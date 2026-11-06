@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-enum CaptureMode: String, CaseIterable, Identifiable, Codable, Sendable {
+nonisolated enum CaptureMode: String, CaseIterable, Identifiable, Codable, Sendable {
     case timeLapse, slowMotion, cinematic, video, photo, portrait, spatial, panorama
 
     var id: Self { self }
@@ -27,25 +27,25 @@ enum CaptureMode: String, CaseIterable, Identifiable, Codable, Sendable {
     }
 }
 
-enum CameraPosition: String, Codable, Sendable { case back, front }
-enum FlashMode: String, CaseIterable, Codable, Sendable { case auto, on, off }
-enum TimerDuration: Int, CaseIterable, Codable, Sendable { case off = 0, three = 3, five = 5, ten = 10 }
-enum AspectRatio: String, CaseIterable, Codable, Sendable { case square, fourByThree, sixteenByNine }
-enum OuterDisplayContent: String, CaseIterable, Codable, Sendable { case off, preview, kidCue }
+nonisolated enum CameraPosition: String, Codable, Sendable { case back, front }
+nonisolated enum FlashMode: String, CaseIterable, Codable, Sendable { case auto, on, off }
+nonisolated enum TimerDuration: Int, CaseIterable, Codable, Sendable { case off = 0, three = 3, five = 5, ten = 10 }
+nonisolated enum AspectRatio: String, CaseIterable, Codable, Sendable { case square, fourByThree, sixteenByNine }
+nonisolated enum OuterDisplayContent: String, CaseIterable, Codable, Sendable { case off, preview, kidCue }
 
-struct PhotoFormat: Hashable, Codable, Sendable {
+nonisolated struct PhotoFormat: Hashable, Codable, Sendable {
     enum Codec: String, Codable, Sendable { case heif, jpeg, proRAW }
     var codec: Codec
     var megapixels: Int
 }
 
-struct VideoFormat: Hashable, Codable, Sendable {
+nonisolated struct VideoFormat: Hashable, Codable, Sendable {
     var height: Int
     var frameRate: Int
     var hdr: Bool
 }
 
-struct CameraSettings: Equatable, Codable, Sendable {
+nonisolated struct CameraSettings: Equatable, Codable, Sendable {
     var mode: CaptureMode = .photo
     var position: CameraPosition = .back
     var flash: FlashMode = .auto
@@ -59,9 +59,11 @@ struct CameraSettings: Equatable, Codable, Sendable {
     var macro = true
     var cinematicAperture: Float?
     var outerDisplay: OuterDisplayContent = .off
+    var centerStage = true
+    var grid = false
 }
 
-struct CameraCapabilities: Equatable, Sendable {
+nonisolated struct CameraCapabilities: Equatable, Sendable {
     var modes: [CaptureMode] = []
     var canFlip = false
     var zoomStops: [CGFloat] = [1]
@@ -78,13 +80,15 @@ struct CameraCapabilities: Equatable, Sendable {
     var cinematicApertureRange: ClosedRange<Float>?
     var exposureBiasRange: ClosedRange<Float> = 0...0
     var activeDeviceID: String?
+    var centerStage = false
+    var stillsWhileRecording = false
 
     static let none = CameraCapabilities()
 }
 
-enum CameraUnavailable: Equatable, Sendable { case denied, noCamera }
+nonisolated enum CameraUnavailable: Equatable, Sendable { case denied, noCamera }
 
-enum CapturePhase: Equatable, Sendable {
+nonisolated enum CapturePhase: Equatable, Sendable {
     case unavailable(CameraUnavailable)
     case starting
     case ready
@@ -94,6 +98,6 @@ enum CapturePhase: Equatable, Sendable {
     case interrupted
 }
 
-struct CameraError: Error, Equatable, Sendable {
+nonisolated struct CameraError: Error, Equatable, Sendable {
     var message: String
 }

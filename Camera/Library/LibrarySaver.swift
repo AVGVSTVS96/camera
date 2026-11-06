@@ -3,7 +3,7 @@ import Photos
 
 nonisolated enum LibraryResource: Sendable {
     case file(PHAssetResourceType, URL)
-    case data(PHAssetResourceType, Data, filename: String)
+    case data(PHAssetResourceType, Data, filename: String? = nil)
 }
 
 nonisolated enum LibrarySaver {
