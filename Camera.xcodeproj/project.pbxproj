@@ -7,23 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1373BF35CB183B074E129911 /* NativeCaptureBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B2E2B4BBC912100DD32DF6 /* NativeCaptureBridge.m */; };
-		3C6928664102E2DE6E4CF438 /* CameraLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 352BF95ED09DA442D92AA3A4 /* CameraLauncher.swift */; };
-		6DCC4C1D6F4A98DD18C07F89 /* CameraUIFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = C5DE0EC6945E993054BFC51D /* CameraUIFactory.m */; };
-		9AF6387557F21D62F429FBF2 /* CameraRuntimeProbe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5548E7ADC6265817E819449D /* CameraRuntimeProbe.swift */; };
-		FA9D01E9F5C77FF07B28FB14 /* PhotosSupport in Frameworks */ = {isa = PBXBuildFile; productRef = B20EB4E8CB455CAE5BB7F419 /* PhotosSupport */; };
+		36B7F93FB4A83BD91686F94E /* CameraTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCD765FE7DB84CC4C7989A3 /* CameraTypes.swift */; };
+		5B678850526BE37DE5029672 /* CameraApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9A9954D00BEDA125BE470D /* CameraApp.swift */; };
+		B059DE85FFB206136EE26546 /* CameraModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA37895400993446F709244 /* CameraModel.swift */; };
+		FA9D01E9F5C77FF07B28FB14 /* PhotosBrowser in Frameworks */ = {isa = PBXBuildFile; productRef = 28328C8CEF602A0E465E94A8 /* PhotosBrowser */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		352BF95ED09DA442D92AA3A4 /* CameraLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraLauncher.swift; sourceTree = "<group>"; };
-		42B2E2B4BBC912100DD32DF6 /* NativeCaptureBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NativeCaptureBridge.m; sourceTree = "<group>"; };
-		5548E7ADC6265817E819449D /* CameraRuntimeProbe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraRuntimeProbe.swift; sourceTree = "<group>"; };
-		597946A851D14283E5AAB869 /* CameraUIFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CameraUIFactory.h; sourceTree = "<group>"; };
-		8E31878DFF6D78301FBB0782 /* Camera-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Camera-Bridging-Header.h"; sourceTree = "<group>"; };
-		A6AE50473F9BC541A2D030FF /* NativeCaptureBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NativeCaptureBridge.h; sourceTree = "<group>"; };
-		BC81295A7B214E8C2BF95465 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		C5DE0EC6945E993054BFC51D /* CameraUIFactory.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CameraUIFactory.m; sourceTree = "<group>"; };
+		4FCD765FE7DB84CC4C7989A3 /* CameraTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraTypes.swift; sourceTree = "<group>"; };
+		7EA37895400993446F709244 /* CameraModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraModel.swift; sourceTree = "<group>"; };
+		8F9A9954D00BEDA125BE470D /* CameraApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraApp.swift; sourceTree = "<group>"; };
 		CF8CD6787A559B870C873F20 /* Camera.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Camera.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E27AA15D4A1A02146A0401D8 /* PhotosBrowser */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PhotosBrowser; path = PhotosBrowser; sourceTree = SOURCE_ROOT; };
+		FA66FB5BDC67AD91D907580F /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,7 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FA9D01E9F5C77FF07B28FB14 /* PhotosSupport in Frameworks */,
+				FA9D01E9F5C77FF07B28FB14 /* PhotosBrowser in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,8 +38,34 @@
 			isa = PBXGroup;
 			children = (
 				DDA6AD6D2339C630E437A3BA /* Camera */,
+				55A500334C52A5B13867995E /* Packages */,
 				C949ADBA9B77F3ED6F9AEEC3 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		55A500334C52A5B13867995E /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				E27AA15D4A1A02146A0401D8 /* PhotosBrowser */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		B6B6C0A090D4DDC5F456E250 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				7EA37895400993446F709244 /* CameraModel.swift */,
+				4FCD765FE7DB84CC4C7989A3 /* CameraTypes.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		C331A139B949347BD83D2376 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				FA66FB5BDC67AD91D907580F /* .gitkeep */,
+			);
+			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 		C949ADBA9B77F3ED6F9AEEC3 /* Products */ = {
@@ -57,14 +79,9 @@
 		DDA6AD6D2339C630E437A3BA /* Camera */ = {
 			isa = PBXGroup;
 			children = (
-				8E31878DFF6D78301FBB0782 /* Camera-Bridging-Header.h */,
-				352BF95ED09DA442D92AA3A4 /* CameraLauncher.swift */,
-				5548E7ADC6265817E819449D /* CameraRuntimeProbe.swift */,
-				597946A851D14283E5AAB869 /* CameraUIFactory.h */,
-				C5DE0EC6945E993054BFC51D /* CameraUIFactory.m */,
-				BC81295A7B214E8C2BF95465 /* Info.plist */,
-				A6AE50473F9BC541A2D030FF /* NativeCaptureBridge.h */,
-				42B2E2B4BBC912100DD32DF6 /* NativeCaptureBridge.m */,
+				8F9A9954D00BEDA125BE470D /* CameraApp.swift */,
+				B6B6C0A090D4DDC5F456E250 /* Model */,
+				C331A139B949347BD83D2376 /* Preview Content */,
 			);
 			path = Camera;
 			sourceTree = "<group>";
@@ -85,7 +102,7 @@
 			);
 			name = Camera;
 			packageProductDependencies = (
-				B20EB4E8CB455CAE5BB7F419 /* PhotosSupport */,
+				28328C8CEF602A0E465E94A8 /* PhotosBrowser */,
 			);
 			productName = Camera;
 			productReference = CF8CD6787A559B870C873F20 /* Camera.app */;
@@ -116,7 +133,7 @@
 			mainGroup = 25AA440F7EB4126CA2CA4F37;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				9061DC7AF4D9EA63C01FB9E5 /* XCRemoteSwiftPackageReference "photos" */,
+				8C7037CC674CB38025F4E18D /* XCLocalSwiftPackageReference "PhotosBrowser" */,
 			);
 			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
@@ -132,10 +149,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3C6928664102E2DE6E4CF438 /* CameraLauncher.swift in Sources */,
-				9AF6387557F21D62F429FBF2 /* CameraRuntimeProbe.swift in Sources */,
-				6DCC4C1D6F4A98DD18C07F89 /* CameraUIFactory.m in Sources */,
-				1373BF35CB183B074E129911 /* NativeCaptureBridge.m in Sources */,
+				5B678850526BE37DE5029672 /* CameraApp.swift in Sources */,
+				B059DE85FFB206136EE26546 /* CameraModel.swift in Sources */,
+				36B7F93FB4A83BD91686F94E /* CameraTypes.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -176,7 +192,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -195,16 +211,18 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 27.1;
-				MARKETING_VERSION = 0.0.2;
+				MARKETING_VERSION = 0.1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -242,7 +260,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -255,15 +273,17 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 27.1;
-				MARKETING_VERSION = 0.0.2;
+				MARKETING_VERSION = 0.1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -273,14 +293,19 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"Camera/Preview Content\"";
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Camera/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Camera Lab";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Camera access is required to take photos and videos.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location access lets you include the capture location in your photos and videos.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Microphone access is required to record video with sound.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Photo library access is required to save your photos and videos.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Photo library access is required to view captured photos.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsMultipleScenes = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -288,8 +313,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.bassim.camera;
 				PRODUCT_NAME = Camera;
 				SDKROOT = iphoneos;
-				SWIFT_OBJC_BRIDGING_HEADER = "Camera/Camera-Bridging-Header.h";
-				SWIFT_STRICT_CONCURRENCY = minimal;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -300,14 +323,19 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"Camera/Preview Content\"";
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Camera/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Camera Lab";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Camera access is required to take photos and videos.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location access lets you include the capture location in your photos and videos.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Microphone access is required to record video with sound.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Photo library access is required to save your photos and videos.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Photo library access is required to view captured photos.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsMultipleScenes = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -315,8 +343,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.bassim.camera;
 				PRODUCT_NAME = Camera;
 				SDKROOT = iphoneos;
-				SWIFT_OBJC_BRIDGING_HEADER = "Camera/Camera-Bridging-Header.h";
-				SWIFT_STRICT_CONCURRENCY = minimal;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -344,22 +370,17 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		9061DC7AF4D9EA63C01FB9E5 /* XCRemoteSwiftPackageReference "photos" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/AVGVSTVS96/photos.git";
-			requirement = {
-				kind = revision;
-				revision = 1ec4a348cbcd8a5e2e4b5b67e708c8477587e18a;
-			};
+/* Begin XCLocalSwiftPackageReference section */
+		8C7037CC674CB38025F4E18D /* XCLocalSwiftPackageReference "PhotosBrowser" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = PhotosBrowser;
 		};
-/* End XCRemoteSwiftPackageReference section */
+/* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		B20EB4E8CB455CAE5BB7F419 /* PhotosSupport */ = {
+		28328C8CEF602A0E465E94A8 /* PhotosBrowser */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 9061DC7AF4D9EA63C01FB9E5 /* XCRemoteSwiftPackageReference "photos" */;
-			productName = PhotosSupport;
+			productName = PhotosBrowser;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
