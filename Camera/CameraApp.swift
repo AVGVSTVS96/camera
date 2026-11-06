@@ -1,4 +1,3 @@
-import PhotosBrowser
 import SwiftUI
 
 @main
@@ -16,26 +15,14 @@ struct CameraApp: App {
 
     var body: some Scene {
         WindowGroup {
-            #if DEBUG
-            if CommandLine.arguments.contains("--photos-browser") {
-                PhotosBrowserHarness()
-            } else {
-                Text("Camera")
-            }
-            #else
-            Text("Camera")
-            #endif
+            CameraScreen(model: Self.model)
         }
     }
-}
 
-#if DEBUG
-private struct PhotosBrowserHarness: View {
-    @State private var isPresented = true
-
-    var body: some View {
-        Button("Photos") { isPresented = true }
-            .fullScreenCover(isPresented: $isPresented) { PhotosBrowser { isPresented = false } }
-    }
+    private static let model: CameraModel = {
+        #if DEBUG && targetEnvironment(simulator)
+        if CommandLine.arguments.contains("--simulated-camera") { return CameraFixture.model() }
+        #endif
+        return .shared
+    }()
 }
-#endif
