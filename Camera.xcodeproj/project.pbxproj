@@ -7,18 +7,44 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0522CF26BC8B108C8EF87F33 /* ControlsTray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C37565B4848D2FB91EC9247 /* ControlsTray.swift */; };
+		08FBD0ABECF9537C2B55A1BD /* CameraScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F95EBF0910F73D54F316FB1 /* CameraScreen.swift */; };
+		11C71DF2281209040456DD05 /* CameraStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CFDD5C00934D21C94AE4C54 /* CameraStyle.swift */; };
+		2B5F3CBA3CDC99D2C78086FC /* CameraFixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE1BDBD68B2906F54094C031 /* CameraFixture.swift */; };
 		36B7F93FB4A83BD91686F94E /* CameraTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCD765FE7DB84CC4C7989A3 /* CameraTypes.swift */; };
 		5B678850526BE37DE5029672 /* CameraApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9A9954D00BEDA125BE470D /* CameraApp.swift */; };
+		77447D237D85AE6E3F1E1924 /* DuoCameraCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76098F43C8C55D20939CBE85 /* DuoCameraCoordinator.swift */; };
+		8A953AA56830A68629D0234C /* Viewfinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 647E75933389366F09DB51F8 /* Viewfinder.swift */; };
+		8DAEC0793AF11D70D184072A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F18EFEDFAA2FD233FBBF8F1A /* Assets.xcassets */; };
+		934BBE7215236138B727C6B5 /* ShutterRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EA05E7EF1EE06C614A5AEF /* ShutterRow.swift */; };
+		9EACFB89FABEAE2A21D8BAB4 /* ZoomControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35D9D557317D065FA2EFF211 /* ZoomControl.swift */; };
+		A34C40296D75018A68F5CAD1 /* ModeDial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15E9648E3EC492C36350AF59 /* ModeDial.swift */; };
 		B059DE85FFB206136EE26546 /* CameraModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA37895400993446F709244 /* CameraModel.swift */; };
+		C545FC31B27CCC1A996BC809 /* OuterDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2B639D67F594A3D151748B /* OuterDisplay.swift */; };
+		D11C1C64610869B342F33B6B /* TopBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3F53D384D93D27CAC02FF8 /* TopBar.swift */; };
+		E07B7E4956C265AC7A786A4C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54D290CA8C382C155DAE7995 /* Preview Assets.xcassets */; };
 		FA9D01E9F5C77FF07B28FB14 /* PhotosBrowser in Frameworks */ = {isa = PBXBuildFile; productRef = 28328C8CEF602A0E465E94A8 /* PhotosBrowser */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		07EA05E7EF1EE06C614A5AEF /* ShutterRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShutterRow.swift; sourceTree = "<group>"; };
+		15E9648E3EC492C36350AF59 /* ModeDial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeDial.swift; sourceTree = "<group>"; };
+		35D9D557317D065FA2EFF211 /* ZoomControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomControl.swift; sourceTree = "<group>"; };
+		3C2B639D67F594A3D151748B /* OuterDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OuterDisplay.swift; sourceTree = "<group>"; };
+		3C37565B4848D2FB91EC9247 /* ControlsTray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlsTray.swift; sourceTree = "<group>"; };
+		4F95EBF0910F73D54F316FB1 /* CameraScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraScreen.swift; sourceTree = "<group>"; };
 		4FCD765FE7DB84CC4C7989A3 /* CameraTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraTypes.swift; sourceTree = "<group>"; };
+		54D290CA8C382C155DAE7995 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		647E75933389366F09DB51F8 /* Viewfinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Viewfinder.swift; sourceTree = "<group>"; };
+		76098F43C8C55D20939CBE85 /* DuoCameraCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuoCameraCoordinator.swift; sourceTree = "<group>"; };
 		7EA37895400993446F709244 /* CameraModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraModel.swift; sourceTree = "<group>"; };
+		8E3F53D384D93D27CAC02FF8 /* TopBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBar.swift; sourceTree = "<group>"; };
 		8F9A9954D00BEDA125BE470D /* CameraApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraApp.swift; sourceTree = "<group>"; };
+		9CFDD5C00934D21C94AE4C54 /* CameraStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraStyle.swift; sourceTree = "<group>"; };
 		CF8CD6787A559B870C873F20 /* Camera.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Camera.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DE1BDBD68B2906F54094C031 /* CameraFixture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraFixture.swift; sourceTree = "<group>"; };
 		E27AA15D4A1A02146A0401D8 /* PhotosBrowser */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PhotosBrowser; path = PhotosBrowser; sourceTree = SOURCE_ROOT; };
+		F18EFEDFAA2FD233FBBF8F1A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FA66FB5BDC67AD91D907580F /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -43,12 +69,35 @@
 			);
 			sourceTree = "<group>";
 		};
+		304BA0FACF951CEB54B91487 /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				DE1BDBD68B2906F54094C031 /* CameraFixture.swift */,
+			);
+			path = Debug;
+			sourceTree = "<group>";
+		};
 		55A500334C52A5B13867995E /* Packages */ = {
 			isa = PBXGroup;
 			children = (
 				E27AA15D4A1A02146A0401D8 /* PhotosBrowser */,
 			);
 			name = Packages;
+			sourceTree = "<group>";
+		};
+		93D39AA573D74E2214518986 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				4F95EBF0910F73D54F316FB1 /* CameraScreen.swift */,
+				9CFDD5C00934D21C94AE4C54 /* CameraStyle.swift */,
+				3C37565B4848D2FB91EC9247 /* ControlsTray.swift */,
+				15E9648E3EC492C36350AF59 /* ModeDial.swift */,
+				07EA05E7EF1EE06C614A5AEF /* ShutterRow.swift */,
+				8E3F53D384D93D27CAC02FF8 /* TopBar.swift */,
+				647E75933389366F09DB51F8 /* Viewfinder.swift */,
+				35D9D557317D065FA2EFF211 /* ZoomControl.swift */,
+			);
+			path = UI;
 			sourceTree = "<group>";
 		};
 		B6B6C0A090D4DDC5F456E250 /* Model */ = {
@@ -60,10 +109,20 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		B7D3CEBD12A5484EC476F5C3 /* Duo */ = {
+			isa = PBXGroup;
+			children = (
+				76098F43C8C55D20939CBE85 /* DuoCameraCoordinator.swift */,
+				3C2B639D67F594A3D151748B /* OuterDisplay.swift */,
+			);
+			path = Duo;
+			sourceTree = "<group>";
+		};
 		C331A139B949347BD83D2376 /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
 				FA66FB5BDC67AD91D907580F /* .gitkeep */,
+				54D290CA8C382C155DAE7995 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
 			sourceTree = "<group>";
@@ -79,9 +138,13 @@
 		DDA6AD6D2339C630E437A3BA /* Camera */ = {
 			isa = PBXGroup;
 			children = (
+				F18EFEDFAA2FD233FBBF8F1A /* Assets.xcassets */,
 				8F9A9954D00BEDA125BE470D /* CameraApp.swift */,
+				304BA0FACF951CEB54B91487 /* Debug */,
+				B7D3CEBD12A5484EC476F5C3 /* Duo */,
 				B6B6C0A090D4DDC5F456E250 /* Model */,
 				C331A139B949347BD83D2376 /* Preview Content */,
+				93D39AA573D74E2214518986 /* UI */,
 			);
 			path = Camera;
 			sourceTree = "<group>";
@@ -94,6 +157,7 @@
 			buildConfigurationList = B49E394FE456DD94A3BE1E86 /* Build configuration list for PBXNativeTarget "Camera" */;
 			buildPhases = (
 				243BF7A68091B86143E1DE4B /* Sources */,
+				C7CDA280435D530E1A3C4923 /* Resources */,
 				AF5DEFBE7D222178B8329763 /* Frameworks */,
 			);
 			buildRules = (
@@ -144,14 +208,37 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		C7CDA280435D530E1A3C4923 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8DAEC0793AF11D70D184072A /* Assets.xcassets in Resources */,
+				E07B7E4956C265AC7A786A4C /* Preview Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		243BF7A68091B86143E1DE4B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				5B678850526BE37DE5029672 /* CameraApp.swift in Sources */,
+				2B5F3CBA3CDC99D2C78086FC /* CameraFixture.swift in Sources */,
 				B059DE85FFB206136EE26546 /* CameraModel.swift in Sources */,
+				08FBD0ABECF9537C2B55A1BD /* CameraScreen.swift in Sources */,
+				11C71DF2281209040456DD05 /* CameraStyle.swift in Sources */,
 				36B7F93FB4A83BD91686F94E /* CameraTypes.swift in Sources */,
+				0522CF26BC8B108C8EF87F33 /* ControlsTray.swift in Sources */,
+				77447D237D85AE6E3F1E1924 /* DuoCameraCoordinator.swift in Sources */,
+				A34C40296D75018A68F5CAD1 /* ModeDial.swift in Sources */,
+				C545FC31B27CCC1A996BC809 /* OuterDisplay.swift in Sources */,
+				934BBE7215236138B727C6B5 /* ShutterRow.swift in Sources */,
+				D11C1C64610869B342F33B6B /* TopBar.swift in Sources */,
+				8A953AA56830A68629D0234C /* Viewfinder.swift in Sources */,
+				9EACFB89FABEAE2A21D8BAB4 /* ZoomControl.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

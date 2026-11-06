@@ -5,7 +5,14 @@ import SwiftUI
 struct CameraApp: App {
     var body: some Scene {
         WindowGroup {
-            Text("Camera")
+            CameraScreen(model: Self.model)
         }
     }
+
+    private static let model: CameraModel = {
+        #if DEBUG && targetEnvironment(simulator)
+        if CommandLine.arguments.contains("--simulated-camera") { return CameraFixture.model() }
+        #endif
+        return .shared
+    }()
 }
