@@ -1,0 +1,14 @@
+{
+  "originHash" : "c002dc57b80a8d73ad7beb4a76659bab4970898fbd353cdbf21a28e66667dbc9",
+  "pins" : [
+    {
+      "identity" : "photos",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/AVGVSTVS96/photos.git",
+      "state" : {
+        "revision" : "1ec4a348cbcd8a5e2e4b5b67e708c8477587e18a"
+      }
+    }
+  ],
+  "version" : 3
+}

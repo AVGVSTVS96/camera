@@ -1,0 +1,51 @@
+name: Camera
+packages:
+  PhotosSupport:
+    url: https://github.com/AVGVSTVS96/photos.git
+    revision: 1ec4a348cbcd8a5e2e4b5b67e708c8477587e18a
+options:
+  bundleIdPrefix: com.bassim
+  deploymentTarget:
+    iOS: "27.1"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    IPHONEOS_DEPLOYMENT_TARGET: "27.1"
+    TARGETED_DEVICE_FAMILY: "1,2"
+    MARKETING_VERSION: "0.0.2"
+    CURRENT_PROJECT_VERSION: "2"
+targets:
+  Camera:
+    type: application
+    platform: iOS
+    info:
+      path: Camera/Info.plist
+      properties:
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+          UISceneConfigurations:
+            UIWindowSceneSessionRoleApplication:
+              - UISceneConfigurationName: Camera App Scene Configuration
+                UISceneClassName: UIWindowScene
+                UISceneDelegateClassName: CAMWindowSceneDelegate
+    sources:
+      - path: Camera
+    dependencies:
+      - package: PhotosSupport
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.bassim.camera
+        PRODUCT_NAME: Camera
+        INFOPLIST_KEY_CFBundleDisplayName: Camera Lab
+        INFOPLIST_KEY_NSCameraUsageDescription: Camera access is required to take photos and videos.
+        INFOPLIST_KEY_NSMicrophoneUsageDescription: Microphone access is required to record video with sound.
+        INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription: Photo library access is required to save your photos and videos.
+        INFOPLIST_KEY_NSPhotoLibraryUsageDescription: Photo library access is required to view captured photos.
+        INFOPLIST_KEY_NSLocationWhenInUseUsageDescription: Location access lets you include the capture location in your photos and videos.
+        GENERATE_INFOPLIST_FILE: YES
+        CODE_SIGN_STYLE: Automatic
+        SWIFT_STRICT_CONCURRENCY: minimal
+        SWIFT_OBJC_BRIDGING_HEADER: Camera/Camera-Bridging-Header.h
