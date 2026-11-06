@@ -34,7 +34,7 @@ struct ControlsTray: View {
                 .fill(.white.opacity(0.55))
                 .frame(width: 37, height: 5)
                 .padding(.top, 11)
-                .padding(.bottom, 18)
+                .padding(.bottom, 34)
             if let open {
                 TrayDetail(model: model, item: open) { self.open = nil }
                     .transition(.blurReplace)
@@ -43,7 +43,7 @@ struct ControlsTray: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .glassEffect(.regular.tint(.black.opacity(0.18)), in: .rect(cornerRadius: 52, style: .continuous))
+        .glassEffect(.regular.tint(.black.opacity(0.35)), in: .rect(cornerRadius: 52, style: .continuous))
         .offset(y: max(0, pull))
         .gesture(
             DragGesture()
@@ -58,13 +58,13 @@ struct ControlsTray: View {
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 0), count: 3), spacing: 22) {
                 ForEach(items) { item in
                     Button { tap(item) } label: {
-                        VStack(spacing: 14) {
+                        VStack(spacing: 10) {
                             knob(for: item)
                                 .frame(width: 67, height: 67)
                                 .background(.black.opacity(0.5), in: .circle)
                                 .rotationEffect(model.glyphRotation)
                             Text(item.title)
-                                .font(.system(size: 13, weight: .medium))
+                                .font(.system(size: 13, weight: .regular))
                                 .tracking(1.6)
                                 .foregroundStyle(.white)
                                 .lineLimit(1)
@@ -74,7 +74,7 @@ struct ControlsTray: View {
                     .buttonStyle(.plain)
                 }
             }
-            .padding(.horizontal, 12)
+            .padding(.horizontal, 20)
             .padding(.bottom, 24)
         }
         .scrollIndicators(.hidden)

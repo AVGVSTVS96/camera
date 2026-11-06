@@ -22,11 +22,11 @@ struct ModeDial: View {
                     lineWidth: 1
                 )
                 .shadow(color: .black.opacity(0.18), radius: 3, y: 1)
-                .frame(width: selectedWidth + 44, height: 42)
+                .frame(width: selectedWidth + 40, height: 42)
             labels
         }
         .frame(width: width, height: height)
-        .glassEffect(.clear.tint(.black.opacity(0.08)).interactive(), in: .capsule)
+        .glassEffect(.regular.tint(.white.opacity(0.04)).interactive(), in: .capsule)
         .animation(.smooth(duration: 0.3), value: selection)
         .contentShape(.capsule)
         .gesture(swipe)
@@ -37,8 +37,8 @@ struct ModeDial: View {
         HStack(spacing: spacing) {
             ForEach(modes) { mode in
                 Text(mode.title)
-                    .font(.system(size: 15.5, weight: .medium))
-                    .tracking(0.6)
+                    .font(.system(size: 13.5, weight: .medium))
+                    .tracking(0.9)
                     .fixedSize()
                     .foregroundStyle(mode == selection ? Color.cameraYellow : .white)
                     .onGeometryChange(for: CGFloat.self, of: \.size.width) { widths[mode] = $0 }

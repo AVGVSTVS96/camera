@@ -3,7 +3,7 @@ import SwiftUI
 extension Color {
     static let cameraYellow = Color(red: 0.976, green: 0.847, blue: 0.282)
     static let recordRed = Color(red: 1, green: 0.56, blue: 0.52)
-    static let cameraKnob = Color.black.opacity(0.28)
+    static let cameraKnob = Color.black.opacity(0.4)
 }
 
 extension Font {
@@ -30,7 +30,7 @@ struct CircleGlassButton<Label: View>: View {
                 .contentShape(.circle)
         }
         .buttonStyle(.plain)
-        .glassEffect(.clear.tint(.cameraKnob).interactive(), in: .circle)
+        .glassEffect(.regular.tint(.cameraKnob).interactive(), in: .circle)
     }
 }
 

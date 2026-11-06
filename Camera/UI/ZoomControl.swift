@@ -87,50 +87,49 @@ struct ZoomDial: View {
 
     var body: some View {
         Canvas { context, size in
-            let radius = size.width * 1.1
-            let center = CGPoint(x: size.width / 2, y: radius + 30)
-            let spread = 0.09
+            let radius = size.width * 0.95
+            let top: CGFloat = 26
+            let center = CGPoint(x: size.width / 2, y: top + radius)
             let current = log2(zoom)
+
+            context.fill(Circle().path(in: CGRect(x: center.x - radius, y: top, width: radius * 2, height: radius * 2)),
+                         with: .color(.black.opacity(0.42)))
+
             var t = log2(range.lowerBound)
             while t <= log2(range.upperBound) + 0.0001 {
                 let value = pow(2, t)
                 let isStop = stops.contains { abs($0 - value) < 0.01 }
-                let angle = -Double.pi / 2 + (t - current) * spread * 4.5
-                let length: CGFloat = isStop ? 14 : 8
-                let outer = point(center, radius, angle)
-                let inner = point(center, radius - length, angle)
-                var path = Path()
-                path.move(to: outer)
-                path.addLine(to: inner)
-                context.stroke(path, with: .color(.white.opacity(isStop ? 1 : 0.6)), lineWidth: isStop ? 1.5 : 1)
+                let angle = -Double.pi / 2 + (t - current) * 0.38
+                let length: CGFloat = isStop ? 12 : 7
+                var tick = Path()
+                tick.move(to: point(center, radius - 5, angle))
+                tick.addLine(to: point(center, radius - 5 - length, angle))
+                context.stroke(tick, with: .color(.white.opacity(isStop ? 1 : 0.55)), lineWidth: isStop ? 1.5 : 1)
                 if isStop {
-                    let labelPoint = point(center, radius - 28, angle)
                     var label = Double(value).formatted(.number.precision(.fractionLength(0...1)))
                     if label.hasPrefix("0") { label.removeFirst() }
-                    context.draw(Text(label).font(.system(size: 13, weight: .medium)).foregroundStyle(.white), at: labelPoint)
+                    context.draw(Text(label).font(.system(size: 13, weight: .medium)).foregroundStyle(.white),
+                                 at: point(center, radius - 32, angle))
                 }
                 t += 1.0 / 12
             }
+
             var marker = Path()
-            marker.move(to: CGPoint(x: size.width / 2, y: 30 - 6))
-            marker.addLine(to: CGPoint(x: size.width / 2, y: 30 + 14))
+            marker.move(to: CGPoint(x: center.x, y: top - 2))
+            marker.addLine(to: CGPoint(x: center.x, y: top + 20))
             context.stroke(marker, with: .color(.cameraYellow), lineWidth: 2)
         }
+        .mask(LinearGradient(stops: [.init(color: .black, location: 0.6), .init(color: .clear, location: 1)],
+                             startPoint: .top, endPoint: .bottom))
         .overlay(alignment: .top) {
-            Text((Double(zoom).formatted(.number.precision(.fractionLength(1)))) + "×")
+            Text(Double(zoom).formatted(.number.precision(.fractionLength(1))) + "×")
                 .font(.system(size: 14, weight: .semibold).monospacedDigit())
                 .foregroundStyle(Color.cameraYellow)
-                .offset(y: -2)
+                .padding(.horizontal, 7)
+                .padding(.vertical, 2)
+                .background(.black.opacity(0.45), in: .capsule)
+                .offset(y: -10)
         }
-        .padding(.top, 4)
-        .background {
-            Ellipse()
-                .fill(.black.opacity(0.35))
-                .frame(width: 900, height: 900)
-                .offset(y: 450 - 10)
-                .clipped()
-        }
-        .clipShape(.rect)
         .allowsHitTesting(false)
     }
 

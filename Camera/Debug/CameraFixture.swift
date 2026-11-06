@@ -1,5 +1,5 @@
 #if DEBUG
-import UIKit
+import SwiftUI
 
 enum CameraFixture {
     static let capabilities = CameraCapabilities(
@@ -88,11 +88,6 @@ enum CameraFixture {
             [UIColor(red: 0.24, green: 0.3, blue: 0.42, alpha: 1), UIColor(red: 0.08, green: 0.1, blue: 0.14, alpha: 1)],
             from: CGPoint(x: 0, y: water.minY), to: CGPoint(x: 0, y: water.maxY)
         )
-        UIColor(red: 1, green: 0.88, blue: 0.7, alpha: 0.35).setFill()
-        for i in 0..<9 {
-            let w = CGFloat(160 - i * 14)
-            UIBezierPath(roundedRect: CGRect(x: sun.x - w / 2, y: water.minY + 14 + CGFloat(i) * 18, width: w, height: 4), cornerRadius: 2).fill()
-        }
         cg.restoreGState()
     }
 
@@ -103,8 +98,42 @@ enum CameraFixture {
             $0.videoFormat = VideoFormat(height: 2160, frameRate: 30, hdr: true)
             $0.slowMotionFormat = VideoFormat(height: 1080, frameRate: 240, hdr: false)
             $0.cinematicAperture = 2.8
+            if let mode = argument("--fixture-mode").flatMap(CaptureMode.init(rawValue:)) { $0.mode = mode }
         }
+        if let zoom = argument("--fixture-zoom").flatMap(Double.init) { model.setZoom(zoom, animated: false) }
         return model
+    }
+
+    static func flag(_ name: String) -> Bool {
+        CommandLine.arguments.contains(name)
+    }
+
+    static func argument(_ name: String) -> String? {
+        let arguments = CommandLine.arguments
+        guard let index = arguments.firstIndex(of: name), index + 1 < arguments.count else { return nil }
+        return arguments[index + 1]
+    }
+
+    static var emulatedSize: CGSize? {
+        guard let parts = argument("--fixture-size")?.split(separator: "x").compactMap({ Double($0) }), parts.count == 2 else { return nil }
+        return CGSize(width: parts[0], height: parts[1])
+    }
+}
+
+extension View {
+    @ViewBuilder func fixtureEmulatedSize() -> some View {
+        if let size = CameraFixture.emulatedSize {
+            GeometryReader { geometry in
+                let scale = min(geometry.size.width / size.width, geometry.size.height / size.height)
+                self.frame(width: size.width, height: size.height)
+                    .scaleEffect(scale)
+                    .frame(width: geometry.size.width, height: geometry.size.height)
+            }
+            .background(.black)
+            .ignoresSafeArea()
+        } else {
+            self
+        }
     }
 }
 #endif

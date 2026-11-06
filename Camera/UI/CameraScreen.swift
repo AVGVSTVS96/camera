@@ -4,8 +4,13 @@ import SwiftUI
 struct CameraScreen: View {
     let model: CameraModel
 
+    #if DEBUG
+    @State private var trayOpen = CameraFixture.flag("--fixture-tray")
+    @State private var dialOpen = CameraFixture.flag("--fixture-zoom-dial")
+    #else
     @State private var trayOpen = false
     @State private var dialOpen = false
+    #endif
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
@@ -33,6 +38,9 @@ struct CameraScreen: View {
             .animation(.smooth(duration: 0.35), value: model.settings.aspectRatio)
         }
         .ignoresSafeArea()
+        #if DEBUG
+        .fixtureEmulatedSize()
+        #endif
         .environment(\.colorScheme, .dark)
         .persistentSystemOverlays(.hidden)
         .animation(.spring(duration: 0.4), value: model.glyphRotation)
@@ -43,8 +51,7 @@ struct CameraScreen: View {
         .onCameraCaptureEvent { event in
             if event.phase == .ended { model.shutter() }
         }
-        .task { await model.start() }
-        .onChange(of: scenePhase) { _, phase in
+        .onChange(of: scenePhase, initial: true) { _, phase in
             Task { phase == .active ? await model.start() : await model.stop() }
         }
         .alert(
@@ -54,10 +61,10 @@ struct CameraScreen: View {
     }
 
     private func previewSize(in area: CGSize) -> CGSize {
-        let ratio = model.settings.mode.recordsMovie ? 9.0 / 16 : model.settings.aspectRatio.portraitRatio
-        let areaRatio = area.width / area.height
-        if abs(ratio - areaRatio) / areaRatio < 0.2 { return area }
-        if ratio < areaRatio { return CGSize(width: area.height * ratio, height: area.height) }
+        let movie = model.settings.mode.recordsMovie
+        if !movie, model.settings.aspectRatio == .fourByThree { return area }
+        let ratio = movie ? 9.0 / 16 : model.settings.aspectRatio.portraitRatio
+        if ratio < area.width / area.height { return CGSize(width: area.height * ratio, height: area.height) }
         return CGSize(width: area.width, height: area.width / ratio)
     }
 
