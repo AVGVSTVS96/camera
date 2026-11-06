@@ -37,4 +37,14 @@ final class CameraModel {
     func directionsChanged(forwardFacing: [AVCaptureDevice]) {}
     func rotationChanged(preview: CGFloat, capture: CGFloat) {}
     func refreshThumbnail() async {}
+
+    #if DEBUG
+    static func simulated(capabilities: CameraCapabilities, frame: UIImage?) -> CameraModel {
+        let model = CameraModel(session: nil)
+        model.capabilities = capabilities
+        model.thumbnail = frame
+        model.phase = .ready
+        return model
+    }
+    #endif
 }
