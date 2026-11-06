@@ -28,6 +28,7 @@ struct AssetGrid: View {
                     .padding(.vertical, 24)
             }
             .defaultScrollAnchor(.bottom)
+            .ignoresSafeArea(edges: .horizontal)
             .overlay {
                 if !library.isAuthorized {
                     ContentUnavailableView("No Access to Photos", systemImage: "photo.on.rectangle", description: Text("Allow access in Settings to see your photos here."))

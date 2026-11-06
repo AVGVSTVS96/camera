@@ -56,6 +56,7 @@ struct AssetInfo: View {
                         .padding(.vertical, 10)
                     }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .background(.background.secondary, in: .rect(cornerRadius: 14))
                 .clipShape(.rect(cornerRadius: 14))
 
@@ -67,6 +68,7 @@ struct AssetInfo: View {
                     .clipShape(.rect(cornerRadius: 14))
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
             .padding(20)
         }
         .task(id: asset.localIdentifier) {

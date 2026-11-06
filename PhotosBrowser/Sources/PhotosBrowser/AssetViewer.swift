@@ -40,6 +40,7 @@ struct AssetViewer: View {
         .scrollTargetBehavior(.viewAligned(limitBehavior: .alwaysByOne))
         .scrollPosition(id: $current)
         .scrollIndicators(.hidden)
+        .scrollEdgeEffectHidden()
         .scrollDisabled(isZoomed)
         .ignoresSafeArea()
         .background {
@@ -158,6 +159,7 @@ private struct VideoControls: View {
             }
             TimelineView(.animation(minimumInterval: 1 / 30)) { _ in
                 Slider(value: progress, in: 0...1)
+                    .tint(.primary)
             }
             Button(isMuted ? "Unmute" : "Mute", systemImage: isMuted ? "speaker.slash.fill" : "speaker.wave.2.fill") {
                 isMuted.toggle()

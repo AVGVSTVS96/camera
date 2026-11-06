@@ -64,14 +64,14 @@ extension PHAsset {
     var pixelSize: CGSize { CGSize(width: pixelWidth, height: pixelHeight) }
     var isLivePhoto: Bool { mediaSubtypes.contains(.photoLive) }
 
-    func setFavorite(_ isFavorite: Bool) {
+    nonisolated func setFavorite(_ isFavorite: Bool) {
         let asset = self
         PHPhotoLibrary.shared().performChanges {
             PHAssetChangeRequest(for: asset).isFavorite = isFavorite
         }
     }
 
-    func delete() {
+    nonisolated func delete() {
         let asset = self
         PHPhotoLibrary.shared().performChanges {
             PHAssetChangeRequest.deleteAssets([asset] as NSArray)

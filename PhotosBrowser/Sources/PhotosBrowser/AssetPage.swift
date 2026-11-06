@@ -45,6 +45,7 @@ struct AssetPage: View {
                 }
             }
         }
+        .ignoresSafeArea()
     }
 }
 
@@ -74,7 +75,7 @@ private struct ZoomView: UIViewRepresentable {
     }
 }
 
-private final class ZoomingScrollView: UIScrollView, UIScrollViewDelegate {
+private final class ZoomingScrollView: UIScrollView, UIScrollViewDelegate, UIGestureRecognizerDelegate {
     let imageView = UIImageView()
     let liveView = PHLivePhotoView()
     let playerView = PlayerView()
@@ -90,6 +91,13 @@ private final class ZoomingScrollView: UIScrollView, UIScrollViewDelegate {
             guard isCurrent != oldValue else { return }
             if isCurrent {
                 liveView.startPlayback(with: .hint)
+                #if DEBUG
+                if ProcessInfo.processInfo.arguments.contains("--photos-zoomed") {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
+                        toggleZoom(at: CGPoint(x: content.bounds.midX, y: content.bounds.midY))
+                    }
+                }
+                #endif
             } else if zoomScale != minimumZoomScale {
                 setZoomScale(minimumZoomScale, animated: false)
                 onZoom(false)
@@ -119,8 +127,14 @@ private final class ZoomingScrollView: UIScrollView, UIScrollViewDelegate {
         doubleTap.numberOfTapsRequired = 2
         let tap = UITapGestureRecognizer(target: self, action: #selector(tapped))
         tap.require(toFail: doubleTap)
+        let press = UILongPressGestureRecognizer(target: self, action: #selector(pressed))
+        press.minimumPressDuration = 0.2
+        // PHLivePhotoView's own press recognizer never fires inside this zooming scroll view.
+        liveView.playbackGestureRecognizer.isEnabled = false
         dismissPan.addTarget(self, action: #selector(panned))
-        [doubleTap, tap, dismissPan].forEach(addGestureRecognizer)
+        dismissPan.delegate = self
+        panGestureRecognizer.isEnabled = false
+        [doubleTap, tap, press, dismissPan].forEach(addGestureRecognizer)
     }
 
     required init?(coder: NSCoder) { fatalError() }
@@ -153,7 +167,10 @@ private final class ZoomingScrollView: UIScrollView, UIScrollViewDelegate {
 
     func viewForZooming(in scrollView: UIScrollView) -> UIView? { content }
 
-    func scrollViewDidZoom(_ scrollView: UIScrollView) { center() }
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        center()
+        panGestureRecognizer.isEnabled = zoomScale > minimumZoomScale
+    }
 
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         onZoom(scale > minimumZoomScale)
@@ -161,13 +178,25 @@ private final class ZoomingScrollView: UIScrollView, UIScrollViewDelegate {
 
     @objc private func tapped() { onTap() }
 
+    @objc private func pressed(_ gesture: UILongPressGestureRecognizer) {
+        guard liveView.livePhoto != nil else { return }
+        switch gesture.state {
+        case .began: liveView.startPlayback(with: .full)
+        case .ended, .cancelled, .failed: liveView.stopPlayback()
+        default: break
+        }
+    }
+
     @objc private func doubleTapped(_ gesture: UITapGestureRecognizer) {
+        toggleZoom(at: gesture.location(in: content))
+    }
+
+    private func toggleZoom(at point: CGPoint) {
         guard zoomScale == minimumZoomScale else {
             return setZoomScale(minimumZoomScale, animated: true)
         }
         let fill = max(bounds.width / contentSize.width, bounds.height / contentSize.height)
         let scale = min(maximumZoomScale, fill > 1.2 ? fill : 2.5)
-        let point = gesture.location(in: content)
         let size = CGSize(width: bounds.width / scale, height: bounds.height / scale)
         zoom(to: CGRect(origin: CGPoint(x: point.x - size.width / 2, y: point.y - size.height / 2), size: size), animated: true)
     }
