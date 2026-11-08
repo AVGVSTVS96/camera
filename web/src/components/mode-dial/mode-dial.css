@@ -1,46 +1,74 @@
 .dial {
-  width: 221px;
-  height: 47px;
+  position: absolute;
+  left: 50%;
+  bottom: 58px;
+  translate: -50% 50%;
+  width: 220px;
+  height: 48px;
   border-radius: 24px;
   overflow: hidden;
+  background: #141414;
+}
+
+.screen[data-orientation="landscape"] .dial {
+  left: 58px;
+  top: 50%;
+  bottom: auto;
+  translate: -50% -50%;
+  rotate: 90deg;
+}
+
+.screen[data-display="inner"][data-orientation="portrait"] .dial {
+  top: 58px;
+  bottom: auto;
+  translate: -50% -50%;
+  rotate: 180deg;
+}
+
+.dial .window {
+  position: absolute;
+  inset: 0;
+  mask: linear-gradient(to right, rgb(0 0 0 / 0.3), #000 26%, #000 76%, rgb(0 0 0 / 0.25));
+}
+
+.dial .labels {
+  position: absolute;
+  left: 50%;
+  top: 3.5px;
+  display: flex;
+}
+
+.dial .labels[data-settled] {
+  transition: translate 0.3s;
+}
+
+.dial .labels button {
+  height: 41px;
+  margin-inline: -9.8px;
+  padding-inline: 21.5px;
+  border-radius: 20.5px;
+  font-size: 15px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.dial .labels [data-on] {
+  color: var(--yellow);
+  background: rgb(255 255 255 / 0.045);
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.1),
+    inset 0 1px 0 rgb(255 255 255 / 0.25);
+}
+
+.dial[data-profile="duo"] {
   background: rgb(255 255 255 / 0.1);
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
 }
 
-.dial .pill {
-  position: absolute;
-  left: 50%;
-  top: 2.5px;
-  width: 90px;
-  height: 42px;
-  translate: -50%;
-  border-radius: 21px;
+.dial[data-profile="duo"] .labels [data-on] {
   background: rgb(255 255 255 / 0.14);
   box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.4),
-    inset 0 -1px 0 rgb(255 255 255 / 0.15),
-    0 1px 3px rgb(0 0 0 / 0.18);
-}
-
-.labels {
-  position: absolute;
-  left: 50%;
-  top: 0;
-  height: 100%;
-  display: flex;
-  gap: 33px;
-  transition: translate 0.3s;
-  mask: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
-}
-
-.labels button {
-  font-size: 13.5px;
-  font-weight: 500;
-  letter-spacing: 0.9px;
-  white-space: nowrap;
-}
-
-.labels [data-on] {
-  color: var(--yellow);
+    inset 0 0 0 1px rgb(0 0 0 / 0.55),
+    inset 0 2px 1px rgb(255 255 255 / 0.18);
 }

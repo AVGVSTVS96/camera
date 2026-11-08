@@ -94,9 +94,9 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
           </div>
           <div className="row modes">
             <Thumbnail shot={shot} open={() => update({ viewer: true })} />
-            {!settings.recording && <ModeDial selected={settings.mode} select={(mode) => update({ mode })} />}
           </div>
           <Flip {...props} />
+          {!settings.recording && <ModeDial selected={settings.mode} select={(mode) => update({ mode })} />}
         </>
       )}
       {profile.lighting !== false && !settings.tray && !movie && <Lighting settings={settings} />}
