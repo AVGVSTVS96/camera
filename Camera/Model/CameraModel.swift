@@ -1,6 +1,7 @@
 import AVFoundation
 import CoreLocation
 import Observation
+import Photos
 import PhotosBrowser
 import SwiftUI
 
@@ -61,6 +62,7 @@ final class CameraModel {
     }
 
     func start() async {
+        await retryPendingCaptures()
         guard let engine else { return }
         guard await Self.requestAccess(for: .video) else {
             phase = .unavailable(.denied)
@@ -171,13 +173,25 @@ final class CameraModel {
         }
         do {
             let photo = try await engine.capturePhoto(settings)
-            defer { if let movie = photo.livePhotoMovie { try? FileManager.default.removeItem(at: movie) } }
             thumbnail = UIImage(data: photo.data).flatMap(Self.thumbnail)
-            var resources: [LibraryResource] = [.data(.photo, photo.data)]
-            if let movie = photo.livePhotoMovie { resources.append(.file(.pairedVideo, movie)) }
-            _ = try await LibrarySaver.save(resources, location: location)
+            let name = photo.livePhotoMovie?.deletingPathExtension().lastPathComponent ?? UUID().uuidString
+            let ext = settings.photoFormat?.codec == .jpeg ? "JPG" : "HEIC"
+            var resources: [(PHAssetResourceType, PendingCaptures.Staged)] = [(.photo, .data(photo.data, filename: "\(name).\(ext)"))]
+            if let movie = photo.livePhotoMovie { resources.append((.pairedVideo, .file(movie))) }
+            try await save(resources)
         } catch {
             self.error = CameraError(message: error.localizedDescription)
+        }
+    }
+
+    private func save(_ resources: [(PHAssetResourceType, PendingCaptures.Staged)]) async throws {
+        let capture = try await PendingCaptures.shared.stage(resources)
+        try await PendingCaptures.shared.save(capture, location: location)
+    }
+
+    private func retryPendingCaptures() async {
+        if let failure = await PendingCaptures.shared.retryAll(location: location) {
+            error = CameraError(message: failure.localizedDescription)
         }
     }
 
@@ -187,8 +201,7 @@ final class CameraModel {
         do {
             let movie = try await engine.record()
             phase = .ready
-            defer { try? FileManager.default.removeItem(at: movie) }
-            _ = try await LibrarySaver.save([.file(.video, movie)], location: location)
+            try await save([(.video, .file(movie))])
             await refreshThumbnail()
         } catch {
             phase = .ready
@@ -199,7 +212,7 @@ final class CameraModel {
     private func saveSimulatedFrame() async {
         guard let frame = simulatedFrame, let data = frame.heicData() else { return }
         do {
-            _ = try await LibrarySaver.save([.data(.photo, data, filename: "simulated-capture.heic")], location: location)
+            try await save([(.photo, .data(data, filename: "simulated-capture.heic"))])
             thumbnail = Self.thumbnail(frame)
         } catch {
             self.error = CameraError(message: error.localizedDescription)

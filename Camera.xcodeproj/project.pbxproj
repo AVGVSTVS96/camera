@@ -14,6 +14,7 @@
 		33B889FAD98332C9864D25C9 /* MovieCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = EACB7B17BB0D7E98BD6F5FB3 /* MovieCapture.swift */; };
 		358CECD143C59DFA2DB5304D /* LiveRecovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2958009814244E439D464910 /* LiveRecovery.swift */; };
 		36B7F93FB4A83BD91686F94E /* CameraTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCD765FE7DB84CC4C7989A3 /* CameraTypes.swift */; };
+		4CB211B2A5556A74FE03C58A /* PendingCaptures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5582598D145253104022CA36 /* PendingCaptures.swift */; };
 		5B678850526BE37DE5029672 /* CameraApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9A9954D00BEDA125BE470D /* CameraApp.swift */; };
 		6B7C2DCCB8139DD4ED53B6BD /* LibrarySaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26BE114FFB60BD14763C5355 /* LibrarySaver.swift */; };
 		77447D237D85AE6E3F1E1924 /* DuoCameraCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76098F43C8C55D20939CBE85 /* DuoCameraCoordinator.swift */; };
@@ -45,6 +46,7 @@
 		4F95EBF0910F73D54F316FB1 /* CameraScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraScreen.swift; sourceTree = "<group>"; };
 		4FCD765FE7DB84CC4C7989A3 /* CameraTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraTypes.swift; sourceTree = "<group>"; };
 		54D290CA8C382C155DAE7995 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		5582598D145253104022CA36 /* PendingCaptures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingCaptures.swift; sourceTree = "<group>"; };
 		647E75933389366F09DB51F8 /* Viewfinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Viewfinder.swift; sourceTree = "<group>"; };
 		76098F43C8C55D20939CBE85 /* DuoCameraCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuoCameraCoordinator.swift; sourceTree = "<group>"; };
 		7EA37895400993446F709244 /* CameraModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraModel.swift; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 			isa = PBXGroup;
 			children = (
 				26BE114FFB60BD14763C5355 /* LibrarySaver.swift */,
+				5582598D145253104022CA36 /* PendingCaptures.swift */,
 			);
 			path = Library;
 			sourceTree = "<group>";
@@ -274,6 +277,7 @@
 				A34C40296D75018A68F5CAD1 /* ModeDial.swift in Sources */,
 				33B889FAD98332C9864D25C9 /* MovieCapture.swift in Sources */,
 				C545FC31B27CCC1A996BC809 /* OuterDisplay.swift in Sources */,
+				4CB211B2A5556A74FE03C58A /* PendingCaptures.swift in Sources */,
 				9C44189EA929DB99477677B2 /* PhotoCapture.swift in Sources */,
 				934BBE7215236138B727C6B5 /* ShutterRow.swift in Sources */,
 				D11C1C64610869B342F33B6B /* TopBar.swift in Sources */,

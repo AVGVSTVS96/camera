@@ -101,6 +101,12 @@ enum CameraFixture {
             if let mode = argument("--fixture-mode").flatMap(CaptureMode.init(rawValue:)) { $0.mode = mode }
         }
         if let zoom = argument("--fixture-zoom").flatMap(Double.init) { model.setZoom(zoom, animated: false) }
+        if flag("--fixture-shutter") {
+            Task {
+                try? await Task.sleep(for: .seconds(2))
+                model.shutter()
+            }
+        }
         return model
     }
 
