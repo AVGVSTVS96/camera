@@ -1,7 +1,4 @@
 .depth-button {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
   background: rgb(47 46 47 / 0.66);
   color: #fff;
 }
@@ -11,14 +8,6 @@
   translate: -50% -50%;
 }
 
-.screen[data-display="inner"][data-orientation="portrait"] .row > .depth-button {
-  --x: calc(var(--w) / 2 - 58px);
-}
-
 .depth-button .glyph {
   rotate: 0deg;
-}
-
-.screen[data-display="inner"][data-orientation="portrait"] .depth-button .glyph {
-  rotate: 180deg;
 }
