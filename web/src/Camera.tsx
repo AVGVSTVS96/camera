@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { record, snapshot, useCamera, type Shot } from "./capture.ts";
+import { AspectFlip } from "./components/aspect-flip/AspectFlip.tsx";
 import { ControlsButton } from "./components/controls-button/ControlsButton.tsx";
 import { ControlsPanel } from "./components/controls-panel/ControlsPanel.tsx";
 import { DepthButton } from "./components/depth-button/DepthButton.tsx";
@@ -98,7 +99,8 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
           <Flip {...props} />
         </>
       )}
-      {profile.lighting !== false && !settings.tray && <Lighting settings={settings} />}
+      {profile.lighting !== false && !settings.tray && !movie && <Lighting settings={settings} />}
+      <AspectFlip {...props} />
       {settings.viewer && <Viewer shot={shot} close={() => update({ viewer: false })} />}
       {settings.viewer && settings.display === "inner" && <InnerViewer empty={!shot} />}
       {still && settings.display === "outer" && <div className="system" />}

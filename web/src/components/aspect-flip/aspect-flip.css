@@ -1,0 +1,59 @@
+.aspect-flip {
+  --d: 232px;
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  color: #fff;
+}
+
+.aspect-flip[data-open] {
+  --d: 334px;
+}
+
+.aspect-flip::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.44);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+
+.aspect-flip-glyph {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+[data-orientation="portrait"] .aspect-flip {
+  left: calc(50% - 22px);
+}
+
+[data-display="outer"][data-orientation="portrait"] .aspect-flip {
+  --d: 446px;
+  top: calc(var(--d) - 22px);
+}
+
+[data-display="outer"][data-orientation="portrait"] .aspect-flip[data-open] {
+  --d: 344px;
+}
+
+[data-display="inner"][data-orientation="portrait"] .aspect-flip {
+  top: calc(var(--d) - 22px);
+  left: calc(50% - 22.17px);
+}
+
+[data-orientation="landscape"] .aspect-flip {
+  left: calc(var(--d) - 22px);
+  top: calc(50% - 22px);
+}
+
+[data-display="inner"][data-orientation="landscape"] .aspect-flip {
+  top: calc(50% - 21.83px);
+}
+
+[data-display="inner"][data-orientation="landscape"][data-mode="cinematic"] .aspect-flip-glyph {
+  rotate: 90deg;
+}
