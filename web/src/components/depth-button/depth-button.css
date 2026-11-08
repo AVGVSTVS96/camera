@@ -30,3 +30,15 @@
 .screen[data-orientation="landscape"] .depth-button .glyph {
   rotate: -90deg;
 }
+
+.screen[data-orientation="portrait"] .depth-button .glyph {
+  rotate: 90deg;
+}
+
+.screen[data-display="inner"][data-orientation="portrait"] .depth-button {
+  --side: 276.67px;
+}
+
+.screen[data-display="inner"][data-orientation="portrait"] .depth-button .glyph {
+  rotate: 0deg;
+}
