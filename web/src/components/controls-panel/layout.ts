@@ -25,6 +25,7 @@ interface Options {
   orientation: Orientation;
   photo: boolean;
   compact: boolean;
+  turned: boolean;
 }
 
 const px = (base: string, offset: number) => `calc(${base} + ${offset}px)`;
@@ -33,7 +34,7 @@ const H = "var(--h)";
 const midW = `${W} / 2`;
 const midH = `${H} / 2`;
 
-export function arrange(count: number, { display, orientation, photo, compact }: Options): Sheet {
+export function arrange(count: number, { display, orientation, photo, compact, turned }: Options): Sheet {
   const rows = Math.ceil(count / 3);
   const shift = photo && compact ? COMPACT : 0;
 
@@ -44,7 +45,6 @@ export function arrange(count: number, { display, orientation, photo, compact }:
   };
 
   if (orientation === "landscape") {
-    const turned = display === "inner" && photo;
     const line = (row: number) => 115 + ROW * (rows - 1 - row) - shift;
     const handleX = line(0) + 70;
 
@@ -76,7 +76,7 @@ export function arrange(count: number, { display, orientation, photo, compact }:
       left: "8px",
       top: handleTop,
       width: px(W, -16),
-      height: px(H, -8 + 149 + ROW * (rows - 1) - shift + 50),
+      height: `${141 + ROW * (rows - 1) - shift}px`,
       handle: { x: px(midW, -19), y: px(handleTop, 10), vertical: false },
       turned: false,
     };
@@ -89,13 +89,17 @@ export function arrange(count: number, { display, orientation, photo, compact }:
     cells: Array.from({ length: count }, (_, index) => {
       const { row, column } = slot(index);
 
-      return { index, x: px(midW, (1 - column) * COLUMN), y: `${first - shift + ROW * (rows - 1 - row) + 34}px` };
+      return {
+        index,
+        x: px(midW, (1 - column) * COLUMN + (turned ? 16.33 : 0)),
+        y: `${first - shift + ROW * (rows - 1 - row) + (turned ? 58 : 34)}px`,
+      };
     }),
     left: px(midW, -225),
     top: "8px",
     width: "450px",
     height: `${handleTop + 6}px`,
     handle: { x: px(midW, -19), y: `${handleTop}px`, vertical: false },
-    turned: false,
+    turned,
   };
 }
