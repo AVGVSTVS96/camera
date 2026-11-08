@@ -163,6 +163,7 @@ const timerOf = (c: Controls) => Number.parseInt(String(c.control === "Timer" ? 
 
 const hasOptions = (c: Controls) => Array.isArray(c.selected);
 
+// Apple's simulator keeps Depth on or off from earlier captures, so its value follows the capture history rather than any control.
 function depthOn(state: ParityState, c: Controls) {
   const back = c.camera === "back";
 

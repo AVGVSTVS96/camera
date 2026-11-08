@@ -52,12 +52,6 @@ export const Moon = () => (
   </Icon>
 );
 
-export const DepthOff = () => (
-  <Icon>
-    <path d="M15.5 4.5c-2.6-.6-3.9.6-4.5 3.4l-2.3 10c-.5 2.2-1.6 2.9-3.7 2.6M8 10h7" />
-  </Icon>
-);
-
 export const Tone = () => (
   <Icon>
     <circle cx="12" cy="12" r="5.6" fill="currentColor" stroke="none" />
