@@ -121,20 +121,25 @@
   display: flex;
   height: 31px;
   border-radius: 16px;
-  background: rgb(255 255 255 / 0.1);
-  font-size: 20px;
-  letter-spacing: 2.4px;
+  background: rgb(255 255 255 / 0.06);
+  font-size: 13px;
+  letter-spacing: 2px;
 }
 
 .styles-tabs span {
   display: grid;
   place-items: center;
-  padding-inline: 14px;
+  width: 91.67px;
   border-radius: 16px;
+  padding-left: 2px;
+}
+
+.styles-tabs span + span {
+  width: 94.33px;
 }
 
 .styles-tabs span[data-on] {
-  background: rgb(255 255 255 / 0.12);
+  background: rgb(255 255 255 / 0.09);
   color: #ffd60a;
 }
 
@@ -144,17 +149,27 @@
   top: 58.67px;
   width: 100px;
   height: 100px;
-  border-radius: 18px;
-  background: linear-gradient(#7c858b, #14171c);
-  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.25);
+  border-radius: 22px;
+  background: linear-gradient(to right, transparent 40%, rgb(70 130 170 / 0.22)), linear-gradient(#80888d, #13171c);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.13);
+}
+
+.styles-pad::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 4.1px 4.1px, rgb(255 255 255 / 0.7) 0.7px, transparent 1.1px) 4.2px 4.2px /
+    8.17px 8.17px;
+  -webkit-mask-image: linear-gradient(#000, transparent);
+  mask-image: linear-gradient(#000, transparent);
 }
 
 .styles-pad span {
   position: absolute;
-  left: 38px;
-  top: 38px;
-  width: 24px;
-  height: 24px;
+  left: 44px;
+  top: 44px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: #fff;
 }
