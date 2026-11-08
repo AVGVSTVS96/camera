@@ -10,8 +10,10 @@
   height: 71.67px;
   pointer-events: none;
   color: #fff;
-  font: 400 60px/71.67px ".SF Compact Rounded", ui-rounded, system-ui, sans-serif;
-  font-feature-settings: "zero";
+  font-family: ".SF Compact Rounded", ui-rounded, sans-serif;
+  font-size: 60px;
+  line-height: 71.67px;
+  font-feature-settings: "ss06", "tnum";
   text-align: center;
   text-shadow: 0 0 5px rgb(0 0 0 / 0.5);
 }
