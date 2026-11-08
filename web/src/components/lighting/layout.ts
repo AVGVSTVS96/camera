@@ -17,7 +17,7 @@ export interface Layout {
   x: number;
   y: number;
   along: readonly [number, number];
-  badge?: { x: number; y: number; turn: number };
+  badge?: { x: number; y: number };
 }
 
 export function layout(s: Settings): Layout | undefined {
@@ -38,13 +38,13 @@ export function layout(s: Settings): Layout | undefined {
 
   switch (context) {
     case "outer-portrait":
-      return { x: 233, y: depth, along: [1, 0], badge: { x: 233, y: depth - 43, turn: 0 } };
+      return { x: 233, y: depth, along: [1, 0], badge: { x: 233, y: depth - 43 } };
     case "inner-portrait":
-      return { x: 334.5, y: depth, along: [-1, 0], badge: { x: 334.5, y: depth + 43, turn: 180 } };
+      return { x: 334.5, y: depth, along: [-1, 0], badge: { x: 334.5, y: depth + 43 } };
     case "inner-landscape":
-      return { x: depth, y: 334.5, along: [0, 1], badge: { x: 656 + nudge, y: 642, turn: -90 } };
+      return { x: depth, y: 334.5, along: [0, 1], badge: { x: 656 + nudge, y: 642 } };
     default:
-      return { x: depth, y: 233, along: [0, 1], badge: { x: 520.7 + nudge, y: 439, turn: -90 } };
+      return { x: depth, y: 233, along: [0, 1], badge: { x: 520.7 + nudge, y: 439 } };
   }
 }
 

@@ -66,10 +66,7 @@ export function Lighting({ settings }: { settings: Settings }) {
           );
         })}
       {place.badge && (
-        <div
-          className="lighting-name"
-          style={{ left: place.badge.x, top: place.badge.y, rotate: `${place.badge.turn}deg` }}
-        >
+        <div className="lighting-name" style={{ left: place.badge.x, top: place.badge.y }}>
           {names[settings.lighting]}
         </div>
       )}
