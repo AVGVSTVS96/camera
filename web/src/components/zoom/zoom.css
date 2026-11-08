@@ -1,36 +1,34 @@
-.stops {
+.zoom {
   position: absolute;
   width: 0;
   height: 0;
 }
 
-.stops button {
+.zoom button {
   position: absolute;
   left: -19px;
   top: -19px;
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  font-size: 15.5px;
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
+  font:
+    15px ".SF Compact Rounded",
+    ui-rounded;
+  font-feature-settings: "ss06", "tnum";
+  text-shadow: 0 0 3px rgb(0 0 0 / 0.4);
 }
 
-.stops [data-on] {
+.zoom [data-on] {
   background: rgb(0 0 0 / 0.48);
   color: var(--yellow);
-  font-size: 14px;
+  text-shadow: none;
 }
 
-.stops .glyph {
-  rotate: 0deg;
-}
-
-.stops[data-dial] {
+.zoom[data-dial] {
   opacity: 0.1;
 }
 
-.stops[data-dial] [data-on] {
+.zoom[data-dial] [data-on] {
   background: none;
   color: inherit;
 }

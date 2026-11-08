@@ -57,7 +57,7 @@ export function Zoom({ settings, update }: Props) {
           />
           <g
             className="readout"
-            transform={`translate(${place.apex.x - place.into[0] * 37} ${place.apex.y - place.into[1] * 37}) rotate(${place.vertical || place.turn ? 90 * Number(place.turn > 0) : 0})`}
+            transform={`translate(${place.apex.x - place.into[0] * 37} ${place.apex.y - place.into[1] * 37}) rotate(${place.turn ? 90 : 0})`}
           >
             <text y="5">{zoomLabel(settings.zoom, true)}</text>
             <text y="21">13MM</text>
@@ -65,7 +65,7 @@ export function Zoom({ settings, update }: Props) {
         </svg>
       )}
       <div
-        className="stops"
+        className="zoom"
         data-dial={showDial || undefined}
         style={{ left: place.x, top: place.y }}
         onPointerMove={(e) => e.buttons && open()}
@@ -77,7 +77,7 @@ export function Zoom({ settings, update }: Props) {
             style={{ translate: offset(i) }}
             onClick={() => (anchored && stops.length === 1 ? update({ lenses: true }) : update({ zoom: stop }))}
           >
-            <span className="glyph">{zoomLabel(i === active ? settings.zoom : stop, i === active)}</span>
+            {zoomLabel(i === active ? settings.zoom : stop, i === active)}
           </button>
         ))}
       </div>
