@@ -1,5 +1,6 @@
 import { createRoot } from "react-dom/client";
 import { Camera } from "./Camera.tsx";
+import { duo, ProfileContext } from "./profile.ts";
 import { initialSettings, loadState, settingsFor } from "./state.ts";
 import "./styles.css";
 
@@ -9,9 +10,13 @@ const id = new URLSearchParams(location.search).get("state");
 if (id) {
   const state = await loadState(id);
   document.documentElement.dataset.still = "";
-  root.render(<Camera initial={settingsFor(state)} still={id} />);
+  root.render(
+    <ProfileContext value={state.profile ?? duo}>
+      <Camera initial={settingsFor(state)} still={id} />
+    </ProfileContext>,
+  );
   await document.fonts.ready;
   requestAnimationFrame(() => requestAnimationFrame(() => (document.documentElement.dataset.ready = "")));
 } else {
-  root.render(<Camera initial={initialSettings} />);
+  root.render(<Camera initial={initialSettings(duo)} />);
 }

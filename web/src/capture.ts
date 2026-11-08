@@ -23,7 +23,11 @@ export function useCamera(settings: Settings, enabled: boolean) {
     let current: MediaStream | undefined;
     navigator.mediaDevices
       .getUserMedia({
-        video: { facingMode: settings.facing, width: { ideal: 4032 }, height: { ideal: 3024 } },
+        video: {
+          facingMode: settings.facing === "front" ? "user" : "environment",
+          width: { ideal: 4032 },
+          height: { ideal: 3024 },
+        },
         audio: false,
       })
       .then((s) => {

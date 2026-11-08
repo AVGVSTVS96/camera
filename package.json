@@ -11,10 +11,11 @@
     "dev": "bun run --cwd web dev",
     "build": "bun run --cwd web build",
     "diff": "bun parity/diff.ts",
-    "publish:parity": "bun parity/publish.ts",
     "lint": "oxlint",
     "fmt": "oxfmt",
-    "check": "bun run --cwd web typecheck && oxlint && oxfmt --check"
+    "check": "bun run --cwd web typecheck && oxlint && oxfmt --check",
+    "specs": "bun parity/specs.ts",
+    "publish:parity": "bun parity/publish.ts"
   },
   "devDependencies": {
     "@oxlint/plugins": "1.92.0",

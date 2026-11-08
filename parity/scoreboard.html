@@ -99,6 +99,48 @@
         padding: 1px 6px;
         border-radius: 4px;
       }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 24px;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        overflow: hidden;
+        font-variant-numeric: tabular-nums;
+      }
+      td,
+      th {
+        padding: 6px 12px;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+        white-space: nowrap;
+      }
+      th {
+        color: var(--muted);
+        font-weight: 500;
+      }
+      tr[data-name] {
+        cursor: pointer;
+      }
+      tr[aria-selected="true"] {
+        background: light-dark(#f0f0f0, #1f1f1f);
+      }
+      td.about {
+        white-space: normal;
+        color: var(--muted);
+      }
+      .bar {
+        width: 160px;
+        height: 8px;
+        border-radius: 4px;
+        background: var(--line);
+        overflow: hidden;
+      }
+      .bar i {
+        display: block;
+        height: 100%;
+      }
       a {
         color: inherit;
       }
@@ -109,21 +151,63 @@
       <h1>Camera parity</h1>
       <span id="summary"></span>
     </header>
+    <table>
+      <thead>
+        <tr>
+          <th>Component</th>
+          <th>Score</th>
+          <th></th>
+          <th>States</th>
+          <th>Duo</th>
+          <th>What it is</th>
+        </tr>
+      </thead>
+      <tbody id="components"></tbody>
+    </table>
+    <header>
+      <h1 id="title">All states</h1>
+      <span id="count"></span>
+    </header>
     <main id="board"></main>
     <script type="module">
-      const results = await fetch("camera-parity/results.json", { cache: "no-store" }).then((r) => r.json());
-      const average = results.reduce((sum, r) => sum + r.score, 0) / (results.length || 1);
+      const { score, simulator, duo, components, states } = await fetch("camera-parity/results.json", {
+        cache: "no-store",
+      }).then((r) => r.json());
+      const updated = new Date(Math.max(...states.map((r) => r.time))).toLocaleString();
       document.querySelector("#summary").textContent =
-        `${results.length} states · average ${average.toFixed(1)}% · updated ${new Date(Math.max(...results.map((r) => r.time))).toLocaleString()}`;
+        `${states.length} states · ${score.toFixed(1)}% overall · simulator ${simulator.toFixed(1)}% · Duo ${duo.toFixed(1)}% · updated ${updated}`;
       const hue = (score) => `hsl(${Math.max(0, score - 50) * 2.4} 70% 42%)`;
       const img = (r, kind) => `camera-parity/${r.id}-${kind}.png?v=${r.time}`;
-      document.querySelector("#board").innerHTML = results
+      const tbody = document.querySelector("#components");
+      tbody.innerHTML = components
         .map(
-          (r) => `<article>
+          (c) => `<tr data-name="${c.name}">
+            <td><b>${c.name}</b></td>
+            <td>${c.score.toFixed(1)}%</td>
+            <td><div class="bar"><i style="width:${c.score}%;background:${hue(c.score)}"></i></div></td>
+            <td>${c.states}</td>
+            <td>${c.duo === null ? "–" : `${c.duo.toFixed(1)}%`}</td>
+            <td class="about">${c.about}</td>
+          </tr>`,
+        )
+        .join("");
+      function show(name) {
+        const rows = name
+          ? states
+              .filter((r) => r.components[name])
+              .map((r) => ({ r, score: r.components[name].score }))
+              .toSorted((a, b) => a.score - b.score)
+          : states.map((r) => ({ r, score: r.score }));
+        document.querySelector("#title").textContent = name ?? "All states";
+        document.querySelector("#count").textContent = `${rows.length} states, worst first`;
+        for (const tr of tbody.querySelectorAll("tr")) tr.setAttribute("aria-selected", tr.dataset.name === name);
+        document.querySelector("#board").innerHTML = rows
+          .map(
+            ({ r, score }) => `<article>
             <div class="head">
               <b>${r.id}</b>
-              <small>${r.display} · ${r.mode} · ${r.orientation}</small>
-              <span class="score" style="background:${hue(r.score)}">${r.score.toFixed(1)}%</span>
+              <small>${r.profile} · ${r.display} · ${r.orientation}</small>
+              <span class="score" style="background:${hue(score)}">${score.toFixed(1)}%</span>
             </div>
             <div class="shots">
               <figure><a href="${img(r, "apple")}"><img loading="lazy" src="${img(r, "apple")}" alt=""></a><figcaption>Apple</figcaption></figure>
@@ -131,8 +215,17 @@
               <figure><a href="${img(r, "diff")}"><img loading="lazy" src="${img(r, "diff")}" alt=""></a><figcaption>Diff</figcaption></figure>
             </div>
           </article>`,
-        )
-        .join("");
+          )
+          .join("");
+      }
+      tbody.addEventListener("click", (e) => {
+        const name = e.target.closest("tr")?.dataset.name;
+        const current = new URLSearchParams(location.search).get("component");
+        const next = name === current ? null : name;
+        history.replaceState(null, "", next ? `?component=${next}` : location.pathname);
+        show(next);
+      });
+      show(new URLSearchParams(location.search).get("component"));
     </script>
   </body>
 </html>

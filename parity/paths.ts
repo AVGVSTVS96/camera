@@ -1,11 +1,10 @@
-import { existsSync } from "node:fs";
-import { join } from "node:path";
+import { basename, join } from "node:path";
 
 const research = join(process.env.HOME!, "Developer/camera-research");
-const answerKey = join(research, "answer-key");
+const repo = join(import.meta.dir, "..");
 
-export const key =
-  process.env.KEY ?? (existsSync(join(answerKey, "states.json")) ? answerKey : join(research, "provisional-key"));
-
-export const out = process.env.OUT ?? join(research, "parity");
-export const dist = join(import.meta.dir, "../web/dist");
+export const key = process.env.KEY ?? join(research, "answer-key");
+export const duo = join(research, "duo");
+export const specs = join(key, "specs");
+export const out = process.env.OUT ?? join(research, "parity", basename(repo));
+export const dist = join(repo, "web/dist");

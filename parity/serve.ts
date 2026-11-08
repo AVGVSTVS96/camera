@@ -1,47 +1,29 @@
-import { existsSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
-import { PNG } from "pngjs";
-import { dist, key, out } from "./paths.ts";
-import { plate } from "./plate.ts";
+import { dist, specs } from "./paths.ts";
+import { scene } from "./scene.ts";
+import { states } from "./states.ts";
 
-export async function states(): Promise<State[]> {
-  return Bun.file(join(key, "states.json")).json();
-}
+export async function serve(port = 0) {
+  const all = await states();
+  const simulator = await Bun.file(join(specs, "profiles/simulator.json")).json();
 
-export interface State {
-  id: string;
-  image: string;
-  mode: string;
-  display: string;
-  orientation: string;
-  screen: { widthPt: number; heightPt: number; scale: number };
-}
+  const published = all.map(({ image: _i, views: _v, ax: _a, ...s }) => ({
+    ...s,
+    profile: s.profile === "simulator" ? simulator : undefined,
+  }));
 
-export async function platePath(state: State) {
-  const file = join(out, "plates", `${state.id}.png`);
-  const source = Bun.file(join(key, state.image));
-
-  if (!existsSync(file) || (await Bun.file(file).stat()).mtimeMs < source.lastModified) {
-    mkdirSync(join(out, "plates"), { recursive: true });
-    await Bun.write(file, PNG.sync.write(plate(PNG.sync.read(Buffer.from(await source.arrayBuffer())))));
-  }
-
-  return file;
-}
-
-export function serve(port = 0) {
   return Bun.serve({
     port,
     async fetch(request) {
       const path = new URL(request.url).pathname;
 
-      if (path === "/states.json") return new Response(Bun.file(join(key, "states.json")));
+      if (path === "/states.json") return Response.json(published);
       const plateId = path.match(/^\/plates\/([\w-]+)\.png$/)?.[1];
 
       if (plateId) {
-        const state = (await states()).find((s) => s.id === plateId);
+        const state = all.find((s) => s.id === plateId);
 
-        return state ? new Response(Bun.file(await platePath(state))) : new Response("not found", { status: 404 });
+        return state ? new Response(Bun.file((await scene(state)).plate)) : new Response("not found", { status: 404 });
       }
 
       const file = Bun.file(join(dist, path === "/" ? "index.html" : path));
@@ -52,6 +34,6 @@ export function serve(port = 0) {
 }
 
 if (import.meta.main) {
-  const server = serve(Number(process.env.PORT ?? 4173));
-  console.log(`Serving web/dist with ${key} at ${server.url}?state=<id>`);
+  const server = await serve(Number(process.env.PORT ?? 4173));
+  console.log(`Serving web/dist and the answer key at ${server.url}?state=<id>`);
 }

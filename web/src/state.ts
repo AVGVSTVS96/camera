@@ -1,23 +1,34 @@
+import { duo, type Profile } from "./profile.ts";
+
 export const modes = ["time-lapse", "slo-mo", "cinematic", "video", "photo", "portrait", "pano"] as const;
 
 export type Mode = (typeof modes)[number];
 
 export const movieModes = new Set<Mode>(["time-lapse", "slo-mo", "cinematic", "video"]);
 
+const appleModes = new Map<string, Mode>([["slow-motion-video", "slo-mo"]]);
+
+export const modeOf = (name: string) => appleModes.get(name) ?? modes.find((m) => m === name) ?? "photo";
+
 export type Display = "outer" | "inner";
 
 export type Orientation = "portrait" | "landscape";
 
+export type Facing = "back" | "front";
+
 export type Flash = "auto" | "on" | "off";
+
+export type Controls = Record<string, boolean | string | number | string[] | null>;
 
 export interface ParityState {
   id: string;
   mode: string;
-  controls?: string | string[] | Record<string, boolean | string | number>;
+  controls?: Controls | null;
   display: Display;
   orientation: Orientation;
   fold?: string;
   screen: { widthPt: number; heightPt: number; scale: number };
+  profile?: Profile;
 }
 
 export interface Settings {
@@ -27,7 +38,9 @@ export interface Settings {
   night: boolean;
   macro: boolean;
   zoom: number;
-  facing: "environment" | "user";
+  facing: Facing;
+  grid: boolean;
+  level: boolean;
   tray: boolean;
   viewer: boolean;
   recording: boolean;
@@ -36,49 +49,41 @@ export interface Settings {
   fold?: string;
 }
 
-export const initialSettings: Settings = {
-  mode: "photo",
-  flash: "auto",
-  live: false,
-  night: true,
-  macro: true,
-  zoom: 1,
-  facing: "environment",
-  tray: false,
-  viewer: false,
-  recording: false,
-  orientation: "portrait",
-  display: "outer",
-};
-
-function flags(controls: ParityState["controls"]) {
-  if (controls === undefined) return new Set<string>();
-
-  if (Array.isArray(controls)) return new Set(controls);
-
-  if (controls instanceof Object) {
-    return new Set(
-      Object.entries(controls).flatMap(([key, value]) => (value === true ? [key] : value ? [`${key}-${value}`] : [])),
-    );
-  }
-
-  return new Set([controls]);
+export function initialSettings(profile: Profile, mode: Mode = "photo", facing: Facing = "back"): Settings {
+  return {
+    mode,
+    flash: movieModes.has(mode) ? "off" : "auto",
+    live: false,
+    night: true,
+    macro: true,
+    zoom: profile.zoom[`${facing}-${mode}`]?.start ?? 1,
+    facing,
+    grid: profile.grid,
+    level: profile.level,
+    tray: false,
+    viewer: false,
+    recording: false,
+    orientation: "portrait",
+    display: "outer",
+  };
 }
 
-export function settingsFor(state: ParityState): Settings {
-  const on = flags(state.controls);
-  const mode = modes.find((m) => m === state.mode.toLowerCase()) ?? "photo";
-  const flash = (["on", "off", "auto"] as const).find((f) => on.has(`flash-${f}`));
+export function settingsFor(state: ParityState, profile = state.profile ?? duo): Settings {
+  const c = state.controls ?? {};
+  const mode = modeOf(state.mode);
+  const facing = c.camera === "front" ? "front" : "back";
+  const initial = initialSettings(profile, mode, facing);
+  const flash = (["on", "off", "auto"] as const).find((f) => c.flash === f);
 
   return {
-    ...initialSettings,
-    mode,
-    flash: flash ?? (movieModes.has(mode) ? "off" : "auto"),
-    live: on.has("live") || on.has("live-on"),
-    tray: on.has("tray") || on.has("more"),
-    viewer: on.has("viewer"),
-    recording: on.has("recording"),
-    facing: on.has("front") ? "user" : "environment",
+    ...initial,
+    flash: flash ?? initial.flash,
+    live: c.live === true || c.live === "on",
+    grid: c.grid === true || initial.grid,
+    level: c.level === true || initial.level,
+    tray: c.panel === "open" || c.panel === "expanded",
+    viewer: state.mode === "viewer",
+    recording: c.action === "recording",
     orientation: state.orientation,
     display: state.display,
     fold: state.fold,

@@ -13,14 +13,19 @@ import {
   TimerOff,
   Tone,
 } from "./icons.tsx";
+import { useProfile } from "./profile.ts";
 import type { Settings } from "./state.ts";
 
-const Resolution = () => (
-  <span className="badge">
-    <b>HEIF</b>
-    <b>48</b>
-  </span>
-);
+function Resolution() {
+  const [name, detail] = useProfile().photoFormat.split(" ");
+
+  return (
+    <span className="badge">
+      <b>{name}</b>
+      <b>{detail}</b>
+    </span>
+  );
+}
 
 const controls: [string, () => ReactNode, boolean?][] = [
   ["Flash", BoltAuto],

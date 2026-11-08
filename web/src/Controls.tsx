@@ -12,14 +12,28 @@ import {
   RunSlash,
   Tone,
 } from "./icons.tsx";
-import { modes, movieModes, type Mode, type Settings } from "./state.ts";
+import { useProfile } from "./profile.ts";
+import { movieModes, type Mode, type Settings } from "./state.ts";
 
 interface Props {
   settings: Settings;
   update: Update;
 }
 
+function Format({ text }: { text: string }) {
+  const [name, detail] = text.split(" ");
+
+  return (
+    <>
+      <b>{name}</b>
+      <small className="mono">{detail}</small>
+    </>
+  );
+}
+
 export function TopBar({ settings, update }: Props) {
+  const profile = useProfile();
+
   if (settings.recording) {
     return (
       <div className="row top">
@@ -30,6 +44,8 @@ export function TopBar({ settings, update }: Props) {
 
   const movie = movieModes.has(settings.mode);
 
+  if (!profile.badges && !settings.tray) return null;
+
   return (
     <div className="row top">
       {settings.tray && (
@@ -37,51 +53,49 @@ export function TopBar({ settings, update }: Props) {
           <PlusGlyph />
         </button>
       )}
-      <div className="top-items">
-        {movie ? (
-          <>
-            <button aria-label="Flash" onClick={() => update({ flash: settings.flash === "on" ? "off" : "on" })}>
-              <BoltSlash />
-            </button>
-            <button aria-label="Action mode">
-              <RunSlash />
-            </button>
-            <button className="badge" aria-label="Video format">
-              <b>4K</b>
-              <small className="mono">30</small>
-            </button>
-          </>
-        ) : (
-          <>
-            <button aria-label="Flash">
-              <BoltAuto />
-            </button>
-            <button
-              aria-label="Live Photo"
-              data-on={settings.live || undefined}
-              onClick={() => update({ live: !settings.live })}
-            >
-              <LiveOff />
-            </button>
-            <button
-              aria-label="Night mode"
-              data-on={settings.night || undefined}
-              onClick={() => update({ night: !settings.night })}
-            >
-              <Moon />
-            </button>
-            <button className="badge" aria-label="Photo format">
-              <b>HEIF</b>
-              <small>48</small>
-            </button>
-          </>
-        )}
-      </div>
+      {profile.badges && (
+        <div className="top-items">
+          {movie ? (
+            <>
+              <button aria-label="Flash" onClick={() => update({ flash: settings.flash === "on" ? "off" : "on" })}>
+                <BoltSlash />
+              </button>
+              <button aria-label="Action mode">
+                <RunSlash />
+              </button>
+              <button className="badge" aria-label="Video format">
+                <Format text={profile.videoFormat} />
+              </button>
+            </>
+          ) : (
+            <>
+              <button aria-label="Flash">
+                <BoltAuto />
+              </button>
+              <button
+                aria-label="Live Photo"
+                data-on={settings.live || undefined}
+                onClick={() => update({ live: !settings.live })}
+              >
+                <LiveOff />
+              </button>
+              <button
+                aria-label="Night mode"
+                data-on={settings.night || undefined}
+                onClick={() => update({ night: !settings.night })}
+              >
+                <Moon />
+              </button>
+              <button className="badge" aria-label="Photo format">
+                <Format text={profile.photoFormat} />
+              </button>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }
-
-const stops = [0.5, 1, 2];
 
 function zoomLabel(value: number, active: boolean) {
   const text = String(Math.round(value * 10) / 10).replace(/^0/, "");
@@ -90,14 +104,17 @@ function zoomLabel(value: number, active: boolean) {
 }
 
 export function ZoomStops({ settings, update }: Props) {
-  const active = stops.findLast((s) => settings.zoom >= s - 0.001);
+  const stops = useProfile().zoom[`${settings.facing}-${settings.mode}`]?.stops ?? [];
+  const active = stops.indexOf(Math.max(...stops.filter((s) => s <= settings.zoom + 0.001)));
+
+  if (!stops.length) return null;
 
   return (
     <div className="row zoom">
       <div className="stops">
-        {stops.map((stop) => (
-          <button key={stop} data-on={stop === active || undefined} onClick={() => update({ zoom: stop })}>
-            <span className="glyph">{zoomLabel(stop === active ? settings.zoom : stop, stop === active)}</span>
+        {stops.map((stop, i) => (
+          <button key={i} data-on={i === active || undefined} onClick={() => update({ zoom: stop })}>
+            <span className="glyph">{zoomLabel(i === active ? settings.zoom : stop, i === active)}</span>
           </button>
         ))}
       </div>
@@ -106,19 +123,22 @@ export function ZoomStops({ settings, update }: Props) {
 }
 
 export function ShutterRow({ settings, update, onShutter }: Props & { onShutter: () => void }) {
+  const profile = useProfile();
   const movie = movieModes.has(settings.mode);
 
   return (
     <div className="row shutter">
       {movie ? (
-        <button
-          className="glass round lead"
-          data-on={settings.macro || undefined}
-          aria-label="Macro"
-          onClick={() => update({ macro: !settings.macro })}
-        >
-          <Macro />
-        </button>
+        profile.macro && (
+          <button
+            className="glass round lead"
+            data-on={settings.macro || undefined}
+            aria-label="Macro"
+            onClick={() => update({ macro: !settings.macro })}
+          >
+            <Macro />
+          </button>
+        )
       ) : (
         <button className="glass round lead dim" aria-label="Depth">
           <DepthOff />
@@ -127,7 +147,7 @@ export function ShutterRow({ settings, update, onShutter }: Props & { onShutter:
       <button className="shutter-button" aria-label={movie ? "Record" : "Take photo"} onClick={onShutter}>
         <span />
       </button>
-      {!movie && !settings.recording && (
+      {profile.smartTake && !movie && !settings.recording && (
         <button className="glass round large tone" aria-label="Styles">
           <Tone />
         </button>
@@ -145,6 +165,7 @@ export function ShutterRow({ settings, update, onShutter }: Props & { onShutter:
 }
 
 export function ModeDial({ selected, select }: { selected: Mode; select: (mode: Mode) => void }) {
+  const { modes } = useProfile();
   const labels = useRef<HTMLDivElement>(null);
   const [offset, setOffset] = useState(0);
 
