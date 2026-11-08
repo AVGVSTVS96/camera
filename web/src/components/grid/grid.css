@@ -1,21 +1,90 @@
+[data-still] [data-display="outer"][data-orientation="portrait"] {
+  --gx: 0px;
+  --gy: -153.33px;
+  --gw: 466px;
+  --gh: 621.33px;
+}
+
+[data-still] [data-display="outer"][data-orientation="portrait"][data-movie] {
+  --gx: 0px;
+  --gy: -98px;
+  --gw: 381.43px;
+  --gh: 678px;
+}
+
+[data-still] [data-display="outer"][data-orientation="landscape"] {
+  --gx: 210px;
+  --gy: 0px;
+  --gw: 621.33px;
+  --gh: 466px;
+}
+
+[data-still] [data-display="outer"][data-orientation="landscape"][data-movie] {
+  --gx: 98px;
+  --gy: 0px;
+  --gw: 678px;
+  --gh: 381.43px;
+}
+
+[data-still] [data-display="inner"][data-orientation="portrait"] {
+  --gx: 0px;
+  --gy: 210px;
+  --gw: 669px;
+  --gh: 892px;
+}
+
+[data-still] [data-display="inner"][data-orientation="portrait"][data-movie] {
+  --gx: 134.06px;
+  --gy: 98px;
+  --gw: 534.94px;
+  --gh: 951px;
+}
+
+[data-still] [data-display="inner"][data-orientation="landscape"] {
+  --gx: 210px;
+  --gy: 0px;
+  --gw: 892px;
+  --gh: 669px;
+}
+
+[data-still] [data-display="inner"][data-orientation="landscape"][data-movie] {
+  --gx: 98px;
+  --gy: 0px;
+  --gw: 951px;
+  --gh: 534.94px;
+}
+
 .grid {
+  --line: #bcbcbf;
+  --edge: #0000002b;
   position: absolute;
-  inset: 0;
+  left: var(--gx, calc(50% - var(--chrome) / 2));
+  top: var(--gy, 0px);
+  width: var(--gw, var(--chrome));
+  height: var(--gh, 100%);
   background:
     linear-gradient(
       to right,
-      transparent calc(100% / 3 - 0.5px),
-      #fff6 0 calc(100% / 3 + 0.5px),
-      transparent 0 calc(200% / 3 - 0.5px),
-      #fff6 0 calc(200% / 3 + 0.5px),
+      transparent calc(100% / 3 - 0.8333px),
+      var(--edge) 0 calc(100% / 3 - 0.5px),
+      var(--line) 0 calc(100% / 3 + 0.5px),
+      var(--edge) 0 calc(100% / 3 + 0.8333px),
+      transparent 0 calc(200% / 3 - 0.8333px),
+      var(--edge) 0 calc(200% / 3 - 0.5px),
+      var(--line) 0 calc(200% / 3 + 0.5px),
+      var(--edge) 0 calc(200% / 3 + 0.8333px),
       transparent 0
     ),
     linear-gradient(
       to bottom,
-      transparent calc(100% / 3 - 0.5px),
-      #fff6 0 calc(100% / 3 + 0.5px),
-      transparent 0 calc(200% / 3 - 0.5px),
-      #fff6 0 calc(200% / 3 + 0.5px),
+      transparent calc(100% / 3 - 0.8333px),
+      var(--edge) 0 calc(100% / 3 - 0.5px),
+      var(--line) 0 calc(100% / 3 + 0.5px),
+      var(--edge) 0 calc(100% / 3 + 0.8333px),
+      transparent 0 calc(200% / 3 - 0.8333px),
+      var(--edge) 0 calc(200% / 3 - 0.5px),
+      var(--line) 0 calc(200% / 3 + 0.5px),
+      var(--edge) 0 calc(200% / 3 + 0.8333px),
       transparent 0
     );
 }
