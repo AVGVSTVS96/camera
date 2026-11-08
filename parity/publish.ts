@@ -1,9 +1,7 @@
 import { join } from "node:path";
 import { $ } from "bun";
 import type { Result } from "./diff.ts";
-import { out } from "./paths.ts";
-
-const target = process.env.PAGES ?? "bassim@server:Developer/pages/pages";
+import { out, pages as target } from "./paths.ts";
 
 export interface Summary {
   states: Result[];

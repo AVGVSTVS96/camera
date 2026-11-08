@@ -2,6 +2,8 @@
 
 Each worker owns one component from `answer-key/specs/index.json` and works in its own checkout, so many can score at once.
 
+Everything runs on the server (`ssh bassim@server`), in `~/Developer`: the repo, the private `camera-research/` beside it and the worktrees. The Mac runs nothing unless the server is overloaded.
+
 ## Set up
 
 ```sh
@@ -12,19 +14,30 @@ cd ~/Developer/camera-wt/<component>
 bun install
 ```
 
-Results go to `~/Developer/camera-research/parity/<component>/`, and every run serves on its own port, so workers never share output.
+Results go to `~/Developer/camera-research/parity/<component>/`, and every run serves on its own port, so workers never share output. Unfinished edits from earlier workers are in `~/Developer/camera-research/wip/wip-<component>.patch`, against an older main: read yours before you start, if there is one.
+
+Scoring renders in Playwright WebKit with Apple's San Francisco fonts from `~/Developer/camera-research/fonts/`, which `fonts.conf` there maps to `system-ui`, `ui-monospace` and `ui-rounded`. They never go in the repo or the site.
 
 ## Iterate
 
 ```sh
-turn bun run diff --component <component> --sample 12
+TURN_POOL=parity TURN_SLOTS=4 turn bun run diff --component <component> --sample 12
 ```
+
+`turn` lets four parity runs go at once, at the lowest CPU priority, and queues the rest. A run is one process rendering in three WebKits at once (`BROWSERS`) and takes about 20 seconds for 12 states.
 
 This builds `web/`, renders 12 of the component's states and prints the worst with the paths of Apple's screenshot, ours and the diff. The sample spreads across profile, display and orientation and takes the worst-scoring states first, from your earlier runs or else the last full run, so each round looks at what's most wrong. Read the images, change your code, run again.
 
 The spec for your component, with its regions per state, is `~/Developer/camera-research/answer-key/specs/components/<component>.json`. The answer key is private: nothing from it, or from `camera-research/`, goes in the repo.
 
-Before you push, run a bigger sample (`--sample 60`, or no `--sample` when the component has few states) and `bun run check`. The full run from `~/Developer/camera` (`turn bun run diff`, no flags) is the authority and the only run that publishes the scoreboard.
+Before you push, run a bigger sample (`--sample 60`, or no `--sample` when the component has few states) and `bun run check`. The full run from `~/Developer/camera` is the authority and the only run that publishes the scoreboard, to http://100.113.223.113:4800/camera-parity:
+
+```sh
+cd ~/Developer/camera && git pull
+TURN_POOL=parity TURN_SLOTS=4 PROCESSES=8 BROWSERS=1 turn bun run diff
+```
+
+`PROCESSES` splits the states across that many processes, each with `BROWSERS` WebKits; all 1,171 states take about 12 minutes this way.
 
 ## What you own
 

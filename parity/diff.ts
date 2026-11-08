@@ -1,10 +1,10 @@
-import { mkdirSync, readdirSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { parseArgs } from "node:util";
 import pixelmatch from "pixelmatch";
 import { webkit, type Browser } from "playwright";
 import { PNG } from "pngjs";
-import { mainOut, out, specs } from "./paths.ts";
+import { fontconfig, mainOut, out, specs } from "./paths.ts";
 import { publish } from "./publish.ts";
 import { read, scene } from "./scene.ts";
 import { serve } from "./serve.ts";
@@ -12,7 +12,8 @@ import { states, type State } from "./states.ts";
 import type { Rect } from "./tree.ts";
 
 const uiThreshold = 16;
-const pages = Number(process.env.PAGES_AT_ONCE ?? 3);
+const browsers = Number(process.env.BROWSERS ?? 3);
+const processes = Number(process.env.PROCESSES ?? 1);
 
 export interface Score {
   score: number;
@@ -236,26 +237,48 @@ if (!flags["no-build"]) {
 
 for (const dir of ["ours", "diff", "small", "results"]) mkdirSync(join(out, dir), { recursive: true });
 
-const server = await serve();
-const browser = await webkit.launch();
-const queue = [...chosen];
-const results: Result[] = [];
+async function shard(i: number) {
+  const slice = chosen.filter((_, j) => j % processes === i).map((s) => s.id);
 
-async function work() {
-  for (let state = queue.shift(); state; state = queue.shift()) {
-    const result = await compare(state, await render(browser, server.url, state), regionsOf(state));
-    await Bun.write(join(out, "results", `${state.id}.json`), JSON.stringify(result, null, 1));
-    results.push(result);
+  const child = Bun.spawn(["bun", import.meta.path, "--no-build", ...slice], {
+    env: { ...process.env, PROCESSES: "1" },
+    stdout: component ? "ignore" : "inherit",
+    stderr: "inherit",
+  });
 
-    if (!component) console.log(`${state.id}: ${result.score}% of ${result.compared} pixels  ${result.diff}`);
-  }
+  if ((await child.exited) !== 0) throw new Error(`Shard ${i} exited with ${child.exitCode}`);
 }
 
-await Promise.all(Array.from({ length: pages }, work));
+async function run() {
+  const server = await serve();
+  const queue = [...chosen];
 
-await browser.close();
+  async function work() {
+    const browser = await webkit.launch({
+      env: existsSync(fontconfig) ? { ...process.env, FONTCONFIG_FILE: fontconfig } : undefined,
+    });
 
-await server.stop();
+    for (let state = queue.shift(); state; state = queue.shift()) {
+      const result = await compare(state, await render(browser, server.url, state), regionsOf(state));
+      await Bun.write(join(out, "results", `${state.id}.json`), JSON.stringify(result, null, 1));
+
+      if (!component) console.log(`${state.id}: ${result.score}% of ${result.compared} pixels  ${result.diff}`);
+    }
+
+    await browser.close();
+  }
+
+  await Promise.all(Array.from({ length: browsers }, work));
+  await server.stop();
+}
+
+if (processes > 1 && chosen.length > processes)
+  await Promise.all(Array.from({ length: processes }, (_, i) => shard(i)));
+else await run();
+
+const results: Result[] = await Promise.all(
+  chosen.map((s): Promise<Result> => Bun.file(join(out, "results", `${s.id}.json`)).json()),
+);
 
 const box = ({ x, y, w, h }: Rect) => `${Math.round(x)},${Math.round(y)} ${Math.round(w)}×${Math.round(h)}`;
 
