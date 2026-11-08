@@ -12,6 +12,8 @@ const names: Record<Effect, string> = {
   "high-key-mono": "HIGH-KEY LIGHT MONO",
 };
 
+const pickedFade = [0.625, 0.25];
+
 export function Lighting({ settings }: { settings: Settings }) {
   const place = layout(settings);
 
@@ -40,6 +42,9 @@ export function Lighting({ settings }: { settings: Settings }) {
           if (!near) return null;
 
           const gap = Math.sign(i - selected) * near.gap;
+          const alpha = settings.picked && gap < 0 ? pickedFade[Math.abs(i - selected) - 1] : near.alpha;
+
+          if (alpha === undefined) return null;
 
           return (
             <div
@@ -50,10 +55,10 @@ export function Lighting({ settings }: { settings: Settings }) {
                 top: place.y + ay * gap,
                 width: near.ring,
                 height: near.ring,
-                opacity: near.alpha,
+                opacity: alpha,
               }}
             >
-              <Ball effect={effect} size={near.size} ring={near.ring * 0.89} />
+              <Ball effect={effect} size={near.size} ring={near.ring * 0.89} turn={turn} />
             </div>
           );
         })}

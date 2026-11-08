@@ -29,8 +29,18 @@ export function Dots({ radius }: { radius: number }) {
   );
 }
 
-export function Ball({ effect, size, ring }: { effect: Lighting; size: number; ring: number }) {
-  const style: CSSProperties = { width: size, height: size };
+export function Ball({
+  effect,
+  size,
+  ring,
+  turn = 0,
+}: {
+  effect: Lighting;
+  size: number;
+  ring: number;
+  turn?: number;
+}) {
+  const style: CSSProperties = { width: size, height: size, rotate: `${turn}deg` };
 
   return (
     <span className="lighting-ball" style={style}>

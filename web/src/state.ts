@@ -71,6 +71,7 @@ export interface Settings {
   holding: boolean;
   square: boolean;
   lighting: Lighting;
+  picked: boolean;
   viewer: boolean;
   recording: boolean;
   timer: number | null;
@@ -114,6 +115,7 @@ export function initialSettings(profile: Profile, mode: Mode = "photo", facing: 
     holding: false,
     square: false,
     lighting: "natural",
+    picked: false,
     viewer: false,
     recording: false,
     timer: null,
@@ -139,7 +141,10 @@ function rememberedLighting(state: ParityState): Lighting {
     const natural =
       (control === "Depth" && !front) ||
       (front && innerPortrait && lightingControls.includes(control)) ||
-      (front && c.zoom === null);
+      (front && c.zoom === null) ||
+      (!front &&
+        Array.isArray(c.selected) &&
+        (state.orientation === "landscape" ? control === "Timer" : innerPortrait && control === "Exposure"));
 
     return natural ? "natural" : "contour";
   }
@@ -217,6 +222,7 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
     holding: c.action === "shutter held (QuickTake)",
     square: c.control === "Aspect Ratio" && c.selected === "Square",
     lighting: appleLightings.get(String(c.portraitLighting)) ?? rememberedLighting(state),
+    picked: c.portraitLighting !== undefined,
     viewer: state.mode === "viewer",
     recording: c.action === "recording",
     timer: timerOf(c),
