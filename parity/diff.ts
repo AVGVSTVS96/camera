@@ -335,10 +335,18 @@ function sideBySide(apple: PNG, ours: PNG, scale: number, { box: b }: Mark) {
 
 const off = ([dx, dy]: [number, number]) => (dx || dy ? `ours off by ${dx},${dy}pt` : "");
 
+const perState = 3;
+
 async function worstElements(rows: Result[], count: number, name?: string) {
   const worst = rows
-    .flatMap((r) => (r.marks ?? []).flatMap((mark) => (!name || mark.components.includes(name) ? [{ r, mark }] : [])))
-    .toSorted((a, b) => a.mark.score - b.mark.score)
+    .flatMap((r) =>
+      (r.marks ?? [])
+        .filter((mark) => !name || mark.components.includes(name))
+        .toSorted((a, b) => a.score - b.score || b.box.w * b.box.h - a.box.w * a.box.h)
+        .slice(0, perState)
+        .map((mark) => ({ r, mark })),
+    )
+    .toSorted((a, b) => a.mark.score - b.mark.score || b.mark.box.w * b.mark.box.h - a.mark.box.w * a.mark.box.h)
     .slice(0, count);
 
   mkdirSync(join(out, "small", "marks"), { recursive: true });

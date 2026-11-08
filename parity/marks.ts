@@ -189,7 +189,7 @@ function match(apple: Field, ours: Field, pixels: Int32Array, width: number, hei
     return likeness * Math.max(0, 1 - (slip * Math.max(0, Math.hypot(dx, dy) - 1)) / scale);
   };
 
-  let best = { score: -1, dx: 0, dy: 0 };
+  let best = { score: at(0, 0), dx: 0, dy: 0 };
 
   const consider = (dx: number, dy: number) => {
     const score = at(dx, dy);
