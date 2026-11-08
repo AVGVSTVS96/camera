@@ -64,6 +64,7 @@ export interface Settings {
   lighting: Lighting;
   viewer: boolean;
   recording: boolean;
+  held: boolean;
   orientation: Orientation;
   display: Display;
   fold?: string;
@@ -97,6 +98,7 @@ export function initialSettings(profile: Profile, mode: Mode = "photo", facing: 
     lighting: mode === "photo" ? "contour" : "natural",
     viewer: false,
     recording: false,
+    held: false,
     orientation: "portrait",
     display: "outer",
   };
@@ -126,6 +128,7 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
     lighting: appleLightings.get(String(c.portraitLighting)) ?? initial.lighting,
     viewer: state.mode === "viewer",
     recording: c.action === "recording",
+    held: String(c.action).includes("held"),
     orientation: state.orientation,
     display: state.display,
     fold: state.fold,
