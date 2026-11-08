@@ -8,7 +8,7 @@ export function Swatch({ colors }: { colors: string }) {
 
     if (!context) return;
 
-    const pixels = context.createImageData(3, 3);
+    const pixels = context.createImageData(4, 4);
     colors.split(" ").forEach((hex, i) => {
       const value = Number.parseInt(hex, 16);
       pixels.data.set([value >> 16, (value >> 8) & 255, value & 255, 255], i * 4);
@@ -17,5 +17,5 @@ export function Swatch({ colors }: { colors: string }) {
     context.putImageData(pixels, 0, 0);
   }, [colors]);
 
-  return <canvas ref={canvas} className="styles-swatch" width={3} height={3} />;
+  return <canvas ref={canvas} className="styles-swatch" width={4} height={4} />;
 }

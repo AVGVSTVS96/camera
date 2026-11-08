@@ -7,21 +7,60 @@ const DIVIDER: Entry = { divider: true };
 const style = (label: string, colors: string): Entry => ({ name: label.toLowerCase(), colors });
 
 export const strip: Entry[] = [
-  style("Cool Rose", "c9b4c0 e0b4c4 d8a0b8 8a7e86 8f7480 8a6272 4a4248 4f3d47 4b3340"),
-  style("Neutral", "575450 afa4a1 aaa9bb 43413f 797270 7c7a8b 2d2c2b 443f3e 43424d"),
-  style("Bright", "e7b9be f5d2cb e2d7ca b57675 b78b85 bba19b 643b4a 653a4f 653d4d"),
-  style("Rose Gold", "c4b6a9 d8b7a0 d4aa9b 8c847b 917d6b 977a67 4b453f 504336 514131"),
-  style("Gold", "c5ad8b d8a654 d29d34 8d806f 90744d 946f34 4d4337 4f412e 4f3e25"),
-  style("Amber", "c5ada0 daa787 d4a079 8e7f78 947362 977057 4e423e 553e34 553b2e"),
+  style(
+    "Cool Rose",
+    "c7b9c6 d8b4c8 dfa8c0 e0a0b8 9a8792 a07c8c a4707f a8687a 6c5a64 70535f 744c5a 774654 40353c 43303a 452c36 462833",
+  ),
+  style(
+    "Neutral",
+    "514e4b 9b9188 c7bcc0 b7b7d0 42413f 79716c 999194 8d8da3 353434 59544f 6e666a 656578 282726 373533 403c3d 3a3b4a",
+  ),
+  style(
+    "Bright",
+    "f7ced7 f9d5d3 fbdfd5 f2e9dc d68a8c d89b94 d4b5a8 d2c7bc 945c5e 946263 987371 a1787b 5d3547 5b304d 592e4b 5a3043",
+  ),
+  style(
+    "Rose Gold",
+    "d7cbbe ddc0a7 e4bda8 eabaad a29b94 a79481 ab907c b18f7c 736d68 76695b 7a6654 7d6552 433d38 443c34 493a2b 4a3a2a",
+  ),
+  style(
+    "Gold",
+    "d9c2a3 deae65 e3ac45 e8ad2f a49787 a68a63 a98246 ad8232 766b60 75644e 78603d 7a5c2f 463b30 473b2b 473926 483722",
+  ),
+  style(
+    "Amber",
+    "d8c2b6 dfaf91 e6ae87 eab083 a59791 a88877 ac836b b08364 766b67 7a6157 7d5d4d 7e5b46 463b38 493933 4f352a 4e3528",
+  ),
   DIVIDER,
-  style("Standard", "b3b7bb adbac2 9dadb8 828587 778086 707e88 444547 414649 3b454c"),
+  style(
+    "Standard",
+    "c8cccf b7c2c9 b0bfca aabdc9 9a9c9e 8f979b 87939c 82939d 6d6e70 666a6f 616b71 5b6a72 3c3e40 3b3d3f 373e43 333e45",
+  ),
   DIVIDER,
-  style("Vibrant", "abb1ac b4998e c06a67 778686 6a7b76 78675e 39494b 314a4b 304644"),
-  style("Natural", "bcbec1 bdc3d0 a8b1c8 868789 80848d 787f93 464647 44464b 3f4452"),
-  style("Luminous", "aeb4bd a4a1ba ab8b99 7e8788 657c87 686d88 404847 324a4a 2e4550"),
-  style("Dramatic", "acb9b8 6db6c3 35a6c7 888683 737c74 517b7c 494644 4f4137 484032"),
-  style("Quiet", "c1bcaf bdac92 b0a07e 878880 7d7968 726e58 434843 414439 3c3d30"),
-  style("Cozy", "d9c0a0 e3b88a e8a870 8a7b66 8c6f52 8a5f3c 463d33 4a382a 4a3224"),
+  style(
+    "Vibrant",
+    "bfc8c3 b6ac9f c68e82 da6467 919d9e 80908b 887f76 986960 647072 556e6d 506965 5b5f55 324244 2d4246 294344 274141",
+  ),
+  style(
+    "Natural",
+    "d1d3d5 c8cdd5 c1c8da b5bfdb 9fa0a0 989ba1 9297a8 8a93ab 6e6f70 6b6c72 676c78 626a7d 3e3f40 3d3f41 3a3e45 373d4c",
+  ),
+  style(
+    "Luminous",
+    "c6cdd3 aaacc7 b29db8 c3949c 9aa0a1 7d919e 79849a 857691 6d7270 576e6f 4d6773 4d607d 39403f 304340 284243 27404a",
+  ),
+  style(
+    "Dramatic",
+    "c7cfcd 86bfc6 51bbd6 25b4e2 a09f9d 89948d 679091 468e9b 73716f 71675f 666558 4d6860 413f3d 443b36 4a382b 47382a",
+  ),
+  style(
+    "Quiet",
+    "d5d0c4 d9cab0 d9cab0 d9cab0 9f9f96 a19d8a a19d8a a19d8a 6d706c 6d6f62 6d6f62 6d6f62 3a403a 3b4138 3b4138 3b4138",
+  ),
+  style(
+    "Cozy",
+    "dcc09a e6b378 eca658 f0a040 a89070 a98550 a8803a ab7a30 76644c 785a3a 79552c 7a5026 44382c 463527 473123 472f20",
+  ),
 ];
 
 const CELL = 58;
