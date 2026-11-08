@@ -14,6 +14,7 @@ import { ModeDial } from "./components/mode-dial/ModeDial.tsx";
 import { Recording } from "./components/recording/Recording.tsx";
 import { Shutter } from "./components/shutter/Shutter.tsx";
 import { SmartTake } from "./components/smart-take/SmartTake.tsx";
+import { SubmenuWhiteBalance } from "./components/submenu-white-balance/SubmenuWhiteBalance.tsx";
 import { Thumbnail } from "./components/thumbnail/Thumbnail.tsx";
 import { TopBar } from "./components/top-bar/TopBar.tsx";
 import { Viewer } from "./components/viewer/Viewer.tsx";
@@ -91,15 +92,16 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
               : !settings.recording && !settings.holding && <DepthButton />}
             <Shutter movie={movie} onPress={shutter} />
             {profile.smartTake && !movie && !settings.recording && <SmartTake />}
-            <ControlsButton open={() => update({ tray: true })} />
+            {!settings.submenu && <ControlsButton open={() => update({ tray: true })} />}
           </div>
           <div className="row modes">
             <Thumbnail shot={shot} open={() => update({ viewer: true })} />
           </div>
-          <Flip {...props} />
+          {!settings.submenu && <Flip {...props} />}
           {!settings.recording && <ModeDial selected={settings.mode} select={(mode) => update({ mode })} />}
         </>
       )}
+      {settings.balance && <SubmenuWhiteBalance {...props} />}
       <Countdown settings={settings} />
       {profile.lighting !== false && !settings.tray && !movie && <Lighting settings={settings} />}
       <AspectFlip {...props} />

@@ -191,3 +191,27 @@
   font-size: 15px;
   color: rgb(255 255 255 / 0.7);
 }
+
+.submenu {
+  position: absolute;
+  width: 447px;
+  height: 181px;
+  translate: -50% -50%;
+}
+
+.screen[data-orientation="portrait"][data-display="outer"] .submenu {
+  left: 50%;
+  top: calc(var(--h) - 99.5px);
+}
+
+.screen[data-orientation="portrait"][data-display="inner"] .submenu {
+  left: 50%;
+  top: 99.5px;
+  rotate: 180deg;
+}
+
+.screen[data-orientation="landscape"] .submenu {
+  left: 99.5px;
+  top: 50%;
+  rotate: 90deg;
+}

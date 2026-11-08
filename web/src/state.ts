@@ -60,6 +60,7 @@ export interface Settings {
   expanded: boolean;
   on: string[];
   submenu: boolean;
+  balance: string | null;
   styles: boolean;
   countdown: boolean;
   holding: boolean;
@@ -98,6 +99,7 @@ export function initialSettings(profile: Profile, mode: Mode = "photo", facing: 
     expanded: false,
     on: [],
     submenu: false,
+    balance: null,
     styles: false,
     countdown: false,
     holding: false,
@@ -135,6 +137,7 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
     expanded: c.panel === "expanded" || c.control !== undefined,
     on: c.control && (c.to === "On" || c.to === "Adaptive") ? [String(c.control)] : [],
     submenu: c.panel === "submenu",
+    balance: c.panel === "submenu" && c.control === "White Balance" ? String(c.selected).toLowerCase() : null,
     styles: c.control === "Styles",
     countdown: c.action === "countdown running",
     holding: c.action === "shutter held (QuickTake)",
