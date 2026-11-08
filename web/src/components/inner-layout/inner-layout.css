@@ -42,7 +42,9 @@
   width: 208px;
   translate: -50%;
   text-align: center;
-  font: 600 17px/26px system-ui, sans-serif;
+  font:
+    600 17px/26px system-ui,
+    sans-serif;
   color: #000;
 }
 
