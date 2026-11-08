@@ -129,7 +129,7 @@ export function ControlsPanel({ settings, update }: Props) {
       (mode === "photo" || (mode === "cinematic" && orientation === "landscape")),
   });
 
-  const narrow = orientation === "landscape" && !sheet.turned;
+  const narrow = (orientation === "landscape") !== sheet.turned;
 
   return (
     <>
