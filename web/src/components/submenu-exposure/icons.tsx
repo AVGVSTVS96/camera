@@ -18,6 +18,6 @@ export const Chevron = () => (
 
 export const Reset = () => (
   <svg {...props}>
-    <path d="M12 6a7 7 0 1 1-6.4 3.8M12 6H8.2m2.6-2.4L8.2 6l2.6 2.4" />
+    <path d="M12 6.5a6.2 6.2 0 1 1-5.7 3.4M12 6.5H8.6m2.2-2.2L8.6 6.5l2.2 2.2" />
   </svg>
 );
