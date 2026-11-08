@@ -18,11 +18,17 @@
 }
 
 .exposure-strip {
+  --turn: 0deg;
   position: absolute;
   inset: 50% auto auto 50%;
   width: 450px;
   height: 184px;
   translate: -50% -50%;
+  rotate: var(--turn);
+}
+
+.exposure-reset svg {
+  rotate: calc(-1 * var(--turn));
 }
 
 .screen[data-orientation="landscape"] .exposure {
@@ -33,7 +39,7 @@
 }
 
 .screen[data-orientation="landscape"] .exposure-strip {
-  rotate: 90deg;
+  --turn: 90deg;
 }
 
 .screen[data-display="inner"][data-orientation="portrait"] .exposure {
@@ -41,11 +47,7 @@
 }
 
 .screen[data-display="inner"][data-orientation="portrait"] .exposure-strip {
-  rotate: 180deg;
-}
-
-.screen[data-display="inner"][data-orientation="portrait"] .exposure-reset svg {
-  rotate: 180deg;
+  --turn: 180deg;
 }
 
 .exposure-button {

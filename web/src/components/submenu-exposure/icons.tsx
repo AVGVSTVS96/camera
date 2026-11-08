@@ -4,7 +4,7 @@ const props = {
   viewBox: "0 0 24 24",
   fill: "none",
   stroke: "#fff",
-  strokeWidth: 1.8,
+  strokeWidth: 1.7,
   strokeLinecap: "round",
   strokeLinejoin: "round",
   "aria-hidden": true,
@@ -18,6 +18,6 @@ export const Chevron = () => (
 
 export const Reset = () => (
   <svg {...props}>
-    <path d="M12 6.5a6.2 6.2 0 1 1-5.7 3.4M12 6.5H8.6m2.2-2.2L8.6 6.5l2.2 2.2" />
+    <path d="M5.4 13.6a6.6 6.6 0 1 0 6.6-6.6H8.6M12.2 3.8 8.6 7.3l3.6 3.6" />
   </svg>
 );

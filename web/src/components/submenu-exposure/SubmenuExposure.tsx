@@ -26,9 +26,11 @@ export function SubmenuExposure({ settings }: Pick<Props, "settings">) {
           <Chevron />
         </button>
         <h2 className="exposure-header">EXPOSURE</h2>
-        <button className="exposure-button exposure-reset" style={{ left: 389 }} aria-label="Reset">
-          <Reset />
-        </button>
+        {exposure !== 0 && (
+          <button className="exposure-button exposure-reset" style={{ left: 389 }} aria-label="Reset">
+            <Reset />
+          </button>
+        )}
         <output className="exposure-value">{exposure.toFixed(1)}</output>
         <div className="exposure-slider" role="slider" aria-label="Exposure slider" aria-valuenow={exposure}>
           {ticks(selected).map(({ step, selected: on, major }) => (
