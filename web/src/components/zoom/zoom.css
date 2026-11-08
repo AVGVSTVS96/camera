@@ -17,7 +17,7 @@
 }
 
 .stops [data-on] {
-  background: rgb(0 0 0 / 0.42);
+  background: rgb(0 0 0 / 0.48);
   color: var(--yellow);
   font-size: 14px;
 }

@@ -11,14 +11,20 @@ function zoomLabel(value: number, active: boolean) {
 }
 
 export function Zoom({ settings, update }: Props) {
-  const stops = useProfile().zoom[`${settings.facing}-${settings.mode}`]?.stops ?? [];
+  const profile = useProfile();
+  const own = profile.zoom[`${settings.facing}-${settings.mode}`]?.stops ?? [];
+  const stops = settings.expanded ? [0.5, 1, 2, settings.zoom] : own;
   const hide = useRef<number>(undefined);
-  const active = stops.lastIndexOf(Math.max(...stops.filter((s) => s <= settings.zoom + 0.001)));
+  const anchored = stops.length === 1 || settings.expanded;
+  const active = settings.expanded
+    ? stops.length - 1
+    : stops.lastIndexOf(Math.max(...stops.filter((s) => s <= settings.zoom + 0.001)));
 
   if (!stops.length) return null;
 
-  const place = layout(settings, stops.length);
+  const place = layout(settings, profile.name === "duo");
   const [ax, ay] = place.along;
+  const shift = anchored ? place.lone - (place.vertical ? place.y : place.x) : 0;
   const marker = Math.atan2(-place.into[1], -place.into[0]) * (180 / Math.PI) - 90;
 
   function open() {
@@ -26,6 +32,13 @@ export function Zoom({ settings, update }: Props) {
     update({ dial: true });
     hide.current = window.setTimeout(() => update({ dial: false }), 2000);
   }
+
+  const offset = (i: number) => {
+    const k = anchored ? i : i - active;
+    const along = k * slot;
+
+    return `${along * ax + (place.vertical ? 0 : shift)}px ${along * ay + (place.vertical ? shift : 0)}px`;
+  };
 
   return (
     <>
@@ -56,12 +69,10 @@ export function Zoom({ settings, update }: Props) {
           <button
             key={i}
             data-on={i === active || undefined}
-            style={{ translate: `${(i - active) * slot * ax}px ${(i - active) * slot * ay}px` }}
-            onClick={() => update({ zoom: stop })}
+            style={{ translate: offset(i) }}
+            onClick={() => (anchored && stops.length === 1 ? update({ expanded: true }) : update({ zoom: stop }))}
           >
-            <span className="glyph" style={{ rotate: `${place.turn}deg` }}>
-              {zoomLabel(i === active ? settings.zoom : stop, i === active)}
-            </span>
+            <span className="glyph">{zoomLabel(i === active ? settings.zoom : stop, i === active)}</span>
           </button>
         ))}
       </div>

@@ -8,6 +8,7 @@ const places = {
     vertical: false,
     closed: 446,
     submenu: 344,
+    square: 338.33,
     cross: 233,
     lone: 34,
     along: [1, 0],
@@ -18,6 +19,7 @@ const places = {
     vertical: true,
     closed: 232,
     submenu: 334,
+    square: 339.67,
     cross: 233,
     lone: 34,
     along: [0, 1],
@@ -28,6 +30,7 @@ const places = {
     vertical: false,
     closed: 232,
     submenu: 334,
+    square: 373.33,
     cross: 334.5,
     lone: 635,
     along: [-1, 0],
@@ -38,6 +41,7 @@ const places = {
     vertical: true,
     closed: 232,
     submenu: 334,
+    square: 373.33,
     cross: 334.5,
     lone: 34,
     along: [0, 1],
@@ -48,21 +52,22 @@ const places = {
 
 export const slot = 39;
 
-export function layout(s: Settings, count: number) {
+export function layout(s: Settings, duo: boolean) {
   const p = places[`${s.display}-${s.orientation}`];
   const [dx, dy] = p.into;
-  const depth = s.submenu ? p.submenu : p.closed;
-  const across = count === 1 ? p.lone : p.cross;
+  const closed = duo ? 432 : p.closed;
+  const depth = s.square ? p.square : s.submenu ? p.submenu : closed;
   const point = (along: number, out: number) => (p.vertical ? [out, along] : [along, out]);
-  const edge = p.closed - 20 * (p.vertical ? dx : dy);
+  const edge = closed - 20 * (p.vertical ? dx : dy);
   const w = Math.sqrt(p.radius ** 2 - (p.radius - p.reach) ** 2);
   const [x1, y1] = point(p.cross - w * (p.vertical ? 1 : dy * -1), edge);
   const [x2, y2] = point(p.cross + w * (p.vertical ? 1 : dy * -1), edge);
   const [ax, ay] = point(p.cross, edge + p.reach * (p.vertical ? dx : dy));
 
   return {
-    x: p.vertical ? depth : across,
-    y: p.vertical ? across : depth,
+    x: p.vertical ? depth : p.cross,
+    y: p.vertical ? p.cross : depth,
+    lone: p.lone,
     along: p.along,
     vertical: p.vertical,
     into: p.into,
