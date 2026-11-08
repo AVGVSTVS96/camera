@@ -3,15 +3,30 @@
   color: #fff;
 }
 
+.depth-button[data-on] {
+  background: #6f6f74;
+  box-shadow: none;
+  color: #b7a33a;
+}
+
+.depth-button[data-on]::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border: 1.3px solid currentColor;
+  border-radius: 50%;
+}
+
 .screen[data-orientation="landscape"] .row > .depth-button {
   top: 58px;
   translate: -50% -50%;
 }
 
 .depth-button .glyph {
+  stroke-width: 1.3px;
   rotate: 0deg;
 }
 
-.screen[data-display="inner"][data-orientation="portrait"] .depth-button .glyph {
+.screen[data-orientation="landscape"] .depth-button .glyph {
   rotate: -90deg;
 }

@@ -96,7 +96,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
           <div className="row shutter">
             {movie
               ? profile.macro && <Macro {...props} />
-              : !settings.recording && !settings.holding && <DepthButton />}
+              : !settings.recording && !settings.holding && <DepthButton on={settings.depth} />}
             <Shutter movie={movie} onPress={shutter} />
             {profile.smartTake && !movie && !settings.recording && !settings.submenu && <SmartTake />}
             {!settings.submenu && <ControlsButton open={() => update({ tray: true })} />}

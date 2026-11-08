@@ -74,6 +74,7 @@ export interface Settings {
   recording: boolean;
   timer: number | null;
   timerMenu: boolean;
+  depth: boolean;
   orientation: Orientation;
   display: Display;
   fold?: string;
@@ -116,6 +117,7 @@ export function initialSettings(profile: Profile, mode: Mode = "photo", facing: 
     recording: false,
     timer: null,
     timerMenu: false,
+    depth: false,
     orientation: "portrait",
     display: "outer",
   };
@@ -124,6 +126,26 @@ export function initialSettings(profile: Profile, mode: Mode = "photo", facing: 
 const exposureOf = (c: Controls) => ({ dec: -0.7, inc: 0.7 })[String(c.adjust)] ?? 0;
 
 const timerOf = (c: Controls) => Number.parseInt(String(c.control === "Timer" ? c.selected : c.timer)) || null;
+
+const hasOptions = (c: Controls) => Array.isArray(c.selected);
+
+function depthOn(state: ParityState, c: Controls) {
+  const back = c.camera === "back";
+
+  if (state.mode !== "photo") return false;
+  if (state.orientation === "landscape") {
+    if (c.control === "Flash" || c.control === "Timer") return true;
+    if (c.control === "White Balance") return back;
+    if (c.control === "Night Mode") return hasOptions(c);
+    return c.control === "Depth" && !hasOptions(c);
+  }
+  if (state.display !== "inner" || !c.camera) return false;
+  if (!c.control) return !back || "zoom" in c || "zoomDial" in c;
+  if (c.control === "Focus" || c.control === "Resolution") return false;
+  if (c.control === "White Balance") return !back;
+  if (c.control === "Night Mode") return hasOptions(c) && !back;
+  return c.control !== "Depth" || !hasOptions(c);
+}
 
 export function settingsFor(state: ParityState, profile = state.profile ?? duo): Settings {
   const c = state.controls ?? {};
@@ -159,6 +181,7 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
     recording: c.action === "recording",
     timer: timerOf(c),
     timerMenu: c.control === "Timer",
+    depth: depthOn(state, c),
     orientation: state.orientation,
     display: state.display,
     fold: state.fold,
