@@ -6,5 +6,6 @@ const repo = join(import.meta.dir, "..");
 export const key = process.env.KEY ?? join(research, "answer-key");
 export const duo = join(research, "duo");
 export const specs = join(key, "specs");
+export const mainOut = join(research, "parity", "camera");
 export const out = process.env.OUT ?? join(research, "parity", basename(repo));
 export const dist = join(repo, "web/dist");

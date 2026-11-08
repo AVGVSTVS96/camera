@@ -4,7 +4,7 @@ import { parseArgs } from "node:util";
 import pixelmatch from "pixelmatch";
 import { webkit, type Browser } from "playwright";
 import { PNG } from "pngjs";
-import { out, specs } from "./paths.ts";
+import { mainOut, out, specs } from "./paths.ts";
 import { publish } from "./publish.ts";
 import { read, scene } from "./scene.ts";
 import { serve } from "./serve.ts";
@@ -161,7 +161,12 @@ async function render(browser: Browser, url: URL, state: State) {
 
 const { values: flags, positionals: ids } = parseArgs({
   allowPositionals: true,
-  options: { component: { type: "string" }, "no-build": { type: "boolean" }, worst: { type: "string", default: "15" } },
+  options: {
+    component: { type: "string" },
+    "no-build": { type: "boolean" },
+    sample: { type: "string" },
+    worst: { type: "string", default: "15" },
+  },
 });
 
 const all = await states();
@@ -192,7 +197,36 @@ function pick(id: string) {
   return state;
 }
 
-const chosen = component ? all.filter((s) => regionsOf(s)[component]) : ids.length ? ids.map(pick) : all;
+async function lastScore(state: State) {
+  for (const dir of [out, mainOut]) {
+    const file = Bun.file(join(dir, "results", `${state.id}.json`));
+
+    if (await file.exists()) {
+      const result: Result = await file.json();
+
+      return component ? result.components[component]?.score : result.score;
+    }
+  }
+}
+
+async function sample(candidates: State[], size: number) {
+  const scored = await Promise.all(candidates.map(async (state) => ({ state, score: (await lastScore(state)) ?? -1 })));
+
+  const groups = Map.groupBy(
+    scored.toSorted((a, b) => a.score - b.score || a.state.id.localeCompare(b.state.id)),
+    ({ state }) => `${state.profile} ${state.display} ${state.orientation}`,
+  );
+
+  const rounds = [...groups.values()].flatMap((group) => group.map(({ state }, round) => ({ state, round })));
+
+  return rounds
+    .toSorted((a, b) => a.round - b.round)
+    .slice(0, size)
+    .map(({ state }) => state);
+}
+
+const candidates = component ? all.filter((s) => regionsOf(s)[component]) : ids.length ? ids.map(pick) : all;
+const chosen = flags.sample ? await sample(candidates, Number(flags.sample)) : candidates;
 
 if (!flags["no-build"]) {
   const build = Bun.spawnSync(["bun", "run", "build"], { cwd: join(import.meta.dir, "../web"), stdout: "ignore" });
@@ -242,7 +276,7 @@ if (component) {
   }
 }
 
-if (!component && !ids.length) {
+if (!component && !ids.length && !flags.sample) {
   const current = new Set(all.map((s) => s.id));
 
   const board = (
@@ -272,5 +306,7 @@ if (!component && !ids.length) {
   console.log(`\nOverall ${summary.score}% (simulator ${summary.simulator}%, duo ${summary.duo}%)`);
 
   for (const c of summary.components) console.log(`  ${c.score.toFixed(2).padStart(6)}%  ${c.name} (${c.states})`);
-  await publish(summary).catch((e: Error) => console.error(`Scoreboard not published: ${e.message}`));
+
+  if (out === mainOut)
+    await publish(summary).catch((e: Error) => console.error(`Scoreboard not published: ${e.message}`));
 }
