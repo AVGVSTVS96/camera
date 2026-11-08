@@ -48,7 +48,7 @@ export const Framing = () => (
 export const Focus = () => (
   <Icon size={30}>
     <path d="M3 8V5a2 2 0 0 1 2-2h3m8 0h3a2 2 0 0 1 2 2v3m0 8v3a2 2 0 0 1-2 2h-3m-8 0H5a2 2 0 0 1-2-2v-3" />
-    <circle cx="12" cy="12" r="2" fill="currentColor" stroke="none" />
+    <circle cx="12" cy="12" r="2.6" fill="currentColor" stroke="none" />
   </Icon>
 );
 
@@ -96,7 +96,7 @@ export const Action = ({ on }: { on: boolean }) => (
 
 export const Adaptive = () => (
   <Icon size={30}>
-    <circle cx="11" cy="12" r="7.5" strokeDasharray="1.6 1.4" strokeWidth={2.2} />
+    <circle cx="11" cy="12" r="7" strokeDasharray="0.7 1.3" strokeWidth={4} />
     <circle cx="18" cy="17.5" r="4.6" fill="currentColor" stroke="none" />
     <path d="m16.1 19.7 1.9-4.7 1.9 4.7m-3.1-1.5h2.4" stroke="#000" strokeWidth={1.2} />
   </Icon>
@@ -104,8 +104,7 @@ export const Adaptive = () => (
 
 export const Constant = () => (
   <Icon size={30}>
-    <circle cx="12" cy="12" r="8.5" strokeDasharray="1.6 1.4" strokeWidth={2.2} />
-    <path d="M12 7.5V12l3 2" />
+    <circle cx="12" cy="12" r="8" strokeDasharray="0.7 1.3" strokeWidth={4} />
   </Icon>
 );
 

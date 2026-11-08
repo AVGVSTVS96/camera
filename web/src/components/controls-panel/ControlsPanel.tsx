@@ -29,11 +29,11 @@ interface Control {
   on?: boolean;
 }
 
-function Stack({ top, bottom, turn = 0 }: { top: string; bottom: string; turn?: number }) {
+function Stack({ top, bottom, turn = 0 }: { top: string; bottom?: string; turn?: number }) {
   return (
     <span className="badge tray-stack" style={{ rotate: `${turn}deg` }}>
       <b>{top}</b>
-      <b className="mono">{bottom}</b>
+      {bottom && <b className="mono">{bottom}</b>}
     </span>
   );
 }
@@ -67,7 +67,7 @@ function controlsFor(settings: Settings, photoFormat: string): Control[] {
       glyph: on.includes("Time-Lapse Mode") ? <Adaptive /> : <Constant />,
       on: on.includes("Time-Lapse Mode"),
     },
-    quality: { label: "Resolution", glyph: <Stack top="HD" bottom="30" turn={turn} /> },
+    quality: { label: "Resolution", glyph: <Stack top="HD" turn={turn} /> },
   };
 
   switch (mode) {

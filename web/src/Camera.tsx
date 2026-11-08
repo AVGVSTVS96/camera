@@ -61,7 +61,6 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
       data-countdown={settings.countdown || undefined}
       data-holding={settings.holding || undefined}
       data-recording={settings.recording || undefined}
-      data-submenu={settings.submenu || undefined}
       style={still ? { backgroundImage: `url(/plates/${still}.png)` } : undefined}
     >
       <div className="viewfinder">

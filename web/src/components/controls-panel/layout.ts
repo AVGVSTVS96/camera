@@ -76,7 +76,7 @@ export function arrange(count: number, { display, orientation, photo, compact, t
       left: "8px",
       top: handleTop,
       width: px(W, -16),
-      height: `${141 + ROW * (rows - 1) - shift}px`,
+      height: `${191 + ROW * (rows - 1) - shift}px`,
       handle: { x: px(midW, -19), y: px(handleTop, 10), vertical: false },
       turned: false,
     };
