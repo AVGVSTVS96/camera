@@ -3,7 +3,7 @@ import "./depth-button.css";
 
 export function DepthButton() {
   return (
-    <button className="glass round lead dim" aria-label="Depth">
+    <button className="depth-button lead" aria-label="Depth">
       <DepthOff />
     </button>
   );

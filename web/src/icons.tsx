@@ -55,7 +55,6 @@ export const Moon = () => (
 export const DepthOff = () => (
   <Icon>
     <path d="M15.5 4.5c-2.6-.6-3.9.6-4.5 3.4l-2.3 10c-.5 2.2-1.6 2.9-3.7 2.6M8 10h7" />
-    <path d="M5 5.5 19 19.5" />
   </Icon>
 );
 
