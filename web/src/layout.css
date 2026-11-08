@@ -6,7 +6,7 @@
   --w: 100vw;
   --h: 100dvh;
   --chrome: var(--w);
-  --side: min(175px, var(--chrome) / 2 - 40px);
+  --side: 175px;
   --glyph-turn: 0deg;
 }
 
@@ -83,6 +83,34 @@
   --x: var(--side);
 }
 
+.screen[data-orientation="landscape"] .row {
+  inset: 0 auto;
+  width: 0;
+  height: auto;
+}
+
+.screen[data-orientation="landscape"] .row > * {
+  top: 50%;
+  left: 0;
+  translate: -50% calc(-50% + var(--x, 0px));
+}
+
+.screen[data-orientation="landscape"] .row.zoom {
+  left: 246px;
+}
+
+.screen[data-orientation="landscape"] .row.shutter {
+  left: 147px;
+}
+
+.screen[data-orientation="landscape"] .row.modes {
+  left: 58px;
+}
+
+.screen[data-orientation="landscape"] .row.top {
+  inset: 0 50px 0 auto;
+}
+
 .row.top {
   top: 50px;
 }
@@ -92,7 +120,7 @@
 }
 
 .row.shutter {
-  bottom: 156px;
+  bottom: 147px;
 }
 
 .row.modes {

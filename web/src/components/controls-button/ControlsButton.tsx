@@ -1,8 +1,9 @@
+import "./controls-button.css";
 import { More } from "./icons.tsx";
 
-export function ControlsButton({ movie, open }: { movie: boolean; open: () => void }) {
+export function ControlsButton({ open }: { open: () => void }) {
   return (
-    <button className="glass round trail" data-on={!movie || undefined} aria-label="Camera controls" onClick={open}>
+    <button className="controls-button trail" aria-label="Camera Controls" onClick={open}>
       <More />
     </button>
   );
