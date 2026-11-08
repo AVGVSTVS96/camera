@@ -1,7 +1,75 @@
-.timer {
-  padding: 4px 10px;
-  border-radius: 6px;
-  background: #ff3b30;
-  font: 500 17px system-ui;
+.screen {
+  --timer: 525.33px 8px;
+  --pause: 119.5px 30.5px;
+  --still: 119.5px 583.5px;
+  --timer-fill: rgb(0 0 0 / 0.3);
+}
+
+.screen[data-display="outer"][data-orientation="landscape"] {
+  --timer: 388.83px 8px;
+  --still: 119.5px 380.5px;
+}
+
+.screen[data-display="inner"][data-orientation="portrait"] {
+  --timer: 353.36px 484.67px;
+  --pause: 583.5px 119.5px;
+  --still: 30.5px 119.5px;
+  --timer-fill: transparent;
+}
+
+.screen[data-display="outer"][data-orientation="portrait"] {
+  --timer: 142.55px 435px;
+  --pause: 30.5px 503.5px;
+  --still: 380.5px 503.5px;
+  --timer-fill: transparent;
+}
+
+.recording-timer,
+.recording-pause,
+.recording-still {
+  position: absolute;
+  translate: var(--at);
+  top: 0;
+  left: 0;
+}
+
+.recording-timer {
+  --at: var(--timer);
+  display: grid;
+  place-items: center;
+  width: 96.33px;
+  height: 31.33px;
+  border-radius: 5px;
+  background: var(--timer-fill);
+  font:
+    400 21px ui-rounded,
+    system-ui;
   font-variant-numeric: tabular-nums;
+  color: #fff;
+}
+
+.recording-pause,
+.recording-still {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+}
+
+.recording-pause {
+  --at: var(--pause);
+  background: #515053;
+  fill: #fff;
+}
+
+.recording-still {
+  --at: var(--still);
+  background: #fff;
+  border: 5px solid #1c1c1e;
+  background-clip: padding-box;
+}
+
+.recording-still[data-holding] {
+  width: 40px;
+  height: 40px;
+  margin: 7.5px;
 }

@@ -73,10 +73,8 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
         {settings.level && !still && <Level />}
       </div>
       {settings.grid && <Grid />}
-      {settings.recording ? (
-        <div className="row top">
-          <Recording />
-        </div>
+      {settings.recording || settings.holding ? (
+        <Recording settings={settings} />
       ) : (
         (profile.badges || settings.tray) && (
           <div className="row top">
@@ -99,12 +97,14 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
               : !settings.recording && !settings.holding && <DepthButton on={settings.depth} />}
             <Shutter movie={movie} onPress={shutter} />
             {profile.smartTake && !movie && !settings.recording && !settings.submenu && <SmartTake />}
-            {!settings.submenu && <ControlsButton open={() => update({ tray: true })} />}
+            {!settings.submenu && !settings.recording && <ControlsButton open={() => update({ tray: true })} />}
           </div>
           <div className="row modes">
-            {!settings.submenu && <Thumbnail shot={shot} open={() => update({ viewer: true })} />}
+            {!settings.submenu && !settings.recording && (
+              <Thumbnail shot={shot} open={() => update({ viewer: true })} />
+            )}
           </div>
-          {!settings.submenu && <Flip {...props} />}
+          {!settings.submenu && !settings.recording && <Flip {...props} />}
           {!settings.recording && <ModeDial selected={settings.mode} select={(mode) => update({ mode })} />}
         </>
       )}
@@ -116,7 +116,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
       <AspectFlip {...props} />
       {settings.viewer && <Viewer shot={shot} close={() => update({ viewer: false })} />}
       {settings.viewer && settings.display === "inner" && <InnerViewer empty={!shot} />}
-      {still && settings.display === "outer" && <div className="system" />}
+      {still && settings.display === "outer" && !settings.recording && <div className="system" />}
       {error && <p className="error">{error}</p>}
     </main>
   );
