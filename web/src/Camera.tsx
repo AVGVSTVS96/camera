@@ -94,9 +94,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
         </>
       )}
       {profile.lighting !== false && !settings.tray && <Lighting settings={settings} />}
-      {settings.viewer && (
-        <Viewer shot={shot} close={() => update({ viewer: false })} />
-      )}
+      {settings.viewer && <Viewer shot={shot} close={() => update({ viewer: false })} />}
       {settings.viewer && settings.display === "inner" && <InnerViewer empty={!shot} />}
       {still && settings.display === "outer" && <div className="system" />}
       {error && <p className="error">{error}</p>}
