@@ -31,6 +31,7 @@
   translate: var(--at);
   top: 0;
   left: 0;
+  z-index: 1;
 }
 
 .recording-timer {
@@ -42,9 +43,9 @@
   border-radius: 5px;
   background: var(--timer-fill);
   font:
-    400 21px ui-rounded,
-    system-ui;
-  font-variant-numeric: tabular-nums;
+    500 17px ui-monospace,
+    monospace;
+  letter-spacing: -0.5px;
   color: #fff;
 }
 
@@ -73,4 +74,31 @@
   width: 40px;
   height: 40px;
   margin: 7.5px;
+  border: 0;
+  background: #0d0d0d;
+  color: #9b9b9b;
+}
+
+.recording-still[data-holding]::before {
+  content: "";
+  position: absolute;
+  background: #a8a8a8;
+  top: 19.75px;
+  left: 45px;
+  width: 220px;
+  height: 0.5px;
+}
+
+.screen[data-display="outer"][data-orientation="portrait"] .recording-still[data-holding]::before {
+  left: auto;
+  right: 44px;
+  width: 114.5px;
+}
+
+.screen[data-orientation="landscape"] .recording-still[data-holding]::before {
+  top: auto;
+  left: 19.75px;
+  bottom: 43px;
+  width: 0.5px;
+  height: 216.5px;
 }

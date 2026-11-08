@@ -97,16 +97,20 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
               ? profile.macro && <Macro {...props} />
               : !settings.recording && !settings.holding && <DepthButton on={settings.depth} />}
             <Shutter movie={movie} onPress={shutter} />
-            {profile.smartTake && !movie && !settings.recording && !settings.submenu && <SmartTake />}
-            {!settings.submenu && !settings.recording && <ControlsButton open={() => update({ tray: true })} />}
+            {profile.smartTake && !movie && !settings.recording && !settings.holding && !settings.submenu && (
+              <SmartTake />
+            )}
+            {!settings.submenu && !settings.holding && !settings.recording && (
+              <ControlsButton open={() => update({ tray: true })} />
+            )}
           </div>
           <div className="row modes">
             {!settings.submenu && !settings.recording && (
               <Thumbnail shot={shot} open={() => update({ viewer: true })} />
             )}
           </div>
-          {!settings.submenu && !settings.recording && <Flip {...props} />}
-          {!settings.recording && !settings.focus && !settings.submenu && (
+          {!settings.submenu && !settings.holding && !settings.recording && <Flip {...props} />}
+          {!settings.holding && !settings.recording && !settings.focus && !settings.submenu && (
             <ModeDial selected={settings.mode} select={(mode) => update({ mode })} />
           )}
         </>
@@ -115,7 +119,9 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
       {settings.focus && <SubmenuFocus {...props} />}
       {settings.balance && <SubmenuWhiteBalance {...props} />}
       <Countdown settings={settings} />
-      {profile.lighting !== false && !settings.tray && !styling && !movie && <Lighting settings={settings} />}
+      {profile.lighting !== false && !settings.tray && !styling && !movie && !settings.holding && (
+        <Lighting settings={settings} />
+      )}
       {styling && <SubmenuStyles {...props} />}
       <AspectFlip {...props} />
       {settings.viewer && <Viewer shot={shot} close={() => update({ viewer: false })} />}
