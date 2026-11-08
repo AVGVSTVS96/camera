@@ -110,7 +110,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
             )}
           </div>
           {!settings.submenu && !settings.holding && !settings.recording && <Flip {...props} />}
-          {!settings.holding && !settings.recording && !settings.focus && !settings.submenu && (
+          {!settings.holding && !settings.recording && !settings.submenu && (
             <ModeDial selected={settings.mode} select={(mode) => update({ mode })} />
           )}
         </>

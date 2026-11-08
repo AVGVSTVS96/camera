@@ -5,7 +5,7 @@
   width: 450px;
   height: 184px;
   box-sizing: border-box;
-  border-radius: 64px;
+  border-radius: 52px;
   background: rgb(51 51 51 / 0.61);
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.2),
@@ -71,13 +71,13 @@
 }
 
 .focus-person {
-  left: 66px;
-  top: 75.7px;
+  left: 64.33px;
+  top: 74.33px;
 }
 
 .focus-mountains {
-  left: 345.7px;
-  top: 75.7px;
+  left: 345.42px;
+  top: 74.83px;
 }
 
 .focus-track {

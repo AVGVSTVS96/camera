@@ -17,19 +17,41 @@ export function Chevron() {
 
 export function Person() {
   return (
-    <svg width="18.3" height="19.3" viewBox="0 0 55 58" fill="#a5a5a5">
-      <circle cx="27.5" cy="14" r="14" />
-      <path d="M0 58v-4c0-8 8-14 27.5-14S55 46 55 54v4z" />
+    <svg width="22" height="22" viewBox="0 0 66 66" fill="#a5a5a5">
+      <ellipse cx="34.6" cy="18.6" rx="12.9" ry="13.8" />
+      <path d="M7.5 58a27.1 19 0 0 1 54.2 0v.8a4 4 0 0 1-4 4H11.5a4 4 0 0 1-4-4z" />
     </svg>
   );
 }
 
+const peak = "M73.8 12.5 107.4 56.6H40.7z";
+
 export function Mountains() {
   return (
-    <svg width="38" height="19.3" viewBox="0 0 114 58" fill="#a5a5a5">
-      <path d="M0 58 26 22q4-5 8 0l8 12-10 8-4 16z" />
-      <path d="M32 58 66 6q4-6 8 0l40 52z" />
-      <path d="M52 22q7 6 14 0t14 0" fill="none" stroke="#1f1f1f" strokeWidth="3" strokeLinecap="round" />
+    <svg
+      width="40"
+      height="22"
+      viewBox="0 0 120 66"
+      fill="#a5a5a5"
+      stroke="#a5a5a5"
+      strokeWidth="13"
+      strokeLinejoin="round"
+    >
+      <mask id="focus-mountains" maskUnits="userSpaceOnUse" x="0" y="0" width="120" height="66">
+        <rect width="120" height="66" fill="#fff" stroke="none" />
+        <path d={peak} fill="#000" stroke="#000" strokeWidth="22" />
+        <path d={peak} fill="#fff" stroke="#fff" />
+        <path
+          d="M48 29.5c9 0 11 4 15.4 4s6.1-4.9 10.6-4.9 6.5 4.9 10.9 4.9 6.1-4 15.1-4M10 38.5c8 0 9.5 2.8 13.5 2.8s5.5-3.8 9.5-3.8 5 3.8 8 3.8"
+          fill="none"
+          stroke="#000"
+          strokeWidth="3.7"
+        />
+      </mask>
+      <g mask="url(#focus-mountains)">
+        <path d="M32.8 26.4 56.6 56.6H8.5z" />
+        <path d={peak} />
+      </g>
     </svg>
   );
 }
