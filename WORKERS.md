@@ -26,7 +26,9 @@ TURN_POOL=parity TURN_SLOTS=4 turn bun run diff --component <component> --sample
 
 `turn` lets four parity runs go at once, at the lowest CPU priority, and queues the rest. A run is one process rendering in three WebKits at once (`BROWSERS`) and takes about 20 seconds for 12 states.
 
-This builds `web/`, renders 12 of the component's states and prints the worst with the paths of Apple's screenshot, ours and the diff. The sample spreads across profile, display and orientation and takes the worst-scoring states first, from your earlier runs or else the last full run, so each round looks at what's most wrong. Read the images, change your code, run again.
+This builds `web/`, renders 12 of the component's states and prints the worst with the paths of Apple's screenshot, ours and the diff, then the worst elements with a crop of each (Apple left, ours right).
+
+A score is the geometric mean of two numbers. Pixels is the share of the region's pixels that match Apple's. Elements is the mean score of every mark Apple draws there (a glyph, a word, a ring, an outline), each counted the same however small: it compares edges, so a wrong weight, size or shape scores low, a mark ours draws off its spot loses a little per point, and a mark ours draws where Apple has nothing scores 0. The sample spreads across profile, display and orientation and takes the worst-scoring states first, from your earlier runs or else the last full run, so each round looks at what's most wrong. Read the images, change your code, run again.
 
 The spec for your component, with its regions per state, is `~/Developer/camera-research/answer-key/specs/components/<component>.json`. The answer key is private: nothing from it, or from `camera-research/`, goes in the repo.
 

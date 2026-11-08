@@ -8,7 +8,11 @@ export interface Summary {
 }
 
 export async function publish(summary: Summary) {
-  const states = summary.states.map(({ apple: _a, ours: _o, diff: _d, ...r }) => r);
+  const states = summary.states.map(({ apple: _a, ours: _o, diff: _d, marks, ...r }) => ({
+    ...r,
+    marks: marks?.slice(0, 5),
+  }));
+
   await Bun.write(join(out, "small", "results.json"), JSON.stringify({ ...summary, states }));
   await $`rsync -a --delete ${join(out, "small")}/ ${target}/camera-parity/`.quiet();
   await $`rsync -a ${join(import.meta.dir, "scoreboard.html")} ${target}/camera-parity.html`.quiet();

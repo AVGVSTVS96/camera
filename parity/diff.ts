@@ -1,5 +1,5 @@
 import { existsSync, mkdirSync, readdirSync } from "node:fs";
-import { join } from "node:path";
+import { basename, join } from "node:path";
 import { parseArgs } from "node:util";
 import pixelmatch from "pixelmatch";
 import { webkit, type Browser } from "playwright";
@@ -8,8 +8,9 @@ import { fontconfig, mainOut, out, specs } from "./paths.ts";
 import { publish } from "./publish.ts";
 import { read, scene } from "./scene.ts";
 import { serve } from "./serve.ts";
+import { marks, type Mark } from "./marks.ts";
 import { states, type State } from "./states.ts";
-import type { Rect } from "./tree.ts";
+import { tree, type Rect } from "./tree.ts";
 
 const uiThreshold = 16;
 const browsers = Number(process.env.BROWSERS ?? 3);
@@ -17,6 +18,8 @@ const processes = Number(process.env.PROCESSES ?? 1);
 
 export interface Score {
   score: number;
+  pixels: number;
+  elements: number | null;
   compared: number;
   mismatched: number;
 }
@@ -28,11 +31,21 @@ export interface Result extends Score {
   display: string;
   orientation: string;
   components: Record<string, Score & { regions: Rect[] }>;
+  marks: (Mark & { components: string[] })[];
   apple: string;
   ours: string;
   diff: string;
   time: number;
 }
+
+const mean = (scores: number[]) => Math.round((scores.reduce((a, b) => a + b, 0) / (scores.length || 1)) * 100) / 100;
+
+const centered = (box: Rect, r: Rect) => {
+  const x = box.x + box.w / 2;
+  const y = box.y + box.h / 2;
+
+  return x >= r.x && x <= r.x + r.w && y >= r.y && y <= r.y + r.h;
+};
 
 const percent = (compared: number, mismatched: number) =>
   compared ? Math.round((1 - mismatched / compared) * 10000) / 100 : 100;
@@ -111,7 +124,15 @@ async function compare(state: State, oursPath: string, regions: Record<string, R
     ),
   );
 
-  const tally = (inside?: Uint8Array) => {
+  const found = marks(apple, ours, counted, scale, await tree(state)).map((mark) => {
+    const components = Object.entries(regions).flatMap(([name, rects]) =>
+      rects.some((r) => centered(mark.box, r)) ? [name] : [],
+    );
+
+    return { ...mark, element: mark.element || `${components.join(", ") || "screen"} (no AX element)`, components };
+  });
+
+  const tally = (inside?: Uint8Array, component?: string) => {
     let compared = 0;
     let mismatched = 0;
 
@@ -122,7 +143,17 @@ async function compare(state: State, oursPath: string, regions: Record<string, R
       if (wrong(p)) mismatched++;
     }
 
-    return { score: percent(compared, mismatched), compared, mismatched };
+    const pixels = percent(compared, mismatched);
+    const scores = found.flatMap((m) => (!component || m.components.includes(component) ? [m.score] : []));
+    const elements = scores.length ? mean(scores) : null;
+
+    return {
+      score: elements === null ? pixels : Math.round(Math.sqrt(pixels * elements) * 100) / 100,
+      pixels,
+      elements,
+      compared,
+      mismatched,
+    };
   };
 
   return {
@@ -135,12 +166,13 @@ async function compare(state: State, oursPath: string, regions: Record<string, R
     components: Object.fromEntries(
       Object.entries(regions).map(([name, rects]) => [
         name,
-        { ...tally(mask(rects, scale, width, height)), regions: rects },
+        { ...tally(mask(rects, scale, width, height), name), regions: rects },
       ]),
     ),
     apple: state.image,
     ours: oursPath,
     diff: diffPath,
+    marks: found.toSorted((a, b) => a.score - b.score),
     time: Date.now(),
   };
 }
@@ -282,7 +314,54 @@ const results: Result[] = await Promise.all(
 
 const box = ({ x, y, w, h }: Rect) => `${Math.round(x)},${Math.round(y)} ${Math.round(w)}×${Math.round(h)}`;
 
-const mean = (scores: number[]) => Math.round((scores.reduce((a, b) => a + b, 0) / (scores.length || 1)) * 100) / 100;
+function sideBySide(apple: PNG, ours: PNG, scale: number, { box: b }: Mark) {
+  const zoom = 2;
+  const [x0, y0] = [Math.max(0, b.x - 4), Math.max(0, b.y - 4)].map((v) => Math.floor(v * scale));
+  const w = Math.min(apple.width - x0, Math.ceil((b.w + 8) * scale));
+  const h = Math.min(apple.height - y0, Math.ceil((b.h + 8) * scale));
+  const crop = new PNG({ width: (2 * w + 2) * zoom, height: h * zoom });
+
+  for (const [k, from] of [apple, ours].entries()) {
+    for (let y = 0; y < crop.height; y++) {
+      for (let x = 0; x < w * zoom; x++) {
+        const at = ((y0 + Math.floor(y / zoom)) * from.width + x0 + Math.floor(x / zoom)) * 4;
+        from.data.copy(crop.data, (y * crop.width + k * (w + 2) * zoom + x) * 4, at, at + 4);
+      }
+    }
+  }
+
+  return PNG.sync.write(crop);
+}
+
+const off = ([dx, dy]: [number, number]) => (dx || dy ? `ours off by ${dx},${dy}pt` : "");
+
+async function worstElements(rows: Result[], count: number, name?: string) {
+  const worst = rows
+    .flatMap((r) => (r.marks ?? []).flatMap((mark) => (!name || mark.components.includes(name) ? [{ r, mark }] : [])))
+    .toSorted((a, b) => a.mark.score - b.mark.score)
+    .slice(0, count);
+
+  mkdirSync(join(out, "small", "marks"), { recursive: true });
+  const crops = worst.map((_, i) => join(out, "small", "marks", `${name ?? "all"}-${i}.png`));
+
+  for (const [id, group] of Map.groupBy(worst.entries(), ([, { r }]) => r.id)) {
+    const { apple, ours } = group[0][1].r;
+    const [a, o] = await Promise.all([read(apple), read(ours)]);
+
+    for (const [i, { mark }] of group) await Bun.write(crops[i], sideBySide(a, o, pick(id).screen.scale, mark));
+  }
+
+  return worst.map(({ r, mark }, i) => ({ id: r.id, ...mark, crop: crops[i] }));
+}
+
+function printElements(worst: Awaited<ReturnType<typeof worstElements>>) {
+  console.log("Worst elements (element score, Apple's element, box in points, state; crop is Apple left, ours right):");
+
+  for (const m of worst) {
+    console.log(`  ${m.score.toFixed(2).padStart(6)}%  ${m.element}  ${box(m.box)}  ${m.id}  ${off(m.shift)}`);
+    console.log(`           crop ${m.crop}`);
+  }
+}
 
 if (component) {
   const name = component;
@@ -294,9 +373,13 @@ if (component) {
   );
 
   for (const { r, c } of rows.slice(0, Number(flags.worst))) {
-    console.log(`  ${c.score.toFixed(2).padStart(6)}%  ${r.id} [${r.profile}]  ${c.regions.map(box).join(" + ")}`);
+    console.log(
+      `  ${c.score.toFixed(2).padStart(6)}%  ${r.id} [${r.profile}]  pixels ${c.pixels}%, elements ${c.elements ?? "–"}%  ${c.regions.map(box).join(" + ")}`,
+    );
     console.log(`           apple ${r.apple}\n           ours  ${r.ours}\n           diff  ${r.diff}`);
   }
+
+  printElements(await worstElements(results, Number(flags.worst), name));
 }
 
 if (!component && !ids.length && !flags.sample) {
@@ -314,7 +397,18 @@ if (!component && !ids.length && !flags.sample) {
     const scored = board.flatMap((r) => (r.components?.[name] ? [r.components[name].score] : []));
     const duo = board.flatMap((r) => (r.profile === "duo" && r.components?.[name] ? [r.components[name].score] : []));
 
-    return { name, about, score: mean(scored), states: scored.length, duo: duo.length ? mean(duo) : null };
+    const parts = board.flatMap((r) => (r.components?.[name] ? [r.components[name]] : []));
+    const elements = parts.flatMap((c) => (c.elements === null || c.elements === undefined ? [] : [c.elements]));
+
+    return {
+      name,
+      about,
+      score: mean(scored),
+      pixels: mean(parts.map((c) => c.pixels ?? c.score)),
+      elements: elements.length ? mean(elements) : null,
+      states: scored.length,
+      duo: duo.length ? mean(duo) : null,
+    };
   });
 
   const summary = {
@@ -322,13 +416,20 @@ if (!component && !ids.length && !flags.sample) {
     simulator: mean(board.flatMap((r) => (r.profile === "simulator" ? [r.score] : []))),
     duo: mean(board.flatMap((r) => (r.profile === "duo" ? [r.score] : []))),
     components: components.toSorted((a, b) => a.score - b.score),
+    worst: (await worstElements(board, 60)).map(({ crop, ...m }) => ({ ...m, crop: `marks/${basename(crop)}` })),
     states: board,
   };
 
   await Bun.write(join(out, "results.json"), JSON.stringify(summary, null, 1));
   console.log(`\nOverall ${summary.score}% (simulator ${summary.simulator}%, duo ${summary.duo}%)`);
 
-  for (const c of summary.components) console.log(`  ${c.score.toFixed(2).padStart(6)}%  ${c.name} (${c.states})`);
+  for (const c of summary.components) {
+    console.log(
+      `  ${c.score.toFixed(2).padStart(6)}%  ${c.name} (${c.states})  pixels ${c.pixels}%, elements ${c.elements ?? "–"}%`,
+    );
+  }
+
+  printElements(summary.worst.slice(0, Number(flags.worst)).map((m) => ({ ...m, crop: join(out, "small", m.crop) })));
 
   if (out === mainOut)
     await publish(summary).catch((e: Error) => console.error(`Scoreboard not published: ${e.message}`));

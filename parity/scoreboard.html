@@ -144,6 +144,46 @@
       a {
         color: inherit;
       }
+      .marks {
+        margin: 0;
+        padding: 8px 14px;
+        list-style: none;
+        font-size: 12px;
+        font-variant-numeric: tabular-nums;
+      }
+      .marks li {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .marks b {
+        display: inline-block;
+        width: 52px;
+      }
+      #worst {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+      #worst figure {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+      #worst img {
+        height: 120px;
+        object-fit: contain;
+        background: #000;
+      }
+      #worst figcaption {
+        position: static;
+        background: none;
+        color: inherit;
+        font-size: 12px;
+        padding: 8px 10px;
+      }
     </style>
   </head>
   <body>
@@ -157,6 +197,8 @@
           <th>Component</th>
           <th>Score</th>
           <th></th>
+          <th>Pixels</th>
+          <th>Elements</th>
           <th>States</th>
           <th>Duo</th>
           <th>What it is</th>
@@ -165,12 +207,24 @@
       <tbody id="components"></tbody>
     </table>
     <header>
+      <h1>Worst elements</h1>
+      <span>Apple left, ours right</span>
+    </header>
+    <section id="worst"></section>
+    <header>
       <h1 id="title">All states</h1>
       <span id="count"></span>
     </header>
     <main id="board"></main>
     <script type="module">
-      const { score, simulator, duo, components, states } = await fetch("camera-parity/results.json", {
+      const {
+        score,
+        simulator,
+        duo,
+        components,
+        states,
+        worst = [],
+      } = await fetch("camera-parity/results.json", {
         cache: "no-store",
       }).then((r) => r.json());
       const updated = new Date(Math.max(...states.map((r) => r.time))).toLocaleString();
@@ -185,10 +239,23 @@
             <td><b>${c.name}</b></td>
             <td>${c.score.toFixed(1)}%</td>
             <td><div class="bar"><i style="width:${c.score}%;background:${hue(c.score)}"></i></div></td>
+            <td>${c.pixels?.toFixed(1) ?? "–"}%</td>
+            <td>${c.elements === null || c.elements === undefined ? "–" : `${c.elements.toFixed(1)}%`}</td>
             <td>${c.states}</td>
             <td>${c.duo === null ? "–" : `${c.duo.toFixed(1)}%`}</td>
             <td class="about">${c.about}</td>
           </tr>`,
+        )
+        .join("");
+      const where = ({ x, y, w, h }) => `${x},${y} ${w}×${h}pt`;
+      const off = ([dx, dy]) => (dx || dy ? ` · ours off ${dx},${dy}pt` : "");
+      document.querySelector("#worst").innerHTML = worst
+        .slice(0, 24)
+        .map(
+          (m) => `<figure>
+            <a href="camera-parity/${m.crop}"><img loading="lazy" src="camera-parity/${m.crop}" alt=""></a>
+            <figcaption><b>${m.score.toFixed(1)}%</b> ${m.element}<br>${m.id} · ${where(m.box)}${off(m.shift)}</figcaption>
+          </figure>`,
         )
         .join("");
       function show(name) {
@@ -214,6 +281,11 @@
               <figure><a href="${img(r, "ours")}"><img loading="lazy" src="${img(r, "ours")}" alt=""></a><figcaption>Ours</figcaption></figure>
               <figure><a href="${img(r, "diff")}"><img loading="lazy" src="${img(r, "diff")}" alt=""></a><figcaption>Diff</figcaption></figure>
             </div>
+            <ul class="marks">${(r.marks ?? [])
+              .filter((m) => !name || m.components.includes(name))
+              .slice(0, 3)
+              .map((m) => `<li><b>${m.score.toFixed(1)}%</b>${m.element} · ${where(m.box)}${off(m.shift)}</li>`)
+              .join("")}</ul>
           </article>`,
           )
           .join("");
