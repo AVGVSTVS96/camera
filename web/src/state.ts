@@ -67,6 +67,8 @@ export interface Settings {
   lighting: Lighting;
   viewer: boolean;
   recording: boolean;
+  timer: number | null;
+  timerMenu: boolean;
   orientation: Orientation;
   display: Display;
   fold?: string;
@@ -103,10 +105,14 @@ export function initialSettings(profile: Profile, mode: Mode = "photo", facing: 
     lighting: mode === "photo" ? "contour" : "natural",
     viewer: false,
     recording: false,
+    timer: null,
+    timerMenu: false,
     orientation: "portrait",
     display: "outer",
   };
 }
+
+const timerOf = (c: Controls) => Number.parseInt(String(c.control === "Timer" ? c.selected : c.timer)) || null;
 
 export function settingsFor(state: ParityState, profile = state.profile ?? duo): Settings {
   const c = state.controls ?? {};
@@ -135,6 +141,8 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
     lighting: appleLightings.get(String(c.portraitLighting)) ?? initial.lighting,
     viewer: state.mode === "viewer",
     recording: c.action === "recording",
+    timer: timerOf(c),
+    timerMenu: c.control === "Timer",
     orientation: state.orientation,
     display: state.display,
     fold: state.fold,

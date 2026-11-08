@@ -3,6 +3,7 @@ import { record, snapshot, useCamera, type Shot } from "./capture.ts";
 import { AspectFlip } from "./components/aspect-flip/AspectFlip.tsx";
 import { ControlsButton } from "./components/controls-button/ControlsButton.tsx";
 import { ControlsPanel } from "./components/controls-panel/ControlsPanel.tsx";
+import { Countdown } from "./components/countdown/Countdown.tsx";
 import { DepthButton } from "./components/depth-button/DepthButton.tsx";
 import { Flip } from "./components/flip/Flip.tsx";
 import { Grid, Level } from "./components/grid/Grid.tsx";
@@ -99,6 +100,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
           {!settings.recording && <ModeDial selected={settings.mode} select={(mode) => update({ mode })} />}
         </>
       )}
+      <Countdown settings={settings} />
       {profile.lighting !== false && !settings.tray && !movie && <Lighting settings={settings} />}
       <AspectFlip {...props} />
       {settings.viewer && <Viewer shot={shot} close={() => update({ viewer: false })} />}
