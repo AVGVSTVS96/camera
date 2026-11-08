@@ -50,6 +50,7 @@
 
 .recording-pause,
 .recording-still {
+  box-sizing: border-box;
   width: 55px;
   height: 55px;
   border-radius: 50%;
