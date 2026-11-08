@@ -156,17 +156,27 @@ function depthOn(state: ParityState, c: Controls) {
   const back = c.camera === "back";
 
   if (state.mode !== "photo") return false;
+
   if (state.orientation === "landscape") {
     if (c.control === "Flash" || c.control === "Timer") return true;
+
     if (c.control === "White Balance") return back;
+
     if (c.control === "Night Mode") return hasOptions(c);
+
     return c.control === "Depth" && !hasOptions(c);
   }
+
   if (state.display !== "inner" || !c.camera) return false;
+
   if (!c.control) return !back || "zoom" in c || "zoomDial" in c;
+
   if (c.control === "Focus" || c.control === "Resolution") return false;
+
   if (c.control === "White Balance") return !back;
+
   if (c.control === "Night Mode") return hasOptions(c) && !back;
+
   return c.control !== "Depth" || !hasOptions(c);
 }
 
