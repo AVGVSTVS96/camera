@@ -22,25 +22,25 @@ export function SubmenuExposure({ settings }: Pick<Props, "settings">) {
   return (
     <section className="exposure" aria-label="Exposure">
       <div className="exposure-strip">
-      <button className="exposure-button" style={{ left: 25 }} aria-label="Back">
-        <Chevron />
-      </button>
-      <h2 className="exposure-header">EXPOSURE</h2>
-      <button className="exposure-button exposure-reset" style={{ left: 389 }} aria-label="Reset">
-        <Reset />
-      </button>
-      <output className="exposure-value">{exposure.toFixed(1)}</output>
-      <div className="exposure-slider" role="slider" aria-label="Exposure slider" aria-valuenow={exposure}>
-        {ticks(selected).map(({ step, selected: on, major }) => (
-          <i
-            key={step}
-            className="exposure-tick"
-            data-selected={on || undefined}
-            data-major={major || undefined}
-            style={{ left: 189 + 20 * (step - selected) }}
-          />
-        ))}
-      </div>
+        <button className="exposure-button" style={{ left: 25 }} aria-label="Back">
+          <Chevron />
+        </button>
+        <h2 className="exposure-header">EXPOSURE</h2>
+        <button className="exposure-button exposure-reset" style={{ left: 389 }} aria-label="Reset">
+          <Reset />
+        </button>
+        <output className="exposure-value">{exposure.toFixed(1)}</output>
+        <div className="exposure-slider" role="slider" aria-label="Exposure slider" aria-valuenow={exposure}>
+          {ticks(selected).map(({ step, selected: on, major }) => (
+            <i
+              key={step}
+              className="exposure-tick"
+              data-selected={on || undefined}
+              data-major={major || undefined}
+              style={{ left: 189 + 20 * (step - selected) }}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );

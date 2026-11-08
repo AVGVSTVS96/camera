@@ -63,6 +63,7 @@ export interface Settings {
   submenu: boolean;
   balance: string | null;
   exposure: number | null;
+  focus?: { value: number; auto: boolean };
   styles: boolean;
   style: StyleName;
   customize: boolean;
@@ -148,6 +149,11 @@ function rememberedLighting(state: ParityState): Lighting {
   return front && outerPortrait && control !== "Depth" && control !== "White Balance" ? "contour" : "natural";
 }
 
+const focusOf = (c: Controls) =>
+  c.panel === "submenu" && c.control === "Focus"
+    ? { value: Number.parseFloat(String(c.value)) || 0, auto: c.value === "Auto" }
+    : undefined;
+
 const timerOf = (c: Controls) => Number.parseInt(String(c.control === "Timer" ? c.selected : c.timer)) || null;
 
 const hasOptions = (c: Controls) => Array.isArray(c.selected);
@@ -203,6 +209,7 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
     submenu: c.panel === "submenu",
     balance: c.panel === "submenu" && c.control === "White Balance" ? String(c.selected).toLowerCase() : null,
     exposure: c.panel === "submenu" && c.control === "Exposure" ? exposureOf(c) : null,
+    focus: focusOf(c),
     styles: c.control === "Styles",
     style: c.adjust === "dec" ? "gold" : c.adjust === "inc" ? "natural" : "standard",
     customize: c.selected === "Customize",
