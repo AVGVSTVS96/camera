@@ -65,6 +65,7 @@ export function layout(s: Settings, count: number) {
     y: p.vertical ? across : depth,
     along: p.along,
     vertical: p.vertical,
+    into: p.into,
     turn: s.display === "inner" && !p.vertical ? 180 : 0,
     apex: { x: ax, y: ay },
     dial: `M${x1} ${y1}A${p.radius} ${p.radius} 0 0 1 ${x2} ${y2}Z`,

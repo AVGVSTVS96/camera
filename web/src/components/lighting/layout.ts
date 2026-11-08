@@ -26,6 +26,8 @@ export function layout(s: Settings): Layout | undefined {
   const depth = s.square ? d.square : s.submenu ? d.submenu : d.closed;
   const nudge = s.square ? 16 : 0;
 
+  if (s.mode !== "photo" && s.mode !== "portrait") return undefined;
+
   if (s.mode === "photo") {
     if (context === "inner-portrait") return { x: 44, y: depth, along: [0, 0] };
 

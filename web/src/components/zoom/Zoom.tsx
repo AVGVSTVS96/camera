@@ -19,6 +19,7 @@ export function Zoom({ settings, update }: Props) {
 
   const place = layout(settings, stops.length);
   const [ax, ay] = place.along;
+  const marker = Math.atan2(-place.into[1], -place.into[0]) * (180 / Math.PI) - 90;
 
   function open() {
     clearTimeout(hide.current);
@@ -31,12 +32,17 @@ export function Zoom({ settings, update }: Props) {
       {settings.dial && (
         <svg className="zoom-dial" aria-hidden>
           <path d={place.dial} />
+          <polygon
+            className="marker"
+            points="-3 0 3 0 0 12"
+            transform={`translate(${place.apex.x - place.into[0] * 10} ${place.apex.y - place.into[1] * 10}) rotate(${marker})`}
+          />
           <g
             className="readout"
-            transform={`translate(${place.apex.x} ${place.apex.y}) rotate(${place.vertical ? 0 : place.turn})`}
+            transform={`translate(${place.apex.x - place.into[0] * 37} ${place.apex.y - place.into[1] * 37}) rotate(${place.vertical || place.turn ? 90 * Number(place.turn > 0) : 0})`}
           >
-            <text>{zoomLabel(settings.zoom, true)}</text>
-            <text y="16">13MM</text>
+            <text y="5">{zoomLabel(settings.zoom, true)}</text>
+            <text y="21">13MM</text>
           </g>
         </svg>
       )}
