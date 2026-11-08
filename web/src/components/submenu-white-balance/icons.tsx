@@ -3,8 +3,8 @@ import type { ReactNode } from "react";
 function Glyph({ children }: { children: ReactNode }) {
   return (
     <svg
-      width="19"
-      height="19"
+      width="16"
+      height="16"
       viewBox="0 0 22 22"
       fill="none"
       stroke="currentColor"
@@ -51,27 +51,4 @@ export const Shade = () => (
   <Glyph>
     <path d="M3 10.500 9 5l6 5.500M5 9.500V17h8V9.500M9 17v-3h2.500v3M16 12.500c1.300 1 2 2.500 2 4.500M14.500 14.500c.8.600 1.200 1.500 1.200 2.500" />
   </Glyph>
-);
-
-export const Chevron = () => (
-  <svg
-    width="14"
-    height="14"
-    viewBox="0 0 14 14"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.8"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden
-  >
-    <path d="M9.500 1.500 4 7l5.500 5.500" />
-  </svg>
-);
-
-export const Unset = () => (
-  <svg width="28" height="19" viewBox="0 0 28 22" fill="none" stroke="currentColor" strokeWidth="2.600" aria-hidden>
-    <ellipse cx="14" cy="11" rx="10" ry="6.500" />
-    <path d="M6 18 22 4" />
-  </svg>
 );

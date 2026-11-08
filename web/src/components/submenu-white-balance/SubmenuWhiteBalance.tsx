@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import type { Props } from "../../state.ts";
-import { Awb, Bulb, Chevron, Cloud, Shade, Sun, Tube, Unset } from "./icons.tsx";
+import { Submenu } from "../submenu/Submenu.tsx";
+import { Awb, Bulb, Cloud, Shade, Sun, Tube } from "./icons.tsx";
 import "./submenu-white-balance.css";
 
 const options: { id: string; label: string; kelvin?: number; glyph: ReactNode }[] = [
@@ -14,24 +15,16 @@ const options: { id: string; label: string; kelvin?: number; glyph: ReactNode }[
 
 export function SubmenuWhiteBalance({ settings, update }: Props) {
   const current = options.find((o) => o.id === settings.balance) ?? options[0];
-  const auto = current === options[0];
 
   return (
-    <section className="submenu wb" aria-label="White Balance">
-      <button className="wb-round wb-back" aria-label="Back" onClick={() => update({ submenu: false, balance: null })}>
-        <Chevron />
-      </button>
-      <button
-        className="wb-round wb-auto"
-        data-on={auto || undefined}
-        aria-label="Auto"
-        onClick={() => update({ balance: "auto" })}
-      >
-        A
-      </button>
-      <h2 className="wb-title">WHITE BALANCE</h2>
-      <p className="wb-readout">
-        {current.kelvin ?? <Unset />}
+    <Submenu
+      title="White Balance"
+      className="wb"
+      back={() => update({ submenu: false, balance: null })}
+      auto={{ on: current === options[0], select: () => update({ balance: "auto" }) }}
+    >
+      <p className="wb-readout" data-auto={!current.kelvin || undefined}>
+        {current.kelvin ?? 0}
         <sup>K</sup>
       </p>
       {options.map(({ id, label, glyph }, i) => (
@@ -39,7 +32,7 @@ export function SubmenuWhiteBalance({ settings, update }: Props) {
           key={id}
           className="wb-option"
           data-on={id === current.id || undefined}
-          style={{ left: 58.5 + 55 * i }}
+          style={{ left: 60 + 55 * i }}
           aria-label={label}
           onClick={() => update({ balance: id })}
         >
@@ -47,6 +40,6 @@ export function SubmenuWhiteBalance({ settings, update }: Props) {
           <span className="wb-radio" />
         </button>
       ))}
-    </section>
+    </Submenu>
   );
 }
