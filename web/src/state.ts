@@ -52,7 +52,7 @@ export interface Settings {
   macro: boolean;
   zoom: number;
   dial: boolean;
-  expanded: boolean;
+  lenses: boolean;
   facing: Facing;
   grid: boolean;
   level: boolean;
@@ -88,7 +88,7 @@ export function initialSettings(profile: Profile, mode: Mode = "photo", facing: 
     macro: true,
     zoom: profile.zoom[`${facing}-${mode}`]?.start ?? 1,
     dial: false,
-    expanded: false,
+    lenses: false,
     facing,
     grid: profile.grid,
     level: profile.level,
@@ -119,7 +119,7 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
     ...initial,
     zoom: Number.parseFloat(String(c.zoom)) || initial.zoom,
     dial: c.zoomDial === "open",
-    expanded: mode === "portrait" && "zoomButton" in c,
+    lenses: mode === "portrait" && "zoomButton" in c,
     flash: flash ?? initial.flash,
     live: c.live === true || c.live === "on",
     grid: c.grid === true || initial.grid,

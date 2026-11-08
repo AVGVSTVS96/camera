@@ -13,10 +13,11 @@ function zoomLabel(value: number, active: boolean) {
 export function Zoom({ settings, update }: Props) {
   const profile = useProfile();
   const own = profile.zoom[`${settings.facing}-${settings.mode}`]?.stops ?? [];
-  const stops = settings.expanded ? [0.5, 1, 2, settings.zoom] : own;
+  const stops = settings.lenses ? [0.5, 1, 2, settings.zoom] : own;
   const hide = useRef<number>(undefined);
-  const anchored = stops.length === 1 || settings.expanded;
-  const active = settings.expanded
+
+  const anchored = stops.length === 1 || settings.lenses;
+  const active = settings.lenses
     ? stops.length - 1
     : stops.lastIndexOf(Math.max(...stops.filter((s) => s <= settings.zoom + 0.001)));
 
@@ -24,6 +25,7 @@ export function Zoom({ settings, update }: Props) {
 
   const place = layout(settings, profile.name === "duo");
   const [ax, ay] = place.along;
+  const sideways = place.turn > 0 && stops.length > 1;
   const shift = anchored ? place.lone - (place.vertical ? place.y : place.x) : 0;
   const marker = Math.atan2(-place.into[1], -place.into[0]) * (180 / Math.PI) - 90;
 
@@ -70,9 +72,11 @@ export function Zoom({ settings, update }: Props) {
             key={i}
             data-on={i === active || undefined}
             style={{ translate: offset(i) }}
-            onClick={() => (anchored && stops.length === 1 ? update({ expanded: true }) : update({ zoom: stop }))}
+            onClick={() => (anchored && stops.length === 1 ? update({ lenses: true }) : update({ zoom: stop }))}
           >
-            <span className="glyph">{zoomLabel(i === active ? settings.zoom : stop, i === active)}</span>
+            <span className="glyph" style={{ rotate: sideways ? "90deg" : undefined }}>
+              {zoomLabel(i === active ? settings.zoom : stop, i === active)}
+            </span>
           </button>
         ))}
       </div>
