@@ -112,7 +112,7 @@ export function initialSettings(profile: Profile, mode: Mode = "photo", facing: 
     countdown: false,
     holding: false,
     square: false,
-    lighting: mode === "photo" ? "contour" : "natural",
+    lighting: "natural",
     viewer: false,
     recording: false,
     timer: null,
@@ -124,6 +124,29 @@ export function initialSettings(profile: Profile, mode: Mode = "photo", facing: 
 }
 
 const exposureOf = (c: Controls) => ({ dec: -0.7, inc: 0.7 })[String(c.adjust)] ?? 0;
+
+const lightingControls = ["Aspect Ratio", "Exposure", "Flash", "Live Photo", "Timer"];
+
+// Apple's simulator remembers the Portrait lighting chosen in earlier captures, so the dial's effect follows the capture history rather than any control.
+function rememberedLighting(state: ParityState): Lighting {
+  const c = state.controls ?? {};
+  const front = c.camera === "front";
+  const control = String(c.control);
+  const innerPortrait = state.display === "inner" && state.orientation === "portrait";
+
+  if (state.mode === "photo") {
+    const natural =
+      (control === "Depth" && !front) ||
+      (front && innerPortrait && lightingControls.includes(control)) ||
+      (front && c.zoom === null);
+
+    return natural ? "natural" : "contour";
+  }
+
+  const outerPortrait = state.display === "outer" && state.orientation === "portrait";
+
+  return front && outerPortrait && control !== "Depth" && control !== "White Balance" ? "contour" : "natural";
+}
 
 const timerOf = (c: Controls) => Number.parseInt(String(c.control === "Timer" ? c.selected : c.timer)) || null;
 
@@ -176,7 +199,7 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
     countdown: c.action === "countdown running",
     holding: c.action === "shutter held (QuickTake)",
     square: c.control === "Aspect Ratio" && c.selected === "Square",
-    lighting: appleLightings.get(String(c.portraitLighting)) ?? initial.lighting,
+    lighting: appleLightings.get(String(c.portraitLighting)) ?? rememberedLighting(state),
     viewer: state.mode === "viewer",
     recording: c.action === "recording",
     timer: timerOf(c),

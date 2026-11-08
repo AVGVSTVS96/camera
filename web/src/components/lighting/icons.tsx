@@ -1,10 +1,10 @@
-import type { CSSProperties } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import type { Lighting } from "../../state.ts";
 
 const dots = Array.from({ length: 15 }, (_, i) => {
   const turn = ((-90 + i * 24) * Math.PI) / 180;
 
-  return [50 + 44.6 * Math.cos(turn), 50 + 44.6 * Math.sin(turn)] as const;
+  return [50 + 50 * Math.cos(turn), 50 + 50 * Math.sin(turn)] as const;
 });
 
 const looks: Record<Lighting, string> = {
@@ -19,58 +19,121 @@ const looks: Record<Lighting, string> = {
     "linear-gradient(#dbdbdb, #cdcdcd 20%, #c4c4c4 40%, #b4b4b4 50%, #a0a0a0 60%, #7e7e7e 75%, #6a6a6a 90%, #888)",
 };
 
-export function Ball({ effect, size }: { effect: Lighting; size: number }) {
+export function Dots({ radius }: { radius: number }) {
+  return (
+    <svg className="lighting-dots" viewBox="0 0 100 100" aria-hidden>
+      {dots.map(([x, y], i) => (
+        <circle key={i} cx={50 + (x - 50) * radius} cy={50 + (y - 50) * radius} r={3.3} fill="#d4d4d6" />
+      ))}
+    </svg>
+  );
+}
+
+export function Ball({ effect, size, ring }: { effect: Lighting; size: number; ring: number }) {
   const style: CSSProperties = { width: size, height: size };
 
   return (
     <span className="lighting-ball" style={style}>
-      {effect === "natural" && (
-        <svg viewBox="0 0 100 100" aria-hidden>
-          {dots.map(([x, y], i) => (
-            <circle key={i} cx={x} cy={y} r={2.5} fill="#e4e4e6" />
-          ))}
-        </svg>
-      )}
+      {effect === "natural" && <Dots radius={ring / size} />}
       <i style={{ background: looks[effect] }} />
     </span>
   );
 }
 
-const outline = "50,2 91.6,26 91.6,74 50,98 8.4,74 8.4,26";
+const RX = 18.4;
+const RY = 18;
 
-export function CubeFace({ size, lit }: { size: number; lit: boolean }) {
+const hex = [0, 1, 2, 3, 4, 5].map((k) => {
+  const turn = ((k * 60 - 90) * Math.PI) / 180;
+
+  return [RX * Math.cos(turn), RY * Math.sin(turn)] as const;
+});
+
+const [top, upperRight, lowerRight, bottom, lowerLeft, upperLeft] = hex;
+const pts = (...p: (readonly [number, number])[]) => p.map(([x, y]) => `${x.toFixed(2)},${y.toFixed(2)}`).join(" ");
+
+function rounded(r: number) {
   return (
-    <svg width={size} height={size} viewBox="0 0 100 100" aria-hidden>
-      {lit ? (
-        <>
-          <defs>
-            <linearGradient id="lighting-left" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0.3" stopColor="#555551" />
-              <stop offset="1" stopColor="#cfcfcd" />
-            </linearGradient>
-            <linearGradient id="lighting-right" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0.3" stopColor="#565552" />
-              <stop offset="1" stopColor="#6f6f6b" />
-            </linearGradient>
-          </defs>
-          <polygon points="50,2 91.6,26 50,50 8.4,26" fill="#bababa" />
-          <polygon points="8.4,26 50,50 50,98 8.4,74" fill="url(#lighting-left)" />
-          <polygon points="91.6,26 50,50 50,98 91.6,74" fill="url(#lighting-right)" />
-        </>
-      ) : (
-        <polygon points={outline} fill="rgb(0 0 0 / 0.4)" />
-      )}
+    hex
+      .map(([x, y], i) => {
+        const [px, py] = hex[(i + 5) % 6];
+        const [nx, ny] = hex[(i + 1) % 6];
+        const a = Math.hypot(px - x, py - y);
+        const b = Math.hypot(nx - x, ny - y);
+        const from = `${(x + ((px - x) * r) / a).toFixed(2)} ${(y + ((py - y) * r) / a).toFixed(2)}`;
+        const to = `${(x + ((nx - x) * r) / b).toFixed(2)} ${(y + ((ny - y) * r) / b).toFixed(2)}`;
+
+        return `${i ? "L" : "M"}${from}Q${x.toFixed(2)} ${y.toFixed(2)} ${to}`;
+      })
+      .join("") + "Z"
+  );
+}
+
+const outline = rounded(2.2);
+const spoke = (p: readonly [number, number]) => `${p[0].toFixed(2)} ${p[1].toFixed(2)}`;
+
+function Glyph({ turn, children }: { turn: number; children: ReactNode }) {
+  return (
+    <svg width={44} height={44} viewBox="-22 -22 44 44" aria-hidden style={{ rotate: `${turn}deg` }}>
+      {children}
     </svg>
   );
 }
 
-export function CubeEdges({ size }: { size: number }) {
+export function CubeFaces({ turn, lit }: { turn: number; lit: boolean }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 100 100" aria-hidden>
-      <g fill="none" stroke="#fff" strokeWidth={4} strokeLinecap="round" strokeLinejoin="round">
-        <polygon points={outline} />
-        <path d="M8.4 26 50 50 91.6 26M50 50v48" />
+    <Glyph turn={turn}>
+      <defs>
+        <clipPath id="lighting-clip">
+          <path d={outline} />
+        </clipPath>
+        <linearGradient id="lighting-wing-l" x1="0" x2="1">
+          <stop offset="0" stopColor="#a8a8a4" />
+          <stop offset="1" stopColor="#8a8a88" />
+        </linearGradient>
+        <linearGradient id="lighting-wing-r" x1="1" x2="0">
+          <stop offset="0" stopColor="#a8a8a4" />
+          <stop offset="1" stopColor="#8a8a88" />
+        </linearGradient>
+        <radialGradient id="lighting-cloud" cx="0" cy="-6.5" r="6.5" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stopColor="#3c3c3c" stopOpacity="0.85" />
+          <stop offset="1" stopColor="#3c3c3c" stopOpacity="0" />
+        </radialGradient>
+        <filter id="lighting-soft">
+          <feGaussianBlur stdDeviation="0.6" />
+        </filter>
+      </defs>
+      <g clipPath="url(#lighting-clip)">
+        {!lit && <path d={outline} fill="#000" fillOpacity="0.4" />}
+        {lit && <Lit />}
       </g>
-    </svg>
+    </Glyph>
+  );
+}
+
+function Lit() {
+  return (
+    <>
+      <path d={outline} fill="#e4e4e4" />
+      <polygon points={pts([0, 0], lowerLeft, bottom, lowerRight)} fill="#e0e0e0" />
+      <polygon points={pts([0, 0], upperLeft, lowerLeft)} fill="url(#lighting-wing-l)" />
+      <polygon points={pts([0, 0], upperRight, lowerRight)} fill="url(#lighting-wing-r)" />
+      <g fill="none" stroke="#ffe27a" strokeOpacity="0.55" strokeWidth="1.6" filter="url(#lighting-soft)">
+        <polyline points={pts(upperLeft, [0, 0], upperRight)} />
+        <polyline points={pts(lowerLeft, [0, 0], lowerRight)} />
+      </g>
+      <rect x="-8" y="-12" width="16" height="12" fill="url(#lighting-cloud)" />
+    </>
+  );
+}
+
+export function CubeLines({ turn }: { turn: number }) {
+  return (
+    <Glyph turn={turn}>
+      <g fill="none" stroke="#fff" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+        <path d={outline} />
+        <path d={`M${spoke(top)}L0 0 ${spoke(lowerLeft)}M0 0 ${spoke(lowerRight)}`} />
+      </g>
+    </Glyph>
   );
 }
