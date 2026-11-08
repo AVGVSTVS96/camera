@@ -105,7 +105,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
             )}
           </div>
           <div className="row modes">
-            {!settings.submenu && !settings.recording && (
+            {!settings.submenu && !settings.holding && !settings.recording && (
               <Thumbnail shot={shot} open={() => update({ viewer: true })} />
             )}
           </div>
@@ -126,7 +126,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
       <AspectFlip {...props} />
       {settings.viewer && <Viewer shot={shot} close={() => update({ viewer: false })} />}
       {settings.viewer && settings.display === "inner" && <InnerViewer empty={!shot} />}
-      {still && settings.display === "outer" && !settings.recording && <div className="system" />}
+      {still && settings.display === "outer" && !settings.holding && !settings.recording && <div className="system" />}
       {error && <p className="error">{error}</p>}
     </main>
   );

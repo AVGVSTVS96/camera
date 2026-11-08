@@ -3,14 +3,15 @@ import type { Settings } from "../../state.ts";
 
 const pause = (
   <svg viewBox="0 0 55 55" aria-hidden>
-    <rect x="19.5" y="17" width="5.5" height="21" rx="1.5" />
-    <rect x="30" y="17" width="5.5" height="21" rx="1.5" />
+    <rect x="21.2" y="18.85" width="5" height="17.3" rx="1.2" />
+    <rect x="28.8" y="18.85" width="5" height="17.3" rx="1.2" />
   </svg>
 );
 
 const lock = (
-  <svg viewBox="0 0 12 17" width="12" height="17" fill="currentColor" aria-hidden>
-    <path d="M2.8 7V4.9a3.2 3.2 0 0 1 6.4 0V7h.3A2.5 2.5 0 0 1 12 9.5v5A2.5 2.5 0 0 1 9.5 17h-7A2.5 2.5 0 0 1 0 14.5v-5A2.5 2.5 0 0 1 2.5 7zm1.6 0h3.2V4.9a1.6 1.6 0 0 0-3.2 0z" />
+  <svg viewBox="0 0 11.4 16.3" width="11.4" height="16.3" aria-hidden>
+    <path d="M2.13 7V4.3a3.57 3.57 0 0 1 7.14 0V7" fill="none" stroke="currentColor" stroke-width="1.45" />
+    <rect y="6.6" width="11.4" height="9.7" rx="2" fill="currentColor" />
   </svg>
 );
 
@@ -20,7 +21,7 @@ export function Recording({ settings }: { settings: Settings }) {
 
   return (
     <>
-      <time className="recording-timer">00:00:00</time>
+      {mode !== "time-lapse" && <time className="recording-timer">00:00:00</time>}
       {recording && mode === "video" && (
         <button className="recording-pause" aria-label="Pause Recording">
           {pause}

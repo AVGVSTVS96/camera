@@ -42,10 +42,9 @@
   height: 31.33px;
   border-radius: 5px;
   background: var(--timer-fill);
-  font:
-    500 17px ui-monospace,
-    monospace;
-  letter-spacing: -0.5px;
+  font-family: ".SF Compact Rounded", ui-rounded, sans-serif;
+  font-size: 21px;
+  font-feature-settings: "ss06", "tnum";
   color: #fff;
 }
 
@@ -82,11 +81,11 @@
 .recording-still[data-holding]::before {
   content: "";
   position: absolute;
-  background: #a8a8a8;
-  top: 19.75px;
+  background: rgb(255 255 255 / 0.5);
+  top: 19.5px;
   left: 45px;
   width: 220px;
-  height: 0.5px;
+  height: 1px;
 }
 
 .screen[data-display="outer"][data-orientation="portrait"] .recording-still[data-holding]::before {
@@ -97,8 +96,8 @@
 
 .screen[data-orientation="landscape"] .recording-still[data-holding]::before {
   top: auto;
-  left: 19.75px;
+  left: 19.5px;
   bottom: 43px;
-  width: 0.5px;
+  width: 1px;
   height: 216.5px;
 }
