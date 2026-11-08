@@ -1,0 +1,20 @@
+.flip {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.118);
+  right: 34px;
+  bottom: 34px;
+}
+
+.screen[data-orientation="landscape"] .flip,
+.screen[data-display="inner"][data-orientation="portrait"] .flip {
+  right: auto;
+  left: 34px;
+}
+
+.screen[data-display="inner"][data-orientation="portrait"] .flip {
+  bottom: auto;
+  top: 34px;
+}

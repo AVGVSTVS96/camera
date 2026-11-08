@@ -88,8 +88,8 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
           <div className="row modes">
             <Thumbnail shot={shot} open={() => update({ viewer: true })} />
             {!settings.recording && <ModeDial selected={settings.mode} select={(mode) => update({ mode })} />}
-            <Flip {...props} />
           </div>
+          <Flip {...props} />
         </>
       )}
       {settings.viewer && (
