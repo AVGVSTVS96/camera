@@ -8,7 +8,7 @@ const dots = Array.from({ length: 15 }, (_, i) => {
 });
 
 const looks: Record<Lighting, string> = {
-  natural: "radial-gradient(circle at 55% 62%, #fff 40%, #ececec 60%, #b4b4b4 85%, #8c8c8c)",
+  natural: "radial-gradient(circle at 50% 78%, #fff 22%, #f2f2f2 40%, #c4c4c4 62%, #7e7e7e 88%, #606060)",
   studio:
     "linear-gradient(#dbdbdb, #cdcdcd 20%, #c4c4c4 40%, #b4b4b4 50%, #a0a0a0 60%, #7e7e7e 75%, #6a6a6a 90%, #888)",
   contour:
@@ -90,15 +90,18 @@ function Glyph({ turn, scale, children }: { turn: number; scale: number; childre
   );
 }
 
-type Shade = readonly [topLeft: string, topRight: string, wedgeLeft: string, wedgeRight: string, lower: string];
+type Shade = readonly [topLeft: number, topRight: number, wedgeLeft: number, wedgeRight: number, lower: number];
 
+// Gray levels of Apple's translucent faces, so a black viewfinder darkens them the way it does there.
 const shades: Record<Exclude<Lighting, "natural">, Shade> = {
-  studio: ["#c2c2c3", "#d1d1d2", "#c4c4c4", "#c7c7c8", "#ececec"],
-  contour: ["#dcdcdd", "#e1e1e1", "#959595", "#979798", "#e3e3e3"],
-  stage: ["#5e5e61", "#6d6d70", "#68686b", "#707073", "#dddddd"],
-  "stage-mono": ["#5e5e61", "#6d6d70", "#68686b", "#707073", "#dddddd"],
-  "high-key-mono": ["#e1e1e2", "#fbfbfb", "#e2e2e3", "#fbfbfb", "#707072"],
+  studio: [200, 217, 223, 227, 249],
+  contour: [230, 235, 152, 155, 239],
+  stage: [88, 105, 84, 96, 232],
+  "stage-mono": [88, 105, 84, 96, 232],
+  "high-key-mono": [235, 255, 255, 255, 109],
 };
+
+const veil = (level: number, alpha: number) => `rgb(${level} ${level} ${level} / ${alpha})`;
 
 export function CubeFaces({ turn, scale, effect }: { turn: number; scale: number; effect: Lighting }) {
   const shade = effect === "natural" ? undefined : shades[effect];
@@ -111,8 +114,8 @@ export function CubeFaces({ turn, scale, effect }: { turn: number; scale: number
           <path d={outline} />
         </clipPath>
         <linearGradient id="lighting-top" x1="0" x2="1">
-          <stop offset="0" stopColor={topLeft} />
-          <stop offset="1" stopColor={topRight} />
+          <stop offset="0" stopColor={veil(topLeft, 0.888)} />
+          <stop offset="1" stopColor={veil(topRight, 0.888)} />
         </linearGradient>
         <radialGradient id="lighting-cloud" cx="0" cy="6.5" r="6.5" gradientUnits="userSpaceOnUse">
           <stop offset="0" stopColor="#3c3c3c" stopOpacity="0.6" />
@@ -126,9 +129,9 @@ export function CubeFaces({ turn, scale, effect }: { turn: number; scale: number
         {shade ? (
           <>
             <polygon points={pts([0, 0], upperLeft, top, upperRight)} fill="url(#lighting-top)" />
-            <polygon points={pts([0, 0], upperLeft, lowerLeft)} fill={wedgeLeft} />
-            <polygon points={pts([0, 0], upperRight, lowerRight)} fill={wedgeRight} />
-            <polygon points={pts([0, 0], lowerLeft, bottom, lowerRight)} fill={lower} />
+            <polygon points={pts([0, 0], upperLeft, lowerLeft)} fill={veil(wedgeLeft, 0.664)} />
+            <polygon points={pts([0, 0], upperRight, lowerRight)} fill={veil(wedgeRight, 0.664)} />
+            <polygon points={pts([0, 0], lowerLeft, bottom, lowerRight)} fill={veil(lower, 0.874)} />
             <g fill="none" stroke="#ffe27a" strokeOpacity="0.55" strokeWidth="1.6" filter="url(#lighting-soft)">
               <polyline points={pts(upperLeft, [0, 0], upperRight)} />
               <polyline points={pts(lowerLeft, [0, 0], lowerRight)} />
@@ -144,11 +147,19 @@ export function CubeFaces({ turn, scale, effect }: { turn: number; scale: number
 }
 
 export function CubeLines({ turn, scale }: { turn: number; scale: number }) {
+  const spokes = `M${spoke(upperLeft)}L0 0 ${spoke(upperRight)}M0 0 ${spoke(bottom)}`;
+
   return (
     <Glyph turn={turn} scale={scale}>
+      <defs>
+        <clipPath id="lighting-ball-clip">
+          <circle r="6.9" />
+        </clipPath>
+      </defs>
       <g fill="none" stroke="#fff" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
         <path d={outline} />
-        <path d={`M${spoke(upperLeft)}L0 0 ${spoke(upperRight)}M0 0 ${spoke(bottom)}`} />
+        <path d={spokes} />
+        <path d={spokes} stroke="#b8b8b8" clipPath="url(#lighting-ball-clip)" />
       </g>
     </Glyph>
   );

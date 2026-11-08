@@ -28,7 +28,10 @@ export function Lighting({ settings }: { settings: Settings }) {
 
   return (
     <div className="lighting" aria-label="Lighting">
-      <div className="lighting-dial" style={{ left: place.x, top: place.y }}>
+      <div
+        className="lighting-dial"
+        style={{ left: place.x, top: place.y, opacity: settings.dial && !portrait ? 0.04 : 1 }}
+      >
         <CubeFaces turn={turn} scale={scale} effect={settings.lighting} />
         <span className="lighting-core" style={{ rotate: `${turn}deg` }}>
           <Ball effect={settings.lighting} size={core} ring={core * 0.9} />
