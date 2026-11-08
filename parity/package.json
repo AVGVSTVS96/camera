@@ -1,0 +1,14 @@
+{
+  "name": "@camera/parity",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "pixelmatch": "^8.0.0",
+    "playwright": "^1.65.0",
+    "pngjs": "^7.0.0"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.4.4",
+    "@types/pngjs": "^6.0.5"
+  }
+}

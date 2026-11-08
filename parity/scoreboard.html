@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Camera parity</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: light-dark(#fafafa, #0a0a0a);
+        --card: light-dark(#fff, #141414);
+        --line: light-dark(#e5e5e5, #262626);
+        --muted: light-dark(#737373, #a3a3a3);
+        font:
+          14px/1.4 system-ui,
+          -apple-system,
+          sans-serif;
+        background: var(--bg);
+      }
+      body {
+        margin: 0 auto;
+        padding: 24px 16px 64px;
+        max-width: 1400px;
+      }
+      header {
+        display: flex;
+        align-items: baseline;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+      }
+      h1 {
+        font-size: 20px;
+        font-weight: 600;
+        margin: 0;
+      }
+      header span {
+        color: var(--muted);
+        font-variant-numeric: tabular-nums;
+      }
+      main {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+        gap: 16px;
+      }
+      article {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+      .head {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--line);
+      }
+      .head b {
+        font-weight: 600;
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .head small {
+        color: var(--muted);
+        white-space: nowrap;
+      }
+      .score {
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+        padding: 2px 8px;
+        border-radius: 6px;
+        color: #fff;
+      }
+      .shots {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--line);
+      }
+      figure {
+        margin: 0;
+        background: #000;
+        position: relative;
+      }
+      figure img {
+        display: block;
+        width: 100%;
+      }
+      figcaption {
+        position: absolute;
+        left: 6px;
+        top: 6px;
+        font-size: 11px;
+        color: #fff;
+        background: #0009;
+        padding: 1px 6px;
+        border-radius: 4px;
+      }
+      a {
+        color: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Camera parity</h1>
+      <span id="summary"></span>
+    </header>
+    <main id="board"></main>
+    <script type="module">
+      const results = await fetch("camera-parity/results.json", { cache: "no-store" }).then((r) => r.json());
+      const average = results.reduce((sum, r) => sum + r.score, 0) / (results.length || 1);
+      document.querySelector("#summary").textContent =
+        `${results.length} states · average ${average.toFixed(1)}% · updated ${new Date(Math.max(...results.map((r) => r.time))).toLocaleString()}`;
+      const hue = (score) => `hsl(${Math.max(0, score - 50) * 2.4} 70% 42%)`;
+      const img = (r, kind) => `camera-parity/${r.id}-${kind}.png?v=${r.time}`;
+      document.querySelector("#board").innerHTML = results
+        .map(
+          (r) => `<article>
+            <div class="head">
+              <b>${r.id}</b>
+              <small>${r.display} · ${r.mode} · ${r.orientation}</small>
+              <span class="score" style="background:${hue(r.score)}">${r.score.toFixed(1)}%</span>
+            </div>
+            <div class="shots">
+              <figure><a href="${img(r, "apple")}"><img loading="lazy" src="${img(r, "apple")}" alt=""></a><figcaption>Apple</figcaption></figure>
+              <figure><a href="${img(r, "ours")}"><img loading="lazy" src="${img(r, "ours")}" alt=""></a><figcaption>Ours</figcaption></figure>
+              <figure><a href="${img(r, "diff")}"><img loading="lazy" src="${img(r, "diff")}" alt=""></a><figcaption>Diff</figcaption></figure>
+            </div>
+          </article>`,
+        )
+        .join("");
+    </script>
+  </body>
+</html>
