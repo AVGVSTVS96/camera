@@ -59,7 +59,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
     >
       <div className="viewfinder">
         {!still && <video ref={video} autoPlay playsInline muted data-facing={settings.facing} />}
-        {settings.level && <Level />}
+        {settings.level && !still && <Level />}
       </div>
       {settings.grid && <Grid />}
       {settings.recording ? (
