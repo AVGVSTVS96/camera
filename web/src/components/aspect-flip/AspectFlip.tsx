@@ -3,9 +3,9 @@ import { LandscapeGlyph, PortraitGlyph } from "./icons.tsx";
 import "./aspect-flip.css";
 
 export function AspectFlip({ settings, update }: Props) {
-  const { display, orientation, mode, facing, submenu, recording } = settings;
+  const { display, orientation, mode, facing, submenu, recording, tray } = settings;
 
-  if (facing !== "front" || (mode !== "cinematic" && mode !== "video") || recording) return null;
+  if (facing !== "front" || (mode !== "cinematic" && mode !== "video") || recording || tray) return null;
 
   const landscape = orientation === "landscape";
   const portraitGlyph = landscape && !(display === "inner" && mode === "cinematic");
