@@ -83,3 +83,79 @@
   rotate: 90deg;
   --glyph-turn: 0deg;
 }
+
+.screen[data-display="inner"] .viewfinder::after {
+  content: "";
+  position: absolute;
+  inset: 210px 0 0;
+  box-shadow:
+    inset 3px 3px 0 #fff,
+    inset -2px 0 0 #fff;
+}
+
+.screen[data-display="inner"][data-orientation="landscape"] .viewfinder::after {
+  inset: 0 0 0 210px;
+  box-shadow:
+    inset 3px 3px 0 #fff,
+    inset 0 -3px 0 #fff;
+}
+
+.screen[data-display="inner"][data-movie] .viewfinder::after {
+  inset: 0;
+}
+
+.inner-preview,
+.inner-home {
+  position: absolute;
+  pointer-events: none;
+}
+
+.inner-preview {
+  left: 334.5px;
+  top: 656px;
+  translate: -50% -50%;
+  rotate: 180deg;
+  font: 17px system-ui;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.screen[data-movie] .inner-preview {
+  left: 401.5px;
+  top: 572px;
+}
+
+.screen[data-orientation="landscape"] .inner-preview {
+  left: 656px;
+  top: 335px;
+  rotate: 90deg;
+}
+
+.screen[data-movie][data-orientation="landscape"] .inner-preview {
+  left: 573px;
+  top: 268px;
+}
+
+.screen[data-display="inner"][data-orientation="portrait"][data-movie] .viewfinder {
+  top: 98px;
+  left: 134px;
+  width: 535px;
+  translate: none;
+}
+
+.inner-home {
+  left: 214px;
+  top: 937.5px;
+  width: 241px;
+  height: 5px;
+  border-radius: 2.5px;
+  background: rgb(255 255 255 / 0.08);
+}
+
+.screen[data-orientation="landscape"] .inner-home {
+  display: none;
+}
+
+.screen[data-display="inner"][data-recording] :is(.zoom, .timer, .thumb, .flip, .controls-button) {
+  display: none;
+}

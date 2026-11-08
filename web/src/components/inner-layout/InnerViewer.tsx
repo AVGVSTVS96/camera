@@ -31,3 +31,12 @@ export function InnerViewer({ empty }: { empty: boolean }) {
     </>
   );
 }
+
+export function InnerPreview() {
+  return (
+    <>
+      <p className="inner-preview">Live Preview</p>
+      <div className="inner-home" />
+    </>
+  );
+}
