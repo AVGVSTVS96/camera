@@ -8,7 +8,7 @@ const dots = Array.from({ length: 15 }, (_, i) => {
 });
 
 const looks: Record<Lighting, string> = {
-  natural: "radial-gradient(circle, #fff 55%, #eee 75%, #d6d6d6 88%, #9a9a9a)",
+  natural: "radial-gradient(circle at 55% 62%, #fff 40%, #ececec 60%, #b4b4b4 85%, #8c8c8c)",
   studio:
     "linear-gradient(#dbdbdb, #cdcdcd 20%, #c4c4c4 40%, #b4b4b4 50%, #a0a0a0 60%, #7e7e7e 75%, #6a6a6a 90%, #888)",
   contour:
@@ -23,7 +23,7 @@ export function Dots({ radius }: { radius: number }) {
   return (
     <svg className="lighting-dots" viewBox="0 0 100 100" aria-hidden>
       {dots.map(([x, y], i) => (
-        <circle key={i} cx={50 + (x - 50) * radius} cy={50 + (y - 50) * radius} r={3.3} fill="#d4d4d6" />
+        <circle key={i} cx={50 + (x - 50) * radius} cy={50 + (y - 50) * radius} r={3} fill="#d4d4d6" />
       ))}
     </svg>
   );
@@ -40,8 +40,8 @@ export function Ball({ effect, size, ring }: { effect: Lighting; size: number; r
   );
 }
 
-const RX = 18.4;
-const RY = 18;
+const RX = 19.15;
+const RY = 18.8;
 
 const hex = [0, 1, 2, 3, 4, 5].map((k) => {
   const turn = ((k * 60 - 90) * Math.PI) / 180;
@@ -72,31 +72,40 @@ function rounded(r: number) {
 const outline = rounded(2.2);
 const spoke = (p: readonly [number, number]) => `${p[0].toFixed(2)} ${p[1].toFixed(2)}`;
 
-function Glyph({ turn, children }: { turn: number; children: ReactNode }) {
+function Glyph({ turn, scale, children }: { turn: number; scale: number; children: ReactNode }) {
   return (
-    <svg width={44} height={44} viewBox="-22 -22 44 44" aria-hidden style={{ rotate: `${turn}deg` }}>
+    <svg width={44 * scale} height={44 * scale} viewBox="-22 -22 44 44" aria-hidden style={{ rotate: `${turn}deg` }}>
       {children}
     </svg>
   );
 }
 
-export function CubeFaces({ turn, lit }: { turn: number; lit: boolean }) {
+type Shade = readonly [topLeft: string, topRight: string, wedgeLeft: string, wedgeRight: string, lower: string];
+
+const shades: Record<Exclude<Lighting, "natural">, Shade> = {
+  studio: ["#c2c2c3", "#d1d1d2", "#c4c4c4", "#c7c7c8", "#ececec"],
+  contour: ["#dcdcdd", "#e1e1e1", "#959595", "#979798", "#e3e3e3"],
+  stage: ["#5e5e61", "#6d6d70", "#68686b", "#707073", "#dddddd"],
+  "stage-mono": ["#5e5e61", "#6d6d70", "#68686b", "#707073", "#dddddd"],
+  "high-key-mono": ["#e1e1e2", "#fbfbfb", "#e2e2e3", "#fbfbfb", "#707072"],
+};
+
+export function CubeFaces({ turn, scale, effect }: { turn: number; scale: number; effect: Lighting }) {
+  const shade = effect === "natural" ? undefined : shades[effect];
+  const [topLeft, topRight, wedgeLeft, wedgeRight, lower] = shade ?? [];
+
   return (
-    <Glyph turn={turn}>
+    <Glyph turn={turn} scale={scale}>
       <defs>
         <clipPath id="lighting-clip">
           <path d={outline} />
         </clipPath>
-        <linearGradient id="lighting-wing-l" x1="0" x2="1">
-          <stop offset="0" stopColor="#a8a8a4" />
-          <stop offset="1" stopColor="#8a8a88" />
+        <linearGradient id="lighting-top" x1="0" x2="1">
+          <stop offset="0" stopColor={topLeft} />
+          <stop offset="1" stopColor={topRight} />
         </linearGradient>
-        <linearGradient id="lighting-wing-r" x1="1" x2="0">
-          <stop offset="0" stopColor="#a8a8a4" />
-          <stop offset="1" stopColor="#8a8a88" />
-        </linearGradient>
-        <radialGradient id="lighting-cloud" cx="0" cy="-6.5" r="6.5" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="#3c3c3c" stopOpacity="0.85" />
+        <radialGradient id="lighting-cloud" cx="0" cy="6.5" r="6.5" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stopColor="#3c3c3c" stopOpacity="0.6" />
           <stop offset="1" stopColor="#3c3c3c" stopOpacity="0" />
         </radialGradient>
         <filter id="lighting-soft">
@@ -104,35 +113,32 @@ export function CubeFaces({ turn, lit }: { turn: number; lit: boolean }) {
         </filter>
       </defs>
       <g clipPath="url(#lighting-clip)">
-        {!lit && <path d={outline} fill="#000" fillOpacity="0.4" />}
-        {lit && <Lit />}
+        {shade ? (
+          <>
+            <polygon points={pts([0, 0], upperLeft, top, upperRight)} fill="url(#lighting-top)" />
+            <polygon points={pts([0, 0], upperLeft, lowerLeft)} fill={wedgeLeft} />
+            <polygon points={pts([0, 0], upperRight, lowerRight)} fill={wedgeRight} />
+            <polygon points={pts([0, 0], lowerLeft, bottom, lowerRight)} fill={lower} />
+            <g fill="none" stroke="#ffe27a" strokeOpacity="0.55" strokeWidth="1.6" filter="url(#lighting-soft)">
+              <polyline points={pts(upperLeft, [0, 0], upperRight)} />
+              <polyline points={pts(lowerLeft, [0, 0], lowerRight)} />
+            </g>
+            <rect x="-8" y="0" width="16" height="12" fill="url(#lighting-cloud)" />
+          </>
+        ) : (
+          <path d={outline} fill="#000" fillOpacity="0.4" />
+        )}
       </g>
     </Glyph>
   );
 }
 
-function Lit() {
+export function CubeLines({ turn, scale }: { turn: number; scale: number }) {
   return (
-    <>
-      <path d={outline} fill="#e4e4e4" />
-      <polygon points={pts([0, 0], lowerLeft, bottom, lowerRight)} fill="#e0e0e0" />
-      <polygon points={pts([0, 0], upperLeft, lowerLeft)} fill="url(#lighting-wing-l)" />
-      <polygon points={pts([0, 0], upperRight, lowerRight)} fill="url(#lighting-wing-r)" />
-      <g fill="none" stroke="#ffe27a" strokeOpacity="0.55" strokeWidth="1.6" filter="url(#lighting-soft)">
-        <polyline points={pts(upperLeft, [0, 0], upperRight)} />
-        <polyline points={pts(lowerLeft, [0, 0], lowerRight)} />
-      </g>
-      <rect x="-8" y="-12" width="16" height="12" fill="url(#lighting-cloud)" />
-    </>
-  );
-}
-
-export function CubeLines({ turn }: { turn: number }) {
-  return (
-    <Glyph turn={turn}>
+    <Glyph turn={turn} scale={scale}>
       <g fill="none" stroke="#fff" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
         <path d={outline} />
-        <path d={`M${spoke(top)}L0 0 ${spoke(lowerLeft)}M0 0 ${spoke(lowerRight)}`} />
+        <path d={`M${spoke(upperLeft)}L0 0 ${spoke(upperRight)}M0 0 ${spoke(bottom)}`} />
       </g>
     </Glyph>
   );

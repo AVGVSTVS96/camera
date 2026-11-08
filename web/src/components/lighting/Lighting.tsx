@@ -21,16 +21,17 @@ export function Lighting({ settings }: { settings: Settings }) {
   const selected = lightings.indexOf(settings.lighting);
   const [ax, ay] = place.along;
   const core = portrait ? 23.75 : 25.33;
-  const turn = settings.orientation === "landscape" ? -90 : 0;
+  const scale = (portrait ? 36.5 : 38.93) / 38.93;
+  const turn = settings.orientation === "landscape" ? 90 : settings.display === "inner" ? 180 : 0;
 
   return (
     <div className="lighting" aria-label="Lighting">
       <div className="lighting-dial" style={{ left: place.x, top: place.y }}>
-        <CubeFaces turn={turn} lit={settings.lighting !== "natural"} />
+        <CubeFaces turn={turn} scale={scale} effect={settings.lighting} />
         <span className="lighting-core" style={{ rotate: `${turn}deg` }}>
           <Ball effect={settings.lighting} size={core} ring={core * 0.9} />
         </span>
-        <CubeLines turn={turn} />
+        <CubeLines turn={turn} scale={scale} />
       </div>
       {portrait &&
         lightings.map((effect, i) => {
@@ -52,7 +53,7 @@ export function Lighting({ settings }: { settings: Settings }) {
                 opacity: near.alpha,
               }}
             >
-              <Ball effect={effect} size={near.size} ring={near.ring} />
+              <Ball effect={effect} size={near.size} ring={near.ring * 0.89} />
             </div>
           );
         })}
