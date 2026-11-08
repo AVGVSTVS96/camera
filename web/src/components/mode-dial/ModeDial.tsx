@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useProfile } from "../../profile.ts";
 import type { Mode } from "../../state.ts";
 import "./mode-dial.css";
@@ -8,18 +8,21 @@ export function ModeDial({ selected, select }: { selected: Mode; select: (mode: 
   const labels = useRef<HTMLDivElement>(null);
   const [offset, setOffset] = useState(0);
   const [settled, setSettled] = useState(false);
-  const [fonts, setFonts] = useState(0);
 
-  useEffect(() => {
-    document.fonts.ready.then(() => setFonts(1));
-    setSettled(true);
-  }, []);
-
-  useLayoutEffect(() => {
+  const measure = useCallback(() => {
     const label = labels.current?.querySelector<HTMLElement>(`[data-mode="${selected}"]`);
 
     if (label) setOffset(-(label.offsetLeft + label.offsetWidth / 2));
-  }, [selected, fonts]);
+  }, [selected]);
+
+  useLayoutEffect(measure, [measure]);
+
+  useEffect(() => {
+    document.fonts.ready.then(() => {
+      measure();
+      setSettled(true);
+    });
+  }, [measure]);
 
   return (
     <div className="dial" data-profile={name} aria-label="Camera Mode">
