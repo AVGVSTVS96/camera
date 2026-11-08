@@ -1,9 +1,13 @@
 .stops {
-  display: flex;
-  gap: 1px;
+  position: absolute;
+  width: 0;
+  height: 0;
 }
 
 .stops button {
+  position: absolute;
+  left: -19px;
+  top: -19px;
   width: 38px;
   height: 38px;
   border-radius: 50%;
@@ -16,4 +20,38 @@
   background: rgb(0 0 0 / 0.42);
   color: var(--yellow);
   font-size: 14px;
+}
+
+.stops .glyph {
+  rotate: 0deg;
+}
+
+.stops[data-dial] {
+  opacity: 0.1;
+}
+
+.stops[data-dial] [data-on] {
+  background: none;
+  color: inherit;
+}
+
+.zoom-dial {
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 0;
+  height: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.zoom-dial path {
+  fill: #47474a;
+}
+
+.zoom-dial .readout {
+  fill: var(--yellow);
+  font:
+    24px ui-rounded,
+    system-ui;
+  text-anchor: middle;
 }

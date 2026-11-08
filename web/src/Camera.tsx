@@ -83,9 +83,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
         <ControlsPanel update={update} />
       ) : (
         <>
-          <div className="row zoom">
-            <Zoom {...props} />
-          </div>
+          <Zoom {...props} />
           <div className="row shutter">
             {movie ? profile.macro && <Macro {...props} /> : <DepthButton />}
             <Shutter movie={movie} onPress={shutter} />

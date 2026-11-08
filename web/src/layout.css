@@ -95,10 +95,6 @@
   translate: -50% calc(-50% + var(--x, 0px));
 }
 
-.screen[data-orientation="landscape"] .row.zoom {
-  left: 246px;
-}
-
 .screen[data-orientation="landscape"] .row.shutter {
   left: var(--rest);
 }
@@ -113,10 +109,6 @@
 
 .row.top {
   top: 50px;
-}
-
-.row.zoom {
-  bottom: 246px;
 }
 
 .screen {
