@@ -1,0 +1,91 @@
+import { useEffect, useRef, useState } from "react";
+import type { Settings } from "./state.ts";
+
+declare global {
+  interface MediaTrackConstraintSet {
+    zoom?: number;
+  }
+}
+
+export interface Shot {
+  url: string;
+  file: File;
+  poster?: string;
+}
+
+export function useCamera(settings: Settings, enabled: boolean) {
+  const video = useRef<HTMLVideoElement>(null);
+  const [stream, setStream] = useState<MediaStream>();
+  const [error, setError] = useState<string>();
+
+  useEffect(() => {
+    if (!enabled) return;
+    let current: MediaStream | undefined;
+    navigator.mediaDevices
+      .getUserMedia({
+        video: { facingMode: settings.facing, width: { ideal: 4032 }, height: { ideal: 3024 } },
+        audio: false,
+      })
+      .then((s) => {
+        current = s;
+        setStream(s);
+        setError(undefined);
+
+        if (video.current) video.current.srcObject = s;
+      })
+      .catch((e: Error) => setError(e.message));
+
+    return () => current?.getTracks().forEach((t) => t.stop());
+  }, [enabled, settings.facing]);
+
+  useEffect(() => {
+    const track = stream?.getVideoTracks()[0];
+
+    if (track && "zoom" in track.getCapabilities()) {
+      track.applyConstraints({ advanced: [{ zoom: settings.zoom }] }).catch(() => {});
+    }
+  }, [stream, settings.zoom]);
+
+  return { video, stream, error };
+}
+
+export function snapshot(video: HTMLVideoElement) {
+  const canvas = document.createElement("canvas");
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas.getContext("2d")!.drawImage(video, 0, 0);
+
+  return new Promise<Shot>((resolve) =>
+    canvas.toBlob(
+      (blob) => {
+        const file = new File([blob!], `IMG_${Date.now()}.jpg`, { type: "image/jpeg" });
+        resolve({ url: URL.createObjectURL(file), file });
+      },
+      "image/jpeg",
+      0.95,
+    ),
+  );
+}
+
+export function record(stream: MediaStream) {
+  const type = ["video/mp4", "video/webm"].find((t) => MediaRecorder.isTypeSupported(t)) ?? "";
+  const recorder = new MediaRecorder(stream, { mimeType: type });
+  const chunks: Blob[] = [];
+  recorder.ondataavailable = (e) => chunks.push(e.data);
+  recorder.start();
+
+  return () =>
+    new Promise<File>((resolve) => {
+      recorder.onstop = () =>
+        resolve(new File(chunks, `VID_${Date.now()}.${type.includes("mp4") ? "mp4" : "webm"}`, { type }));
+      recorder.stop();
+    });
+}
+
+export async function save(file: File) {
+  if (navigator.canShare?.({ files: [file] })) return navigator.share({ files: [file] });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(file);
+  link.download = file.name;
+  link.click();
+}
