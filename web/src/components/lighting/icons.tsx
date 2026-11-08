@@ -105,7 +105,7 @@ const veil = (level: number, alpha: number) => `rgb(${level} ${level} ${level} /
 
 export function CubeFaces({ turn, scale, effect }: { turn: number; scale: number; effect: Lighting }) {
   const shade = effect === "natural" ? undefined : shades[effect];
-  const [topLeft, topRight, wedgeLeft, wedgeRight, lower] = shade ?? [];
+  const [topLeft = 0, topRight = 0, wedgeLeft = 0, wedgeRight = 0, lower = 0] = shade ?? [];
 
   return (
     <Glyph turn={turn} scale={scale}>
