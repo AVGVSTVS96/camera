@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { record, save, snapshot, useCamera, type Shot } from "./capture.ts";
+import { record, snapshot, useCamera, type Shot } from "./capture.ts";
 import { ControlsButton } from "./components/controls-button/ControlsButton.tsx";
 import { ControlsPanel } from "./components/controls-panel/ControlsPanel.tsx";
 import { DepthButton } from "./components/depth-button/DepthButton.tsx";
@@ -95,7 +95,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
       )}
       {profile.lighting !== false && !settings.tray && <Lighting settings={settings} />}
       {settings.viewer && (
-        <Viewer shot={shot} close={() => update({ viewer: false })} share={shot && (() => save(shot.file))} />
+        <Viewer shot={shot} close={() => update({ viewer: false })} />
       )}
       {settings.viewer && settings.display === "inner" && <InnerViewer empty={!shot} />}
       {still && settings.display === "outer" && <div className="system" />}
