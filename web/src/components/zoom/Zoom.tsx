@@ -29,7 +29,6 @@ export function Zoom({ settings, update }: Props) {
 
   const place = layout(settings, profile.name === "duo");
   const [ax, ay] = place.along;
-  const sideways = settings.display === "inner" && stops.length > 1;
   const shift = anchored ? place.lone - (place.vertical ? place.y : place.x) : 0;
   const marker = Math.atan2(-place.into[1], -place.into[0]) * (180 / Math.PI) - 90;
 
@@ -78,9 +77,7 @@ export function Zoom({ settings, update }: Props) {
             style={{ translate: offset(i) }}
             onClick={() => (anchored && stops.length === 1 ? update({ lenses: true }) : update({ zoom: stop }))}
           >
-            <span className="glyph" style={{ rotate: sideways ? "90deg" : undefined }}>
-              {zoomLabel(i === active ? settings.zoom : stop, i === active)}
-            </span>
+            <span className="glyph">{zoomLabel(i === active ? settings.zoom : stop, i === active)}</span>
           </button>
         ))}
       </div>
