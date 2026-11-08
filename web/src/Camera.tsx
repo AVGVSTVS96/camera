@@ -6,6 +6,7 @@ import { DepthButton } from "./components/depth-button/DepthButton.tsx";
 import { Flip } from "./components/flip/Flip.tsx";
 import { Grid, Level } from "./components/grid/Grid.tsx";
 import { InnerViewer } from "./components/inner-layout/InnerViewer.tsx";
+import { Lighting } from "./components/lighting/Lighting.tsx";
 import { Macro } from "./components/macro/Macro.tsx";
 import { ModeDial } from "./components/mode-dial/ModeDial.tsx";
 import { Recording } from "./components/recording/Recording.tsx";
@@ -92,6 +93,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
           <Flip {...props} />
         </>
       )}
+      {profile.lighting !== false && !settings.tray && <Lighting settings={settings} />}
       {settings.viewer && (
         <Viewer shot={shot} close={() => update({ viewer: false })} share={shot && (() => save(shot.file))} />
       )}

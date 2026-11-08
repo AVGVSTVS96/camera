@@ -18,6 +18,7 @@ export interface Profile {
   photoFormat: string;
   videoFormat: string;
   library: boolean;
+  lighting?: boolean;
 }
 
 const lenses: Zoom = { stops: [0.5, 1, 2], start: 1 };
@@ -42,6 +43,7 @@ export const duo: Profile = {
   photoFormat: "HEIF 48",
   videoFormat: "4K 30",
   library: true,
+  lighting: false,
 };
 
 export const ProfileContext = createContext(duo);

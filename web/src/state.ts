@@ -10,6 +10,19 @@ const appleModes = new Map<string, Mode>([["slow-motion-video", "slo-mo"]]);
 
 export const modeOf = (name: string) => appleModes.get(name) ?? modes.find((m) => m === name) ?? "photo";
 
+export const lightings = ["natural", "studio", "contour", "stage", "stage-mono", "high-key-mono"] as const;
+
+export type Lighting = (typeof lightings)[number];
+
+const appleLightings = new Map<string, Lighting>([
+  ["NATURAL LIGHT", "natural"],
+  ["STUDIO LIGHT", "studio"],
+  ["CONTOUR LIGHT", "contour"],
+  ["STAGE LIGHT", "stage"],
+  ["STAGE LIGHT MONO", "stage-mono"],
+  ["HIGH-KEY LIGHT MONO", "high-key-mono"],
+]);
+
 export type Display = "outer" | "inner";
 
 export type Orientation = "portrait" | "landscape";
@@ -42,6 +55,9 @@ export interface Settings {
   grid: boolean;
   level: boolean;
   tray: boolean;
+  submenu: boolean;
+  square: boolean;
+  lighting: Lighting;
   viewer: boolean;
   recording: boolean;
   orientation: Orientation;
@@ -68,6 +84,9 @@ export function initialSettings(profile: Profile, mode: Mode = "photo", facing: 
     grid: profile.grid,
     level: profile.level,
     tray: false,
+    submenu: false,
+    square: false,
+    lighting: mode === "photo" ? "contour" : "natural",
     viewer: false,
     recording: false,
     orientation: "portrait",
@@ -89,6 +108,9 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
     grid: c.grid === true || initial.grid,
     level: c.level === true || initial.level,
     tray: c.panel === "open" || c.panel === "expanded",
+    submenu: c.panel === "submenu",
+    square: c.control === "Aspect Ratio" && c.selected === "Square",
+    lighting: appleLightings.get(String(c.portraitLighting)) ?? initial.lighting,
     viewer: state.mode === "viewer",
     recording: c.action === "recording",
     orientation: state.orientation,

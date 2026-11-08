@@ -1,0 +1,62 @@
+.lighting {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.lighting > * {
+  position: absolute;
+  translate: -50% -50%;
+}
+
+.lighting-dial {
+  display: grid;
+  place-items: center;
+}
+
+.lighting-dial > * {
+  grid-area: 1 / 1;
+}
+
+.lighting-ball {
+  position: relative;
+  display: block;
+}
+
+.lighting-ball svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.lighting-ball i {
+  position: absolute;
+  inset: 25%;
+  border-radius: 50%;
+  box-shadow:
+    inset 0 0 0 0.4px rgb(0 0 0 / 0.35),
+    0 1.2px 1px -0.4px rgb(255 255 255 / 0.35);
+}
+
+.lighting-ring {
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 0.67px solid rgb(255 255 255 / 0.43);
+}
+
+.lighting-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  padding-inline: 8.5px;
+  border-radius: 4px;
+  background: rgb(0 0 0 / 0.3);
+  color: rgb(235 235 245 / 0.5);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+}
