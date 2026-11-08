@@ -62,6 +62,7 @@ export interface Settings {
   on: string[];
   submenu: boolean;
   balance: string | null;
+  exposure: number | null;
   styles: boolean;
   style: StyleName;
   customize: boolean;
@@ -103,6 +104,7 @@ export function initialSettings(profile: Profile, mode: Mode = "photo", facing: 
     on: [],
     submenu: false,
     balance: null,
+    exposure: null,
     styles: false,
     style: "standard",
     customize: false,
@@ -118,6 +120,8 @@ export function initialSettings(profile: Profile, mode: Mode = "photo", facing: 
     display: "outer",
   };
 }
+
+const exposureOf = (c: Controls) => ({ dec: -0.7, inc: 0.7 })[String(c.adjust)] ?? 0;
 
 const timerOf = (c: Controls) => Number.parseInt(String(c.control === "Timer" ? c.selected : c.timer)) || null;
 
@@ -143,6 +147,7 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
     on: c.control && (c.to === "On" || c.to === "Adaptive") ? [String(c.control)] : [],
     submenu: c.panel === "submenu",
     balance: c.panel === "submenu" && c.control === "White Balance" ? String(c.selected).toLowerCase() : null,
+    exposure: c.panel === "submenu" && c.control === "Exposure" ? exposureOf(c) : null,
     styles: c.control === "Styles",
     style: c.adjust === "dec" ? "gold" : c.adjust === "inc" ? "natural" : "standard",
     customize: c.selected === "Customize",
