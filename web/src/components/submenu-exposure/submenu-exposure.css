@@ -15,14 +15,34 @@
   font-family: ".SF Compact Rounded", ui-rounded, sans-serif;
 }
 
+.exposure-strip {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 450px;
+  height: 184px;
+  translate: -50% -50%;
+}
+
 .screen[data-orientation="landscape"] .exposure {
-  left: calc(100px - 225px);
-  top: calc(var(--h) / 2 - 92px);
+  left: 8px;
+  top: calc(var(--h) / 2 - 225px);
+  width: 184px;
+  height: 450px;
+}
+
+.screen[data-orientation="landscape"] .exposure-strip {
   rotate: 90deg;
 }
 
 .screen[data-display="inner"][data-orientation="portrait"] .exposure {
   top: 8px;
+}
+
+.screen[data-display="inner"][data-orientation="portrait"] .exposure-strip {
+  rotate: 180deg;
+}
+
+.screen[data-display="inner"][data-orientation="portrait"] .exposure-reset svg {
   rotate: 180deg;
 }
 
