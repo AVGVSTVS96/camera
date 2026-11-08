@@ -65,3 +65,26 @@
 [data-orientation="landscape"] .inner-scrubber {
   top: 603px;
 }
+
+.screen[data-display="inner"][data-orientation="portrait"] {
+  --side: 276px;
+}
+
+.screen[data-display="inner"][data-orientation="portrait"] .row {
+  rotate: 180deg;
+}
+
+.screen[data-display="inner"][data-orientation="portrait"] .row.modes {
+  top: 58px;
+  bottom: auto;
+}
+
+.screen[data-display="inner"][data-orientation="portrait"] .row.shutter {
+  top: 147px;
+  bottom: auto;
+}
+
+.screen[data-display="inner"][data-orientation="portrait"] .row.zoom {
+  top: 232px;
+  bottom: auto;
+}
