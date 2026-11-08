@@ -5,6 +5,7 @@ import { ControlsPanel } from "./components/controls-panel/ControlsPanel.tsx";
 import { DepthButton } from "./components/depth-button/DepthButton.tsx";
 import { Flip } from "./components/flip/Flip.tsx";
 import { Grid, Level } from "./components/grid/Grid.tsx";
+import { InnerViewer } from "./components/inner-layout/InnerViewer.tsx";
 import { Macro } from "./components/macro/Macro.tsx";
 import { ModeDial } from "./components/mode-dial/ModeDial.tsx";
 import { Recording } from "./components/recording/Recording.tsx";
@@ -94,6 +95,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
       {settings.viewer && (
         <Viewer shot={shot} close={() => update({ viewer: false })} share={shot && (() => save(shot.file))} />
       )}
+      {settings.viewer && settings.display === "inner" && <InnerViewer empty={!shot} />}
       {still && settings.display === "outer" && <div className="system" />}
       {error && <p className="error">{error}</p>}
     </main>
