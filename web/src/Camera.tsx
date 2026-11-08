@@ -1,13 +1,21 @@
 import { useRef, useState } from "react";
 import { record, save, snapshot, useCamera, type Shot } from "./capture.ts";
-import { ModeDial, ShutterRow, TopBar, ZoomStops } from "./Controls.tsx";
-import { Flip as FlipGlyph } from "./icons.tsx";
+import { ControlsButton } from "./components/controls-button/ControlsButton.tsx";
+import { ControlsPanel } from "./components/controls-panel/ControlsPanel.tsx";
+import { DepthButton } from "./components/depth-button/DepthButton.tsx";
+import { Flip } from "./components/flip/Flip.tsx";
+import { Grid, Level } from "./components/grid/Grid.tsx";
+import { Macro } from "./components/macro/Macro.tsx";
+import { ModeDial } from "./components/mode-dial/ModeDial.tsx";
+import { Recording } from "./components/recording/Recording.tsx";
+import { Shutter } from "./components/shutter/Shutter.tsx";
+import { SmartTake } from "./components/smart-take/SmartTake.tsx";
+import { Thumbnail } from "./components/thumbnail/Thumbnail.tsx";
+import { TopBar } from "./components/top-bar/TopBar.tsx";
+import { Viewer } from "./components/viewer/Viewer.tsx";
+import { Zoom } from "./components/zoom/Zoom.tsx";
 import { useProfile } from "./profile.ts";
-import { Tray } from "./Tray.tsx";
-import { movieModes, type Settings } from "./state.ts";
-import { Viewer } from "./Viewer.tsx";
-
-export type Update = (change: Partial<Settings>) => void;
+import { movieModes, type Settings, type Update } from "./state.ts";
 
 export function Camera({ initial, still }: { initial: Settings; still?: string }) {
   const profile = useProfile();
@@ -17,6 +25,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
   const { video, stream, error } = useCamera(settings, !still);
   const update: Update = (change) => setSettings((s) => ({ ...s, ...change }));
   const movie = movieModes.has(settings.mode);
+  const props = { settings, update };
 
   async function shutter() {
     if (!video.current || !stream) return;
@@ -48,33 +57,37 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
     >
       <div className="viewfinder">
         {!still && <video ref={video} autoPlay playsInline muted data-facing={settings.facing} />}
-        {settings.grid && <div className="grid" />}
-        {settings.level && <div className="level" />}
+        {settings.grid && <Grid />}
+        {settings.level && <Level />}
       </div>
-      <TopBar settings={settings} update={update} />
+      {settings.recording ? (
+        <div className="row top">
+          <Recording />
+        </div>
+      ) : (
+        (profile.badges || settings.tray) && (
+          <div className="row top">
+            <TopBar {...props} />
+          </div>
+        )
+      )}
       {settings.tray ? (
-        <Tray settings={settings} update={update} />
+        <ControlsPanel update={update} />
       ) : (
         <>
-          <ZoomStops settings={settings} update={update} />
-          <ShutterRow settings={settings} update={update} onShutter={shutter} />
+          <div className="row zoom">
+            <Zoom {...props} />
+          </div>
+          <div className="row shutter">
+            {movie ? profile.macro && <Macro {...props} /> : <DepthButton />}
+            <Shutter movie={movie} onPress={shutter} />
+            {profile.smartTake && !movie && !settings.recording && <SmartTake />}
+            <ControlsButton movie={movie} open={() => update({ tray: true })} />
+          </div>
           <div className="row modes">
-            <button
-              className="thumb lead"
-              data-empty={!profile.library || undefined}
-              aria-label="Photos"
-              onClick={() => update({ viewer: true })}
-            >
-              {shot && <img src={shot.poster ?? shot.url} alt="" />}
-            </button>
+            <Thumbnail shot={shot} open={() => update({ viewer: true })} />
             {!settings.recording && <ModeDial selected={settings.mode} select={(mode) => update({ mode })} />}
-            <button
-              className="glass round trail"
-              aria-label="Switch camera"
-              onClick={() => update({ facing: settings.facing === "front" ? "back" : "front" })}
-            >
-              <FlipGlyph />
-            </button>
+            <Flip {...props} />
           </div>
         </>
       )}

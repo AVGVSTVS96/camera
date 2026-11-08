@@ -1,20 +1,9 @@
 import type { ReactNode } from "react";
-import type { Update } from "./Camera.tsx";
-import {
-  Aspect,
-  BoltAuto,
-  DepthOff,
-  Exposure,
-  Framing,
-  LiveOff,
-  Moon,
-  Scene,
-  Styles,
-  TimerOff,
-  Tone,
-} from "./icons.tsx";
-import { useProfile } from "./profile.ts";
-import type { Settings } from "./state.ts";
+import { BoltAuto, DepthOff, LiveOff, Moon, Tone } from "../../icons.tsx";
+import { useProfile } from "../../profile.ts";
+import type { Update } from "../../state.ts";
+import { Aspect, Exposure, Framing, Scene, Styles, TimerOff } from "./icons.tsx";
+import "./controls-panel.css";
 
 function Resolution() {
   const [name, detail] = useProfile().photoFormat.split(" ");
@@ -42,7 +31,7 @@ const controls: [string, () => ReactNode, boolean?][] = [
   ["Tone", Tone, true],
 ];
 
-export function Tray({ update }: { settings: Settings; update: Update }) {
+export function ControlsPanel({ update }: { update: Update }) {
   return (
     <>
       <div className="tray-backdrop" onClick={() => update({ tray: false })} />

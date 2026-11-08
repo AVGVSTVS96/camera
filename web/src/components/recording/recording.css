@@ -1,0 +1,7 @@
+.timer {
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: #ff3b30;
+  font: 500 17px system-ui;
+  font-variant-numeric: tabular-nums;
+}

@@ -1,0 +1,18 @@
+.top-items {
+  display: flex;
+  gap: 12px;
+}
+
+.top-items > button {
+  width: 30px;
+  height: 44px;
+}
+
+.top-items [data-on] {
+  color: var(--yellow);
+}
+
+.plus {
+  left: 36px;
+  translate: -50% -50%;
+}

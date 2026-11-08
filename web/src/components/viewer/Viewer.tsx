@@ -1,4 +1,5 @@
-import type { Shot } from "./capture.ts";
+import type { Shot } from "../../capture.ts";
+import "./viewer.css";
 
 export function Viewer({ shot, close, share }: { shot?: Shot; close: () => void; share?: () => void }) {
   const video = shot?.file.type.startsWith("video/");

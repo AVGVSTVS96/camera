@@ -49,6 +49,13 @@ export interface Settings {
   fold?: string;
 }
 
+export type Update = (change: Partial<Settings>) => void;
+
+export interface Props {
+  settings: Settings;
+  update: Update;
+}
+
 export function initialSettings(profile: Profile, mode: Mode = "photo", facing: Facing = "back"): Settings {
   return {
     mode,

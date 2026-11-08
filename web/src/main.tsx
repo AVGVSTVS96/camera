@@ -1,8 +1,9 @@
+import "./base.css";
+import "./layout.css";
 import { createRoot } from "react-dom/client";
 import { Camera } from "./Camera.tsx";
 import { duo, ProfileContext } from "./profile.ts";
 import { initialSettings, loadState, settingsFor } from "./state.ts";
-import "./styles.css";
 
 const root = createRoot(document.getElementById("root")!);
 const id = new URLSearchParams(location.search).get("state");
