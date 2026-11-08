@@ -101,7 +101,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
             {!settings.submenu && <ControlsButton open={() => update({ tray: true })} />}
           </div>
           <div className="row modes">
-            <Thumbnail shot={shot} open={() => update({ viewer: true })} />
+            {!settings.submenu && <Thumbnail shot={shot} open={() => update({ viewer: true })} />}
           </div>
           {!settings.submenu && <Flip {...props} />}
           {!settings.recording && <ModeDial selected={settings.mode} select={(mode) => update({ mode })} />}
