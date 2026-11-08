@@ -123,7 +123,10 @@ export function ControlsPanel({ settings, update }: Props) {
     orientation,
     photo: mode === "photo",
     compact: !expanded,
-    turned: display === "inner" && (mode === "photo" || (mode === "cinematic" && orientation === "landscape")),
+    turned:
+      display === "inner" &&
+      (settings.fold !== "half-open" || orientation === "portrait") &&
+      (mode === "photo" || (mode === "cinematic" && orientation === "landscape")),
   });
 
   const narrow = orientation === "landscape" && !sheet.turned;
