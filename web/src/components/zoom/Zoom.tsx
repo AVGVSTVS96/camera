@@ -17,6 +17,7 @@ export function Zoom({ settings, update }: Props) {
   const hide = useRef<number>(undefined);
 
   const anchored = stops.length === 1 || settings.lenses;
+
   const active = settings.lenses
     ? stops.length - 1
     : stops.lastIndexOf(Math.max(...stops.filter((s) => s <= settings.zoom + 0.001)));
