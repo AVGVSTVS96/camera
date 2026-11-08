@@ -81,7 +81,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
         )
       )}
       {settings.tray ? (
-        <ControlsPanel update={update} />
+        <ControlsPanel {...props} />
       ) : (
         <>
           <Zoom {...props} />

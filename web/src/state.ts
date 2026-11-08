@@ -56,6 +56,8 @@ export interface Settings {
   grid: boolean;
   level: boolean;
   tray: boolean;
+  expanded: boolean;
+  on: string[];
   submenu: boolean;
   styles: boolean;
   countdown: boolean;
@@ -90,6 +92,8 @@ export function initialSettings(profile: Profile, mode: Mode = "photo", facing: 
     grid: profile.grid,
     level: profile.level,
     tray: false,
+    expanded: false,
+    on: [],
     submenu: false,
     styles: false,
     countdown: false,
@@ -120,6 +124,8 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
     grid: c.grid === true || initial.grid,
     level: c.level === true || initial.level,
     tray: c.panel === "open" || c.panel === "expanded",
+    expanded: c.panel === "expanded" || c.control !== undefined,
+    on: c.control && (c.to === "On" || c.to === "Adaptive") ? [String(c.control)] : [],
     submenu: c.panel === "submenu",
     styles: c.control === "Styles",
     countdown: c.action === "countdown running",
