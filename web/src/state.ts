@@ -119,13 +119,14 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
   const mode = modeOf(state.mode);
   const facing = c.camera === "front" ? "front" : "back";
   const initial = initialSettings(profile, mode, facing);
+  const lowest = mode === "portrait" ? 0.5 : Math.min(...(profile.zoom[`${facing}-${mode}`]?.stops ?? [initial.zoom]));
   const flash = (["on", "off", "auto"] as const).find((f) => c.flash === f);
 
   return {
     ...initial,
-    zoom: Number.parseFloat(String(c.zoom)) || initial.zoom,
+    zoom: Number.parseFloat(String(c.zoom)) || (c.zoomDial === "open" ? lowest : initial.zoom),
     dial: c.zoomDial === "open",
-    lenses: mode === "portrait" && "zoomButton" in c,
+    lenses: mode === "portrait" && ("zoomButton" in c || c.zoomDial === "open"),
     flash: flash ?? initial.flash,
     live: c.live === true || c.live === "on",
     grid: c.grid === true || initial.grid,

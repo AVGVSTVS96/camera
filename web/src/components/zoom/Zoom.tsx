@@ -13,20 +13,23 @@ function zoomLabel(value: number, active: boolean) {
 export function Zoom({ settings, update }: Props) {
   const profile = useProfile();
   const own = profile.zoom[`${settings.facing}-${settings.mode}`]?.stops ?? [];
-  const stops = settings.lenses ? [0.5, 1, 2, settings.zoom] : own;
+  const stops = settings.lenses ? [0.5, 1, 2, settings.zoom === 0.5 ? 1 : settings.zoom] : own;
   const hide = useRef<number>(undefined);
 
+  const showDial = settings.dial && (settings.mode === "photo" || settings.mode === "video");
   const anchored = stops.length === 1 || settings.lenses;
 
   const active = settings.lenses
-    ? stops.length - 1
+    ? settings.zoom === 0.5
+      ? 0
+      : stops.length - 1
     : stops.lastIndexOf(Math.max(...stops.filter((s) => s <= settings.zoom + 0.001)));
 
   if (!stops.length) return null;
 
   const place = layout(settings, profile.name === "duo");
   const [ax, ay] = place.along;
-  const sideways = place.turn > 0 && stops.length > 1;
+  const sideways = settings.display === "inner" && stops.length > 1;
   const shift = anchored ? place.lone - (place.vertical ? place.y : place.x) : 0;
   const marker = Math.atan2(-place.into[1], -place.into[0]) * (180 / Math.PI) - 90;
 
@@ -45,7 +48,7 @@ export function Zoom({ settings, update }: Props) {
 
   return (
     <>
-      {settings.dial && (
+      {showDial && (
         <svg className="zoom-dial" aria-hidden>
           <path d={place.dial} />
           <polygon
@@ -64,7 +67,7 @@ export function Zoom({ settings, update }: Props) {
       )}
       <div
         className="stops"
-        data-dial={settings.dial || undefined}
+        data-dial={showDial || undefined}
         style={{ left: place.x, top: place.y }}
         onPointerMove={(e) => e.buttons && open()}
       >
