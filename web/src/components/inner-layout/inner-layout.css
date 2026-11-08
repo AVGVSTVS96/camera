@@ -88,3 +88,16 @@
   top: 232px;
   bottom: auto;
 }
+
+.screen[data-display="inner"][data-orientation="landscape"] {
+  --side: 276px;
+}
+
+.screen[data-display="inner"][data-orientation="landscape"] .row > * {
+  rotate: 90deg;
+  --glyph-turn: 0deg;
+}
+
+.screen[data-display="inner"][data-orientation="landscape"] .row.zoom {
+  left: 232px;
+}
