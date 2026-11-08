@@ -154,14 +154,25 @@
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.13);
 }
 
-.styles-pad::before {
+.styles-pad::before,
+.styles-pad::after {
   content: "";
   position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 4.1px 4.1px, rgb(255 255 255 / 0.7) 0.7px, transparent 1.1px) 4.2px 4.2px /
-    8.17px 8.17px;
+  inset: 5.07px;
+  --dot: radial-gradient(circle at 4.085px 4.085px, #fff 0.6px, transparent 0.9px);
+}
+
+.styles-pad::before {
+  background: var(--dot) 0 0 / 8.17px 8.17px;
+  opacity: 0.6;
   -webkit-mask-image: linear-gradient(#000, transparent);
   mask-image: linear-gradient(#000, transparent);
+}
+
+.styles-pad::after {
+  background:
+    var(--dot) 0 40.85px / 8.17px 8.17px repeat-x,
+    var(--dot) 40.85px 0 / 8.17px 8.17px repeat-y;
 }
 
 .styles-pad span {
