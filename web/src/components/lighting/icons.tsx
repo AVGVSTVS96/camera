@@ -8,7 +8,8 @@ const dots = Array.from({ length: 15 }, (_, i) => {
 });
 
 const looks: Record<Lighting, string> = {
-  natural: "radial-gradient(circle at 50% 78%, #fff 22%, #f2f2f2 40%, #c4c4c4 62%, #7e7e7e 88%, #606060)",
+  natural:
+    "radial-gradient(circle at 50% 78%, #fff 22%, rgb(255 255 255 / 0.85) 45%, rgb(255 255 255 / 0.4) 75%, rgb(255 255 255 / 0.12))",
   studio:
     "linear-gradient(#dbdbdb, #cdcdcd 20%, #c4c4c4 40%, #b4b4b4 50%, #a0a0a0 60%, #7e7e7e 75%, #6a6a6a 90%, #888)",
   contour:
@@ -80,7 +81,12 @@ function rounded(r: number) {
 }
 
 const outline = rounded(2.2);
-const spoke = (p: readonly [number, number]) => `${p[0].toFixed(2)} ${p[1].toFixed(2)}`;
+
+const spoke = ([x, y]: readonly [number, number]) => {
+  const reach = 1 - 1.4 / Math.hypot(x, y);
+
+  return `${(x * reach).toFixed(2)} ${(y * reach).toFixed(2)}`;
+};
 
 function Glyph({ turn, scale, children }: { turn: number; scale: number; children: ReactNode }) {
   return (
@@ -133,7 +139,7 @@ export function CubeFaces({ turn, scale, effect }: { turn: number; scale: number
             <polygon points={pts([0, 0], upperRight, lowerRight)} fill={veil(wedgeRight, 0.664)} />
             <polygon points={pts([0, 0], lowerLeft, bottom, lowerRight)} fill={veil(lower, 0.874)} />
             <g fill="none" stroke="#ffe27a" strokeOpacity="0.55" strokeWidth="1.6" filter="url(#lighting-soft)">
-              <polyline points={pts(upperLeft, [0, 0], upperRight)} />
+              {effect === "contour" && <polyline points={pts(upperLeft, [0, 0], upperRight)} />}
               <polyline points={pts(lowerLeft, [0, 0], lowerRight)} />
             </g>
             <rect x="-8" y="0" width="16" height="12" fill="url(#lighting-cloud)" />
@@ -151,15 +157,9 @@ export function CubeLines({ turn, scale }: { turn: number; scale: number }) {
 
   return (
     <Glyph turn={turn} scale={scale}>
-      <defs>
-        <clipPath id="lighting-ball-clip">
-          <circle r="6.9" />
-        </clipPath>
-      </defs>
       <g fill="none" stroke="#fff" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
         <path d={outline} />
         <path d={spokes} />
-        <path d={spokes} stroke="#b8b8b8" clipPath="url(#lighting-ball-clip)" />
       </g>
     </Glyph>
   );
