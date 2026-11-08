@@ -56,6 +56,9 @@ export interface Settings {
   level: boolean;
   tray: boolean;
   submenu: boolean;
+  styles: boolean;
+  countdown: boolean;
+  holding: boolean;
   square: boolean;
   lighting: Lighting;
   viewer: boolean;
@@ -85,6 +88,9 @@ export function initialSettings(profile: Profile, mode: Mode = "photo", facing: 
     level: profile.level,
     tray: false,
     submenu: false,
+    styles: false,
+    countdown: false,
+    holding: false,
     square: false,
     lighting: mode === "photo" ? "contour" : "natural",
     viewer: false,
@@ -109,6 +115,9 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
     level: c.level === true || initial.level,
     tray: c.panel === "open" || c.panel === "expanded",
     submenu: c.panel === "submenu",
+    styles: c.control === "Styles",
+    countdown: c.action === "countdown running",
+    holding: c.action === "shutter held (QuickTake)",
     square: c.control === "Aspect Ratio" && c.selected === "Square",
     lighting: appleLightings.get(String(c.portraitLighting)) ?? initial.lighting,
     viewer: state.mode === "viewer",

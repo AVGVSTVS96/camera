@@ -100,7 +100,7 @@
 }
 
 .screen[data-orientation="landscape"] .row.shutter {
-  left: 147px;
+  left: var(--rest);
 }
 
 .screen[data-orientation="landscape"] .row.modes {
@@ -119,8 +119,29 @@
   bottom: 246px;
 }
 
+.screen {
+  --rest: 147px;
+}
+
+.screen[data-profile="duo"] {
+  --rest: 153px;
+}
+
+.screen[data-submenu] {
+  --rest: 249px;
+}
+
+.screen[data-styles] {
+  --rest: 303px;
+}
+
 .row.shutter {
-  bottom: 147px;
+  bottom: var(--rest);
+}
+
+.screen[data-display="inner"][data-orientation="portrait"] .row.shutter {
+  top: var(--rest);
+  bottom: auto;
 }
 
 .row.modes {

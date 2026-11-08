@@ -54,6 +54,11 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
       data-display={settings.display}
       data-orientation={settings.orientation}
       data-fold={settings.fold}
+      data-profile={profile.name}
+      data-submenu={settings.submenu || undefined}
+      data-styles={settings.styles || undefined}
+      data-countdown={settings.countdown || undefined}
+      data-holding={settings.holding || undefined}
       data-recording={settings.recording || undefined}
       style={still ? { backgroundImage: `url(/plates/${still}.png)` } : undefined}
     >
