@@ -1,23 +1,31 @@
 .screen {
-  --ring: 74px;
+  --ring: 66px;
   --disc: 54.67px;
 }
 
 .screen[data-profile="simulator"] {
   --record: #ff383c;
+  --band: rgb(52 52 53 / 0.62);
+  --rim: inset 0 0 0 0.67px rgb(0 0 0 / 0.75);
+}
+
+.screen[data-profile="simulator"][data-movie] {
+  --band: none;
 }
 
 .screen[data-profile="duo"] {
   --ring: 81px;
   --disc: 68px;
+  --band: rgb(255 255 255 / 0.12);
+  --rim: inset 0 0 0 0.33px rgb(255 255 255 / 0.4);
 }
 
 .shutter-button {
   width: var(--ring);
   height: var(--ring);
   border-radius: 50%;
-  background: rgb(255 255 255 / 0.12);
-  box-shadow: inset 0 0 0 0.33px rgb(255 255 255 / 0.4);
+  background: var(--band);
+  box-shadow: var(--rim);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
@@ -41,7 +49,7 @@
 [data-holding] .shutter-button span {
   width: 49.14px;
   height: 49.14px;
-  background: #ff383c;
+  background: var(--record);
 }
 
 [data-recording] .shutter-button span,
