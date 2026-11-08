@@ -13,19 +13,6 @@
 
 .screen[data-display="inner"][data-orientation="portrait"] .row > .depth-button {
   --x: calc(var(--w) / 2 - 58px);
-  top: calc(294px - var(--h));
-}
-
-.screen[data-submenu][data-orientation="landscape"] .row > .depth-button {
-  margin-left: 102px;
-}
-
-.screen[data-submenu][data-display="outer"][data-orientation="portrait"] .row > .depth-button {
-  margin-top: -101px;
-}
-
-.screen[data-submenu][data-display="inner"][data-orientation="portrait"] .row > .depth-button {
-  margin-top: 101px;
 }
 
 .depth-button .glyph {
