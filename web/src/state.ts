@@ -1,4 +1,5 @@
 import { duo, type Profile } from "./profile.ts";
+import type { StyleName } from "./components/submenu-styles/styles.ts";
 
 export const modes = ["time-lapse", "slo-mo", "cinematic", "video", "photo", "portrait", "pano"] as const;
 
@@ -62,6 +63,8 @@ export interface Settings {
   submenu: boolean;
   balance: string | null;
   styles: boolean;
+  style: StyleName;
+  customize: boolean;
   countdown: boolean;
   holding: boolean;
   square: boolean;
@@ -101,6 +104,8 @@ export function initialSettings(profile: Profile, mode: Mode = "photo", facing: 
     submenu: false,
     balance: null,
     styles: false,
+    style: "standard",
+    customize: false,
     countdown: false,
     holding: false,
     square: false,
@@ -139,6 +144,8 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
     submenu: c.panel === "submenu",
     balance: c.panel === "submenu" && c.control === "White Balance" ? String(c.selected).toLowerCase() : null,
     styles: c.control === "Styles",
+    style: c.adjust === "dec" ? "gold" : c.adjust === "inc" ? "natural" : "standard",
+    customize: c.selected === "Customize",
     countdown: c.action === "countdown running",
     holding: c.action === "shutter held (QuickTake)",
     square: c.control === "Aspect Ratio" && c.selected === "Square",

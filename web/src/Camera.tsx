@@ -13,6 +13,7 @@ import { Macro } from "./components/macro/Macro.tsx";
 import { ModeDial } from "./components/mode-dial/ModeDial.tsx";
 import { Recording } from "./components/recording/Recording.tsx";
 import { Shutter } from "./components/shutter/Shutter.tsx";
+import { SubmenuStyles } from "./components/submenu-styles/SubmenuStyles.tsx";
 import { SmartTake } from "./components/smart-take/SmartTake.tsx";
 import { SubmenuWhiteBalance } from "./components/submenu-white-balance/SubmenuWhiteBalance.tsx";
 import { Thumbnail } from "./components/thumbnail/Thumbnail.tsx";
@@ -31,6 +32,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
   const update: Update = (change) => setSettings((s) => ({ ...s, ...change }));
   const movie = movieModes.has(settings.mode);
   const props = { settings, update };
+  const styling = settings.submenu && settings.styles;
 
   async function shutter() {
     if (!video.current || !stream) return;
@@ -83,6 +85,10 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
       )}
       {settings.tray ? (
         <ControlsPanel {...props} />
+      ) : styling ? (
+        <div className="row shutter">
+          <Shutter movie={movie} onPress={shutter} />
+        </div>
       ) : (
         <>
           <Zoom {...props} />
@@ -103,7 +109,8 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
       )}
       {settings.balance && <SubmenuWhiteBalance {...props} />}
       <Countdown settings={settings} />
-      {profile.lighting !== false && !settings.tray && !movie && <Lighting settings={settings} />}
+      {profile.lighting !== false && !settings.tray && !styling && !movie && <Lighting settings={settings} />}
+      {styling && <SubmenuStyles {...props} />}
       <AspectFlip {...props} />
       {settings.viewer && <Viewer shot={shot} close={() => update({ viewer: false })} />}
       {settings.viewer && settings.display === "inner" && <InnerViewer empty={!shot} />}
