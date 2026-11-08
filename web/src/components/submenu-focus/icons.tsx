@@ -10,7 +10,7 @@ export function Chevron() {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <path d="M7.5 1.5 1.5 7.5l6 6" />
+      <path d="M7.8 1.2 1.5 7.5l6.3 6.3" />
     </svg>
   );
 }
