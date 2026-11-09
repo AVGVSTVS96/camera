@@ -11,6 +11,22 @@
   --ny: 422.67px;
 }
 
+[data-orientation="portrait"] .sheet::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 8px;
+  width: 167px;
+  height: 5px;
+  border-radius: 2.5px;
+  translate: -50%;
+  background: rgb(255 255 255 / 0.13);
+}
+
+[data-display="inner"] .sheet::after {
+  width: 239px;
+}
+
 .sheet-scrim {
   position: absolute;
   inset: 0;
@@ -21,7 +37,7 @@
 
 [data-sheet] .zoom,
 [data-sheet] .lighting,
-[data-sheet][data-display="inner"][data-orientation="landscape"] .row.shutter {
+[data-sheet][data-orientation="landscape"] .row.shutter {
   display: none;
 }
 
