@@ -9,10 +9,18 @@
 }
 
 .top-items [data-on] {
-  color: var(--yellow);
+  color: #ffff8c;
 }
 
 .plus {
   left: 36px;
   translate: -50% -50%;
+}
+
+.top-items > .badge {
+  justify-content: center;
+}
+
+.top-items > .badge b {
+  font-weight: 500;
 }

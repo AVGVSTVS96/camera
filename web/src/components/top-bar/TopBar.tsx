@@ -1,12 +1,9 @@
-import { BoltAuto, LiveOff, Moon } from "../../icons.tsx";
 import { useProfile } from "../../profile.ts";
-import { movieModes, type Props } from "../../state.ts";
-import { BoltSlash, Plus, RunSlash } from "./icons.tsx";
+import { movieModes, type Props, type Submenu } from "../../state.ts";
+import { Bolt, Live, Moon, Plus, Run } from "./icons.tsx";
 import "./top-bar.css";
 
-function Format({ text }: { text: string }) {
-  const [name, detail] = text.split(" ");
-
+function Format({ name, detail }: { name: string; detail: string | number }) {
   return (
     <>
       <b>{name}</b>
@@ -17,7 +14,11 @@ function Format({ text }: { text: string }) {
 
 export function TopBar({ settings, update }: Props) {
   const profile = useProfile();
-  const movie = movieModes.has(settings.mode);
+  const { flash, live, night, resolution, mode, videoResolution } = settings;
+  const movie = movieModes.has(mode);
+  const format = settings.formats[mode] ?? { resolution: videoResolution, rate: 30 };
+  const action = settings.on.includes("Action Mode");
+  const open = (submenu: Submenu) => update({ submenu, tray: false, expanded: false });
 
   return (
     <>
@@ -28,39 +29,36 @@ export function TopBar({ settings, update }: Props) {
       )}
       {profile.badges && (
         <div className="top-items">
+          <button aria-label="Flash" data-on={flash === "on" || undefined} onClick={() => open("Flash")}>
+            <Bolt mode={flash} />
+          </button>
           {movie ? (
             <>
-              <button aria-label="Flash" onClick={() => update({ flash: settings.flash === "on" ? "off" : "on" })}>
-                <BoltSlash />
+              <button
+                aria-label="Action mode"
+                data-on={action || undefined}
+                onClick={() =>
+                  update({
+                    on: action ? settings.on.filter((t) => t !== "Action Mode") : [...settings.on, "Action Mode"],
+                  })
+                }
+              >
+                <Run off={!action} />
               </button>
-              <button aria-label="Action mode">
-                <RunSlash />
-              </button>
-              <button className="badge" aria-label="Video format">
-                <Format text={profile.videoFormat} />
+              <button className="badge" aria-label="Video format" onClick={() => open("Video Format")}>
+                <Format name={format.resolution} detail={format.rate} />
               </button>
             </>
           ) : (
             <>
-              <button aria-label="Flash">
-                <BoltAuto />
+              <button aria-label="Live Photo" data-on={live === "on" || undefined} onClick={() => open("Live Photo")}>
+                <Live off={live !== "on"} />
               </button>
-              <button
-                aria-label="Live Photo"
-                data-on={settings.live === "on" || undefined}
-                onClick={() => update({ live: settings.live === "on" ? "off" : "on" })}
-              >
-                <LiveOff />
+              <button aria-label="Night mode" data-on={night !== "off" || undefined} onClick={() => open("Night Mode")}>
+                <Moon off={night === "off"} />
               </button>
-              <button
-                aria-label="Night mode"
-                data-on={settings.night !== "off" || undefined}
-                onClick={() => update({ night: settings.night === "off" ? "auto" : "off" })}
-              >
-                <Moon />
-              </button>
-              <button className="badge" aria-label="Photo format">
-                <Format text={profile.photoFormat} />
+              <button className="badge" aria-label="Photo format" onClick={() => open("Resolution")}>
+                <Format name="HEIF" detail={resolution} />
               </button>
             </>
           )}
