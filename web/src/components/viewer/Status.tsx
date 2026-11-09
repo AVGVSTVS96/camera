@@ -14,10 +14,10 @@ export function Status() {
             strokeLinejoin="round"
           />
           <g stroke="#000" strokeWidth="2.8" strokeLinecap="round">
-            <path d="M14.6 19.4Q21.1 13.4 27.6 19.4" />
-            <path d="M17.2 23Q21.1 19.5 25 23" />
+            <path d="M14.6 18.8Q21.1 12.8 27.6 18.8" />
+            <path d="M17.2 22.4Q21.1 18.9 25 22.4" />
           </g>
-          <path d="M21.1 27.3 19 25Q21.1 23.8 23.2 25z" fill="#000" />
+          <path d="M21.1 26.7 19 24.4Q21.1 23.2 23.2 24.4z" fill="#000" />
           <g fill="#000">
             <circle cx="12.3" cy="35.5" r="1.9" />
             <circle cx="18.1" cy="37.4" r="1.9" />

@@ -61,8 +61,6 @@
 }
 
 .viewer-status {
-  --ring-x: 597px;
-  --ring-y: 24px;
   inset: 0;
 }
 
@@ -81,13 +79,13 @@
   font:
     700 17px/14px system-ui,
     sans-serif;
-  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.6px;
 }
 
 [data-display="outer"][data-orientation="portrait"] .viewer-status {
   --ring-x: 396px;
   --ring-y: 105.3px;
-  --clock-x: 401.5px;
+  --clock-x: 400.5px;
   --clock-y: 85.5px;
 }
 
@@ -116,7 +114,7 @@
 [data-display="outer"][data-orientation="portrait"] .viewer-home {
   display: block;
   left: 150px;
-  top: 667px;
+  top: 665px;
   width: 168px;
   height: 5px;
   border-radius: 2.5px;
