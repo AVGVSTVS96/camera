@@ -1,6 +1,6 @@
 import { join } from "node:path";
 import { $ } from "bun";
-import type { Result } from "./diff.ts";
+import type { Result } from "./score.ts";
 import { out, pages as target } from "./paths.ts";
 
 export interface Summary {
