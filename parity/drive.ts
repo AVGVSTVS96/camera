@@ -290,16 +290,22 @@ export async function perform(driver: Driver, step: Step): Promise<string | unde
     return tap(page, stop.stop);
   }
 
-  if ("swipe" in step) {
+  if ("swipe" in step || "longPress" in step) {
     const stops = await zoomStops(page);
     const on = stops.find((s) => s.on) ?? stops[0];
     const at = on && (await center(on.stop));
 
     if (!at) return "no zoom stops";
 
-    const other = stops.find((s) => s !== on);
-    const across = other ? await center(other.stop) : undefined;
-    const vertical = !!across && Math.abs(across.y - at.y) > Math.abs(across.x - at.x);
+    if ("longPress" in step) {
+      await touch(driver, "touchStart", [at]);
+      await page.clock.runFor(800);
+      await touch(driver, "touchEnd", []);
+
+      return;
+    }
+
+    const vertical = (await settings(page))?.orientation === "landscape";
     const to = vertical ? { x: at.x, y: at.y - 50 } : { x: at.x - 50, y: at.y };
     await touch(driver, "touchStart", [at]);
     await gesture(driver, [at], [to], 500);

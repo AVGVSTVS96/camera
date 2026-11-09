@@ -9,6 +9,7 @@ export type Step =
   | { zoom: string }
   | { pinch: number }
   | { swipe: "zoom" }
+  | { longPress: "zoom" }
   | { adjust: string | null; by: number }
   | { press: string; hold: number; slide?: number; rise?: number; release: boolean }
   | { point: [number, number] }
@@ -158,7 +159,7 @@ export class Graph {
 
     if (c.panel === "submenu") return this.submenu(state, c, `${prefix}-${slug(control)}`, panel(prefix));
 
-    if (c.zoomDial) return { parent: `${prefix}-default`, steps: [{ swipe: "zoom" }] };
+    if (c.zoomDial) return { parent: `${prefix}-default`, steps: [c.zoom ? { swipe: "zoom" } : { longPress: "zoom" }] };
 
     if (c.via) {
       const factor = Number.parseFloat(String(c.zoom)) || Number.parseFloat(String(c.via).replace(/^\D+/, ""));
@@ -166,7 +167,7 @@ export class Graph {
       return { parent: `${prefix}-default`, steps: [{ pinch: factor }] };
     }
 
-    if (c.zoomButton) return { parent: `${prefix}-default`, steps: [{ zoom: String(c.zoomButton) }] };
+    if (c.zoomButton) return { parent: `${prefix}-default`, steps: [{ zoom: String(c.zoom ?? c.zoomButton) }] };
 
     if (front) return { parent: `${base}-default`, steps: [{ tap: "Camera Chooser" }] };
 
@@ -315,6 +316,8 @@ export function describe(step: Step) {
   if ("pinch" in step) return `pinch to ${step.pinch}×`;
 
   if ("swipe" in step) return "swipe across the zoom stops";
+
+  if ("longPress" in step) return "long-press the zoom stops";
 
   if ("adjust" in step)
     return `${step.by > 0 ? "raise" : "lower"} ${step.adjust ?? "slider"} ${Math.abs(step.by)} ticks`;
