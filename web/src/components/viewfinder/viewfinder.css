@@ -7,6 +7,7 @@
   width: 0;
   height: 0;
   color: var(--yellow);
+  rotate: var(--glyph-turn);
   pointer-events: none;
   animation: viewfinder-focus 3.5s linear forwards;
 }
@@ -45,7 +46,6 @@
   top: 59px;
   width: 25px;
   height: 25px;
-  rotate: var(--glyph-turn);
   background: #0006;
   border-radius: 50%;
 }

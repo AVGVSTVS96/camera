@@ -218,12 +218,13 @@ export const switchMode = (
   mode,
   zoom: startZoom(profile, facing, mode),
   flash: movieModes.has(mode) === movieModes.has(from) ? flash : defaultFlash(mode),
+  lock: false,
 });
 
 export const flipCamera = (profile: Profile, { mode, facing }: Settings): Partial<Settings> => {
   const to = facing === "front" ? "back" : "front";
 
-  return { facing: to, zoom: startZoom(profile, to, mode), night: to === "front" ? "off" : "auto" };
+  return { facing: to, zoom: startZoom(profile, to, mode), night: to === "front" ? "off" : "auto", lock: false };
 };
 
 export function initialSettings(profile: Profile, pose: Pose, mode: Mode = "photo", facing: Facing = "back"): Settings {
@@ -396,8 +397,6 @@ function choose(settings: Settings, c: Controls): Partial<Settings> {
   }
 }
 
-export const MAX_BIAS = 2;
-
 const lockActions = new Set(["long-press viewfinder (AE/AF lock)", "drag up beside focus box"]);
 
 export function reached(state: ParityState, profile = state.profile ?? duo): Settings {
@@ -422,7 +421,6 @@ export function reached(state: ParityState, profile = state.profile ?? duo): Set
     grid: c.grid === true || initial.grid,
     level: c.level === true || initial.level,
     lock: lockActions.has(String(c.action)),
-    ...(c.action === "drag up beside focus box" && { exposure: MAX_BIAS }),
 
     tray: c.panel === "open" || c.panel === "expanded",
     expanded: c.panel === "expanded" || (c.panel === "open" && c.control !== undefined),

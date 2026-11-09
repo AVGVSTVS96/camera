@@ -1,18 +1,22 @@
 import { useRef, useState, type PointerEvent, type ReactNode } from "react";
-import { MAX_BIAS, type Props } from "../../state.ts";
+import type { Props } from "../../state.ts";
 import "./viewfinder.css";
 
 const HOLD = 500;
 const SLOP = 8;
 const PX_PER_STOP = 35.75;
+const MAX_BIAS = 2;
 
 const clamp = (bias: number) => Math.round(Math.min(MAX_BIAS, Math.max(-MAX_BIAS, bias)) * 10) / 10;
 
-const aim = (e: PointerEvent) => {
-  const box = e.currentTarget.getBoundingClientRect();
-
-  return { x: e.clientX - box.x, y: e.clientY - box.y };
-};
+interface Square {
+  x: number;
+  y: number;
+  flip: boolean;
+  bias: number;
+  scene: string;
+  key: number;
+}
 
 interface Touch {
   x: number;
@@ -28,58 +32,74 @@ interface ViewfinderProps extends Props {
 }
 
 export function Viewfinder({ settings, update, still, children }: ViewfinderProps) {
-  const [square, setSquare] = useState<{ x: number; y: number; key: number }>();
+  const [square, setSquare] = useState<Square>();
   const touch = useRef<Touch>(undefined);
   const idle = settings.tray || settings.submenu || settings.sheet || settings.viewer;
-  const { exposure, lock } = settings;
+  const scene = `${settings.mode} ${settings.facing}`;
+  const shown = square?.scene === scene ? square : undefined;
+  const { lock } = settings;
 
-  const focus = (e: PointerEvent, locked: boolean) => {
-    setSquare((s) => ({ ...aim(e), key: (s?.key ?? 0) + 1 }));
-    update({ lock: locked });
-  };
+  const sideways = settings.orientation === "landscape";
+  const up = (dx: number, dy: number) => (sideways ? dx : -dy);
 
   const end = () => {
     clearTimeout(touch.current?.timer);
     touch.current = undefined;
   };
 
-  const down = (e: PointerEvent) => {
+  const focus = (x: number, y: number, box: DOMRect, locked: boolean) => {
+    const flip = sideways ? y > box.height / 2 : x > box.width / 2;
+    setSquare((s) => ({ x, y, flip, bias: 0, scene, key: (s?.key ?? 0) + 1 }));
+    update({ lock: locked });
+  };
+
+  const down = (e: PointerEvent<HTMLDivElement>) => {
+    if (!e.isPrimary) return end();
+
     if (idle) return;
 
+    const box = e.currentTarget.getBoundingClientRect();
+    const [x, y] = [e.clientX - box.x, e.clientY - box.y];
     e.currentTarget.setPointerCapture(e.pointerId);
-    const held = aim(e);
 
     touch.current = {
-      ...held,
-      bias: exposure,
+      x,
+      y,
+      bias: shown?.bias ?? 0,
       moved: false,
       timer: window.setTimeout(() => {
-        touch.current!.moved = true;
-        setSquare((s) => ({ ...held, key: (s?.key ?? 0) + 1 }));
-        update({ lock: true });
+        if (touch.current) touch.current.moved = true;
+        focus(x, y, box, true);
       }, HOLD),
     };
   };
 
-  const move = (e: PointerEvent) => {
+  const move = (e: PointerEvent<HTMLDivElement>) => {
     const t = touch.current;
 
-    if (!t) return;
+    if (!t || !e.isPrimary) return;
 
-    const dy = e.clientY - e.currentTarget.getBoundingClientRect().y - t.y;
+    const box = e.currentTarget.getBoundingClientRect();
+    const [dx, dy] = [e.clientX - box.x - t.x, e.clientY - box.y - t.y];
 
-    if (!t.moved && Math.abs(dy) < SLOP) return;
+    if (!t.moved && Math.hypot(dx, dy) < SLOP) return;
 
     t.moved = true;
     clearTimeout(t.timer);
 
-    if (square) update({ exposure: clamp(t.bias - dy / PX_PER_STOP) });
+    const rise = up(dx, dy);
+    const across = sideways ? dy : dx;
+
+    if (shown && Math.abs(rise) > Math.abs(across)) {
+      const bias = clamp(t.bias + rise / PX_PER_STOP);
+      setSquare({ ...shown, bias });
+    }
   };
 
-  const up = (e: PointerEvent) => {
+  const release = (e: PointerEvent<HTMLDivElement>) => {
     const t = touch.current;
 
-    if (t && !t.moved) focus(e, false);
+    if (t && !t.moved && e.isPrimary) focus(t.x, t.y, e.currentTarget.getBoundingClientRect(), false);
 
     end();
   };
@@ -91,22 +111,22 @@ export function Viewfinder({ settings, update, still, children }: ViewfinderProp
       aria-label="Viewfinder"
       onPointerDown={down}
       onPointerMove={move}
-      onPointerUp={up}
+      onPointerUp={release}
       onPointerCancel={end}
     >
       {children}
-      {!still && square && (
+      {!still && shown && (
         <div
-          key={square.key}
+          key={shown.key}
           className="viewfinder-focus"
           data-locked={lock || undefined}
-          data-flip={square.x > innerWidth / 2 || undefined}
-          style={{ left: square.x, top: square.y }}
+          data-flip={shown.flip || undefined}
+          style={{ left: shown.x, top: shown.y }}
           onAnimationEnd={() => !lock && setSquare(undefined)}
         >
           <i className="viewfinder-box" />
           <i className="viewfinder-bias">
-            <b style={{ translate: `0 ${-exposure * PX_PER_STOP}px` }}>
+            <b style={{ translate: `0 ${-shown.bias * PX_PER_STOP}px` }}>
               <Sun />
             </b>
           </i>
