@@ -56,6 +56,7 @@ export interface Settings {
   zoom: number;
   dial: boolean;
   lenses: boolean;
+  zoomTurn: number;
   facing: Facing;
   grid: boolean;
   level: boolean;
@@ -120,6 +121,7 @@ export function initialSettings(profile: Profile, mode: Mode = "photo", facing: 
     zoom: profile.zoom[`${facing}-${mode}`]?.start ?? 1,
     dial: false,
     lenses: false,
+    zoomTurn: 0,
     facing,
     grid: profile.grid,
     level: profile.level,
@@ -218,6 +220,22 @@ function rememberedLighting(state: ParityState): Lighting {
   return front && outerPortrait && control !== "Depth" && control !== "White Balance" ? "contour" : "natural";
 }
 
+const touches = /^(shutter tapped|long-press|drag|tap viewfinder)/;
+
+// Apple's simulator leaves the zoom stops turned the way the device last was, so the turn follows the capture history rather than any control.
+function zoomTurnOf(state: ParityState, c: Controls) {
+  const portrait = state.orientation === "portrait";
+  const touched = touches.test(String(c.action));
+
+  if (state.mode === "photo" && portrait && touched) return 180;
+
+  const sideways = state.display === "inner" && (state.mode === "photo" || (state.mode === "cinematic" && !portrait));
+  const resting =
+    c.panel !== undefined || (portrait && c.fold !== undefined) || (c.zoom !== undefined && c.zoomDial === undefined);
+
+  return sideways && (resting || touched) ? 90 : 0;
+}
+
 const focusOf = (c: Controls) =>
   c.panel === "submenu" && c.control === "Focus"
     ? { value: Number.parseFloat(String(c.value)) || 0, auto: c.value === "Auto" }
@@ -308,6 +326,7 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
     ...initial,
     zoom: Number.parseFloat(String(c.zoom)) || (c.zoomDial === "open" ? lowest : initial.zoom),
     dial: c.zoomDial === "open",
+    zoomTurn: zoomTurnOf(state, c),
     lenses: mode === "portrait" && ("zoomButton" in c || c.zoomDial === "open"),
     flash: flash ?? initial.flash,
     live: c.live === true || c.live === "on",

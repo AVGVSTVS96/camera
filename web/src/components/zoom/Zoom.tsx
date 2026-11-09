@@ -74,7 +74,7 @@ export function Zoom({ settings, update }: Props) {
           <button
             key={i}
             data-on={i === active || undefined}
-            style={{ translate: offset(i) }}
+            style={{ translate: offset(i), rotate: `${settings.zoomTurn}deg` }}
             onClick={() => (anchored && stops.length === 1 ? update({ lenses: true }) : update({ zoom: stop }))}
           >
             {zoomLabel(i === active ? settings.zoom : stop, i === active)}
