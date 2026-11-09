@@ -6,7 +6,12 @@ export function Thumbnail({ shot, open }: { shot?: Shot; open: () => void }) {
   const { library } = useProfile();
 
   return (
-    <button className="thumb lead" data-empty={!library || undefined} aria-label="Photos" onClick={open}>
+    <button
+      className="thumb lead"
+      data-empty={!library || undefined}
+      aria-label="Photo and Video Viewer"
+      onClick={open}
+    >
       {shot && <img src={shot.poster ?? shot.url} alt="" />}
     </button>
   );

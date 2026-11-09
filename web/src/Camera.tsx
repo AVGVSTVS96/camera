@@ -103,7 +103,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
         <ControlsPanel {...props} />
       ) : styling ? (
         <div className="row shutter">
-          <Shutter movie={movie} onPress={shutter} />
+          <Shutter mode={settings.mode} recording={settings.recording} onPress={shutter} />
         </div>
       ) : (
         <>
@@ -112,7 +112,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
             {movie
               ? profile.macro && <Macro {...props} />
               : !settings.recording && !settings.holding && <DepthButton on={settings.depth} />}
-            <Shutter movie={movie} onPress={shutter} />
+            <Shutter mode={settings.mode} recording={settings.recording} onPress={shutter} />
             {profile.smartTake && !movie && !settings.recording && !settings.holding && !settings.submenu && (
               <SmartTake />
             )}
