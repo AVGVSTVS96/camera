@@ -205,15 +205,6 @@ export function apertureOf(settings: Settings): Aperture {
   return at === undefined ? aperture : { ...aperture, at: clampStop(aperture, at) };
 }
 
-function depthStops(settings: Settings, c: Controls): Settings["stops"] {
-  const ticks = c.adjust === "inc" ? 2 : c.adjust === "dec" ? -2 : 0;
-  const aperture = defaultAperture(settings);
-
-  if (c.control !== "Depth" || !ticks || aperture.off || aperture.unavailable) return {};
-
-  return { [settings.mode]: clampStop(aperture, aperture.at + ticks) };
-}
-
 const startZoom = (profile: Profile, facing: Facing, mode: Mode) => profile.zoom[`${facing}-${mode}`]?.start ?? 1;
 
 const defaultFlash = (mode: Mode): Flash => (movieModes.has(mode) ? "off" : "auto");
@@ -329,6 +320,15 @@ const aspects = new Map<string, AspectRatio>([
 
 const exposureOf = (adjust: Controls[string]) => ({ dec: -0.7, inc: 0.7 })[String(adjust)] ?? 0;
 
+function stopsOf(settings: Settings, adjust: Controls[string]): Settings["stops"] {
+  const ticks = { dec: -2, inc: 2 }[String(adjust)];
+  const aperture = defaultAperture(settings);
+
+  if (!ticks || aperture.off || aperture.unavailable) return {};
+
+  return { [settings.mode]: clampStop(aperture, aperture.at + ticks) };
+}
+
 const styleOf = (c: Controls): StyleName => (c.adjust ? nameOf(c.value) : "standard");
 
 const megapixelsOf = (selected: Controls[string]) => (named(selected).startsWith("48") ? 48 : 24);
@@ -384,7 +384,7 @@ function choose(settings: Settings, c: Controls): Partial<Settings> {
     case "Video Resolution":
       return { videoResolution: c.selected === "4K" ? "4K" : "HD" };
     case "Depth":
-      return c.selected === "Depth" ? { depth: true } : {};
+      return c.selected === "Depth" ? { depth: true } : { stops: stopsOf(settings, c.adjust) };
     case "Focus":
       return { focus: focusOf(c.value) };
     case "Center Stage":
@@ -410,7 +410,6 @@ export function reached(state: ParityState, profile = state.profile ?? duo): Set
   return {
     ...initial,
     ...choose(initial, c),
-    stops: depthStops(initial, c),
     zoom:
       Number.parseFloat(String(c.zoom)) ||
       Number.parseFloat(String(c.via).replace(/^\D+/, "")) ||
