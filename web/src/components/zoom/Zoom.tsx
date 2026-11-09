@@ -30,7 +30,13 @@ export function Zoom({ settings, update }: Props) {
   const bare = settings.mode === "time-lapse" || settings.mode === "portrait" || profile.name === "duo";
   const hide = useRef<number>(undefined);
 
-  const showDial = settings.dial && (settings.mode === "photo" || settings.mode === "video");
+  const dialModes = ["photo", "video", "cinematic", "slo-mo"];
+
+  const showDial =
+    settings.dial &&
+    dialModes.includes(settings.mode) &&
+    !(settings.mode === "slo-mo" && settings.display === "outer" && settings.orientation === "portrait");
+
   const anchored = stops.length === 1 || settings.lenses;
 
   const active = settings.lenses
@@ -74,7 +80,7 @@ export function Zoom({ settings, update }: Props) {
             transform={`translate(${place.apex.x - place.into[0] * 37} ${place.apex.y - place.into[1] * 37}) rotate(${place.turn ? 90 : 0})`}
           >
             <text y="5">{zoomLabel(zoom, true, bare)}</text>
-            <text y="21">13MM</text>
+            <text y="21">{Math.round(zoom * 26)}MM</text>
           </g>
         </svg>
       )}
