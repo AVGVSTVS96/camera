@@ -3,6 +3,7 @@ import { back, type Props, type Settings, type Update } from "../../state.ts";
 import { Chevron } from "./icons.tsx";
 import { CELL, place, shift, styles, type StyleName } from "./styles.ts";
 import { Swatch } from "./Swatch.tsx";
+import { Textures } from "./Textures.tsx";
 import "./submenu-styles.css";
 
 const at = (e: PointerEvent<HTMLElement>) => e.nativeEvent.offsetX;
@@ -54,65 +55,17 @@ function Scrubber({ selected, update }: { selected: StyleName; update: Update })
   );
 }
 
-const textures = [
-  { name: "Standard", glyph: <path d="M9 9l16 16M17 6a11 11 0 1 0 11 11" /> },
-  {
-    name: "Soft Skin",
-    glyph: (
-      <path
-        d="M17 7a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9ZM8.5 27c0-5 4-7.5 8.5-7.5s8.5 2.500 8.500 7.500Z"
-        fill="currentColor"
-      />
-    ),
-  },
-  {
-    name: "Glow",
-    glyph: (
-      <path
-        d="M17 6v0M24.800 9.200v0M28 17v0M24.800 24.800v0M17 28v0M9.200 24.800v0M6 17v0M9.200 9.200v0"
-        strokeWidth="3.200"
-      />
-    ),
-  },
-  { name: "Film", glyph: <path d="M7 8h20v18H7ZM12 8v18M22 8v18M7 14h5M22 14h5M7 20h5M22 20h5" /> },
-  {
-    name: "Grain",
-    glyph: (
-      <path
-        d="M8 8v0M13 8v0M18 8v0M23 8v0M28 8v0M8 13v0M13 13v0M18 13v0M23 13v0M28 13v0M8 18v0M13 18v0M18 18v0M23 18v0M28 18v0M8 23v0M13 23v0M18 23v0M23 23v0M28 23v0"
-        strokeWidth="2.400"
-      />
-    ),
-  },
-] as const;
-
-function Textures() {
-  return (
-    <>
-      {textures.map(({ name, glyph }, i) => (
-        <button key={name} className="styles-texture" data-on={i === 0 || undefined} data-slot={i} aria-label={name}>
-          <svg
-            width="34"
-            height="34"
-            viewBox="0 0 34 34"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.800"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            {glyph}
-          </svg>
-          <span>{name.toUpperCase()}</span>
-        </button>
-      ))}
-      <i className="styles-texture-rule" />
-      <p className="styles-texture-note">Texture is applied after taking a photo.</p>
-    </>
-  );
-}
-
-function Pad({ pad, texture, update }: { pad: Settings["pad"]; texture: boolean; update: Update }) {
+function Pad({
+  pad,
+  texture,
+  grade,
+  update,
+}: {
+  pad: Settings["pad"];
+  texture: boolean;
+  grade: string;
+  update: Update;
+}) {
   const { tone, color } = pad;
 
   const aim = (e: PointerEvent<HTMLElement>) =>
@@ -129,7 +82,7 @@ function Pad({ pad, texture, update }: { pad: Settings["pad"]; texture: boolean;
         </button>
       </div>
       {texture ? (
-        <Textures />
+        <Textures selected={grade} update={update} />
       ) : (
         <div
           className="styles-pad"
@@ -159,7 +112,7 @@ function Pad({ pad, texture, update }: { pad: Settings["pad"]; texture: boolean;
 }
 
 export function SubmenuStyles({ settings, update }: Props) {
-  const { style, customize, pad, texture } = settings;
+  const { style, customize, pad, texture, grade } = settings;
 
   return (
     <section className="styles" aria-label="Photographic Styles">
@@ -172,7 +125,7 @@ export function SubmenuStyles({ settings, update }: Props) {
         <Chevron />
       </button>
       {customize ? (
-        <Pad pad={pad} texture={texture} update={update} />
+        <Pad pad={pad} texture={texture} grade={grade} update={update} />
       ) : (
         <>
           <Scrubber selected={style} update={update} />

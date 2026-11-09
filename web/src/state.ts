@@ -139,6 +139,7 @@ export interface Settings extends Pose {
   style: StyleName;
   pad: { tone: number; color: number };
   texture: boolean;
+  grade: string;
   resolution: 24 | 48;
   formats: Partial<Record<Mode, VideoFormat>>;
   videoResolution: VideoResolution;
@@ -247,6 +248,7 @@ export function initialSettings(profile: Profile, pose: Pose, mode: Mode = "phot
     style: "standard",
     pad: { tone: 0, color: 0 },
     texture: false,
+    grade: "standard",
     resolution: megapixels === "48" ? 48 : 24,
     formats: {
       video: { resolution, rate: 30 },
