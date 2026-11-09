@@ -59,8 +59,9 @@ export function Zoom({ settings, update }: Props) {
   const shift = anchored ? place.lone - (place.vertical ? place.y : place.x) : 0;
   const marker = Math.atan2(-place.into[1], -place.into[0]) * (180 / Math.PI) - 90;
 
-  const low = settings.mode === "portrait" ? 0.5 : Math.min(...stops);
-  const high = Math.max(10, ...stops);
+  const front = settings.facing === "front";
+  const low = front ? 1 : settings.mode === "portrait" ? 0.5 : Math.min(...stops);
+  const high = front ? 2 : Math.max(10, ...stops);
   const self = useRef<HTMLDivElement>(null);
   const shown = stops.length > 0;
   const latest = useRef({ zoom: settings.zoom, low, high, update });
@@ -106,7 +107,7 @@ export function Zoom({ settings, update }: Props) {
   useEffect(() => {
     const screen = self.current?.closest<HTMLElement>(".screen");
 
-    if (!screen || !shown) return;
+    if (!screen) return;
 
     const touches = new Map<number, { x: number; y: number }>();
     let pinch: { span: number; zoom: number } | undefined;
@@ -151,7 +152,7 @@ export function Zoom({ settings, update }: Props) {
       screen.removeEventListener("pointerup", up);
       screen.removeEventListener("pointercancel", up);
     };
-  }, [shown]);
+  }, []);
 
   const offset = (i: number) => {
     const k = anchored ? i : i - active;

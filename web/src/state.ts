@@ -367,7 +367,10 @@ export function reached(state: ParityState, profile = state.profile ?? duo): Set
   return {
     ...initial,
     ...choose(initial, c),
-    zoom: Number.parseFloat(String(c.zoom)) || (c.zoomDial === "open" ? lowest : initial.zoom),
+    zoom:
+      Number.parseFloat(String(c.zoom)) ||
+      Number.parseFloat(String(c.via).replace(/^\D+/, "")) ||
+      (c.zoomDial === "open" ? lowest : initial.zoom),
     timer: timerOf(c),
     lighting: appleLightings.get(String(c.portraitLighting)) ?? initial.lighting,
     on: isToggle(toggled) && (c.to === "On" || c.to === "Adaptive") ? [toggled] : [],
