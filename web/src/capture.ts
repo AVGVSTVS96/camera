@@ -17,7 +17,6 @@ export interface Shot {
 export function useCamera(settings: Settings, enabled: boolean) {
   const video = useRef<HTMLVideoElement>(null);
   const [stream, setStream] = useState<MediaStream>();
-  const [error, setError] = useState<string>();
 
   useEffect(() => {
     if (!enabled) return;
@@ -34,11 +33,10 @@ export function useCamera(settings: Settings, enabled: boolean) {
       .then((s) => {
         current = s;
         setStream(s);
-        setError(undefined);
 
         if (video.current) video.current.srcObject = s;
       })
-      .catch((e: Error) => setError(e.message));
+      .catch(() => {});
 
     return () => current?.getTracks().forEach((t) => t.stop());
   }, [enabled, settings.facing]);
@@ -51,7 +49,7 @@ export function useCamera(settings: Settings, enabled: boolean) {
     }
   }, [stream, settings.zoom]);
 
-  return { video, stream, error };
+  return { video, stream };
 }
 
 export function snapshot(video: HTMLVideoElement) {

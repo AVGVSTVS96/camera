@@ -58,7 +58,7 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
 
   const lock = useRef<HTMLButtonElement>(null);
   const take = useRef<Take>(undefined);
-  const { video, stream, error } = useCamera(settings, !still);
+  const { video, stream } = useCamera(settings, !still);
   const update: Update = (change) => setSettings((s) => ({ ...s, ...change }));
   const movie = movieModes.has(settings.mode);
   const counting = settings.countdown > 0;
@@ -276,7 +276,6 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
       {settings.viewer && <Viewer shots={shots} close={() => update({ viewer: false })} />}
       {settings.sheet && <Sheet kind={settings.sheet} update={update} />}
       {still && settings.display === "outer" && !settings.holding && !settings.recording && <div className="system" />}
-      {error && <p className="error">{error}</p>}
     </main>
   );
 }

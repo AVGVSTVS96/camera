@@ -165,13 +165,7 @@ async function check(browser: Browser, url: URL, state: State): Promise<Reached>
 
     const shot = join(dir, "live", `${state.id}.png`);
 
-    const hidden = [
-      ".thumb img",
-      ".inner-edge, .inner-preview, .inner-home",
-      ...(state.controls?.permission === "camera denied" ? [".error"] : []),
-    ];
-
-    await page.addStyleTag({ content: `${hidden.join(", ")} { visibility: hidden }` });
+    await page.addStyleTag({ content: ".thumb img, .inner-edge, .inner-preview, .inner-home { visibility: hidden }" });
     await page.screenshot({ path: shot });
 
     const [ours, theirs] = await Promise.all([
