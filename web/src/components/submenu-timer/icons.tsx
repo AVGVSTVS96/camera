@@ -8,7 +8,7 @@ function Ring({ children }: { children: ReactNode }) {
       viewBox="0 0 25 25"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2.300"
+      strokeWidth="2.100"
       strokeLinecap="round"
       aria-hidden
     >
@@ -32,8 +32,8 @@ export const Seconds = ({ value }: { value: number }) => (
       textAnchor="middle"
       fill="currentColor"
       stroke="none"
-      fontFamily="ui-monospace, monospace"
-      fontSize={value > 9 ? 12 : 14}
+      fontFamily="system-ui" fontVariantNumeric="slashed-zero" letterSpacing="-0.5"
+      fontSize={value > 9 ? 12.500 : 14}
       fontWeight="600"
     >
       {value}
