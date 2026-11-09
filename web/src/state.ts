@@ -259,34 +259,33 @@ function depthOn(state: ParityState, c: Controls) {
   return c.control !== "Depth" || !hasOptions(c);
 }
 
-// Marks count in third-stops from ƒ1.4 (0); each lens and mode shows its own range of them.
 export interface Aperture {
   first: number;
   at: number;
+  home: number;
   last: number;
   off?: boolean;
-  reset?: boolean;
   unavailable?: boolean;
 }
 
-// Apple's simulator keeps the f-stop it last had, so these follow its capture history; a reset button shows once the value moved.
+// Apple's simulator keeps the f-stop it last had, so these follow its capture history.
 function apertureOf(state: ParityState, c: Controls): Aperture {
   const front = c.camera === "front";
   const moved = (Array.isArray(c.options) && c.options.includes("Reset")) || (!front && c.adjust !== undefined);
 
   if (state.mode === "photo") {
-    if (c.selected !== "Depth") return { first: 1, at: 13, last: 13, off: true };
+    if (c.selected !== "Depth") return { first: 1, at: 13, home: 13, last: 13, off: true };
 
-    const wide = front && state.display === "inner" && state.orientation === "landscape";
+    const at = front && state.display === "inner" && state.orientation === "landscape" ? 10 : 6;
 
-    return { first: 0, at: wide ? 10 : 6, last: wide ? 22 : 18, unavailable: true };
+    return { first: 0, at, home: at, last: at + 12, unavailable: true };
   }
 
-  if (state.mode === "portrait") return { first: 0, at: moved ? 11 : 10, last: 21, reset: moved };
+  if (state.mode === "portrait") return { first: 0, at: moved ? 11 : 10, home: 10, last: 21 };
 
-  if (front) return moved ? { first: 3, at: 7, last: 19, reset: true } : { first: 3, at: 10, last: 21 };
+  if (front) return moved ? { first: 3, at: 7, home: 10, last: 19 } : { first: 3, at: 10, home: 10, last: 21 };
 
-  return moved ? { first: 3, at: 7, last: 19, reset: true } : { first: 3, at: 6, last: 18 };
+  return moved ? { first: 3, at: 7, home: 6, last: 19 } : { first: 3, at: 6, home: 6, last: 18 };
 }
 
 export function settingsFor(state: ParityState, profile = state.profile ?? duo): Settings {

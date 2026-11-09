@@ -38,13 +38,17 @@ export function SubmenuDepth({ settings, update }: Props) {
 
   if (!aperture) return null;
 
-  const { at, first, last, off, reset, unavailable } = aperture;
+  const { at, home, first, last, off, unavailable } = aperture;
   const marks = Array.from({ length: last - first + 1 }, (_, i) => first + i).filter((i) => Math.abs(i - at) <= REACH);
 
   return (
     <Submenu title="Depth" className="depth" back={() => update({ submenu: false, aperture: null })}>
-      {reset && (
-        <button className="submenu-button depth-reset" aria-label="Reset">
+      {at !== home && (
+        <button
+          className="submenu-button depth-reset"
+          aria-label="Reset"
+          onClick={() => update({ aperture: { ...aperture, at: home } })}
+        >
           <Reset />
         </button>
       )}
@@ -73,6 +77,7 @@ export function SubmenuDepth({ settings, update }: Props) {
             style={{ left: 189 + 15 * (i - at) }}
           />
         ))}
+        {at !== home && <i className="depth-home" style={{ left: 187 + 15 * (home - at) }} />}
       </div>
       {unavailable && <p className="depth-caption">Depth is unavailable.</p>}
     </Submenu>

@@ -85,3 +85,12 @@
   line-height: 14.33px;
   color: rgb(255 255 255 / 0.55);
 }
+
+.depth-home {
+  position: absolute;
+  top: 32.83px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #666;
+}
