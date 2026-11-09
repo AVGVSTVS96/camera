@@ -52,12 +52,7 @@ export const NightOff = () => (
       stroke="currentColor"
       strokeWidth="4.6"
     />
-    <path
-      d="M45.3 18.4 32.3 26.3 37.9 29.1 43.4 37.8ZM86.5 61 68.1 62.1 75.6 67.3 79.4 73.5Z"
-      stroke="currentColor"
-      strokeWidth="1.2"
-      strokeLinejoin="round"
-    />
+    <path d="M45.3 18.4 32.3 26.3 38.4 28.8 43.4 37.8ZM86.5 61 68.1 62.1 75.2 66.6 79.4 73.5Z" />
     <g transform="translate(0 -3.7)">
       <Dots />
     </g>
