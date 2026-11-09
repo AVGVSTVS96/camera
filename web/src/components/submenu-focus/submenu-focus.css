@@ -81,13 +81,16 @@
 }
 
 .focus-track {
-  left: 0;
-  top: 118px;
+  left: 64px;
+  top: 74.33px;
+  width: 322.33px;
+  height: 52.67px;
 }
 
 .focus-dot,
 .focus-thumb {
   position: absolute;
+  top: 43.67px;
   translate: -50% -50%;
   border-radius: 50%;
 }

@@ -40,10 +40,12 @@ export function SubmenuDepth({ settings, update }: Props) {
   const { at, home, first, last, off, unavailable } = aperture;
   const marks = Array.from({ length: last - first + 1 }, (_, i) => first + i).filter((i) => Math.abs(i - at) <= REACH);
 
+  const fixed = off || unavailable;
+
   const slider = useSlider({
     value: at,
-    min: first,
-    max: last,
+    min: fixed ? at : first,
+    max: fixed ? at : last,
     pitch: -PITCH,
     settings,
     set: (stop) => update({ aperture: { ...aperture, at: stop } }),
