@@ -59,10 +59,8 @@ export function layout(s: Settings, duo: boolean) {
   const depth = s.square ? p.square : s.submenu ? p.submenu : closed;
   const point = (along: number, out: number) => (p.vertical ? [out, along] : [along, out]);
   const edge = closed - 20 * (p.vertical ? dx : dy);
-  const w = Math.sqrt(p.radius ** 2 - (p.radius - p.reach) ** 2);
-  const [x1, y1] = point(p.cross - w * (p.vertical ? 1 : dy * -1), edge);
-  const [x2, y2] = point(p.cross + w * (p.vertical ? 1 : dy * -1), edge);
   const [ax, ay] = point(p.cross, edge + p.reach * (p.vertical ? dx : dy));
+  const [cx, cy] = [ax - dx * p.radius, ay - dy * p.radius];
 
   return {
     x: p.vertical ? depth : p.cross,
@@ -73,6 +71,6 @@ export function layout(s: Settings, duo: boolean) {
     into: p.into,
     turn: s.display === "inner" && !p.vertical ? 180 : 0,
     apex: { x: ax, y: ay },
-    dial: `M${x1} ${y1}A${p.radius} ${p.radius} 0 0 1 ${x2} ${y2}Z`,
+    dial: `M${cx - p.radius} ${cy}a${p.radius} ${p.radius} 0 1 0 ${2 * p.radius} 0a${p.radius} ${p.radius} 0 1 0 ${-2 * p.radius} 0Z`,
   };
 }
