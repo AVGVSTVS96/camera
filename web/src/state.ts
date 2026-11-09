@@ -148,7 +148,7 @@ export interface Settings extends Pose {
   lenses: boolean;
   zoomTurn: number;
   picked: boolean;
-  countdown: boolean;
+  countdown: number;
   holding: boolean;
   recording: boolean;
   viewer: boolean;
@@ -234,7 +234,7 @@ export function initialSettings(profile: Profile, pose: Pose, mode: Mode = "phot
     lenses: false,
     zoomTurn: 0,
     picked: false,
-    countdown: false,
+    countdown: 0,
     holding: false,
     recording: false,
     viewer: false,
@@ -374,7 +374,7 @@ export function reached(state: ParityState, profile = state.profile ?? duo): Set
     dial: c.zoomDial === "open",
     lenses: mode === "portrait" && ("zoomButton" in c || c.zoomDial === "open"),
     picked: c.portraitLighting !== undefined,
-    countdown: c.action === "countdown running",
+    countdown: c.action === "countdown running" ? (timerOf(c) ?? 0) - (state.id.endsWith("-2") ? 2 : 1) : 0,
     holding: c.action === "shutter held (QuickTake)",
     recording: c.action === "recording",
     viewer: state.mode === "viewer",

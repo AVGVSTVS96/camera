@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useEffectEvent, useRef, useState } from "react";
 import { record, snapshot, useCamera, type Shot } from "./capture.ts";
 import { AspectFlip } from "./components/aspect-flip/AspectFlip.tsx";
 import { ControlsButton } from "./components/controls-button/ControlsButton.tsx";
@@ -50,6 +50,7 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
   const { video, stream, error } = useCamera(settings, !still);
   const update: Update = (change) => setSettings((s) => ({ ...s, ...change }));
   const movie = movieModes.has(settings.mode);
+  const busy = settings.holding || settings.recording || settings.countdown > 0;
   const props = { settings, update };
   const open = settings.submenu;
   const styling = open === "Styles";
@@ -67,22 +68,63 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
     onSettings?.(settings);
   }, [onSettings, settings]);
 
-  async function shutter() {
+  async function finish() {
+    const [file, frame] = await Promise.all([stop.current!(), snapshot(video.current!)]);
+    stop.current = undefined;
+    update({ holding: false, recording: false });
+    setShot({ url: URL.createObjectURL(file), file, poster: frame.url });
+  }
+
+  async function capture() {
     if (!video.current || !stream) return;
+
+    if (stop.current) return finish();
 
     if (!movie) return setShot(await snapshot(video.current));
 
-    if (!stop.current) {
-      stop.current = record(stream);
-
-      return update({ recording: true });
-    }
-
-    const [file, frame] = await Promise.all([stop.current(), snapshot(video.current)]);
-    stop.current = undefined;
-    update({ recording: false });
-    setShot({ url: URL.createObjectURL(file), file, poster: frame.url });
+    stop.current = record(stream);
+    update({ recording: true });
   }
+
+  function shutter() {
+    if (settings.countdown) return update({ countdown: 0 });
+
+    if (settings.timer && !stop.current) return update({ countdown: settings.timer });
+
+    return capture();
+  }
+
+  function hold() {
+    if (!stream) return;
+
+    stop.current = record(stream);
+    update({ holding: true });
+  }
+
+  const tick = useEffectEvent((left: number) => {
+    update({ countdown: left - 1 });
+
+    if (left === 1) capture();
+  });
+
+  useEffect(() => {
+    if (!settings.countdown) return;
+
+    const next = setTimeout(tick, 1000, settings.countdown);
+
+    return () => clearTimeout(next);
+  }, [settings.countdown]);
+
+  const quicktake = {
+    mode: settings.mode,
+    orientation: settings.orientation,
+    recording: settings.recording,
+    holding: settings.holding,
+    onPress: shutter,
+    onHold: hold,
+    onLock: () => update({ holding: false, recording: true }),
+    onRelease: finish,
+  };
 
   return (
     <main
@@ -97,7 +139,7 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
       data-sheet={settings.sheet}
       data-submenu={open ?? undefined}
       data-styles={styling || undefined}
-      data-countdown={settings.countdown || undefined}
+      data-countdown={settings.countdown > 0 || undefined}
       data-holding={settings.holding || undefined}
       data-wide={settings.aspect === "16:9" || undefined}
       data-recording={settings.recording || undefined}
@@ -123,30 +165,22 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
         <ControlsPanel {...props} />
       ) : styling ? (
         <div className="row shutter">
-          <Shutter mode={settings.mode} recording={settings.recording} onPress={shutter} />
+          <Shutter {...quicktake} />
         </div>
       ) : (
         <>
-          <Zoom {...props} />
+          {!settings.countdown && <Zoom {...props} />}
           <div className="row shutter">
-            {movie
-              ? profile.macro && <Macro {...props} />
-              : !settings.recording && !settings.holding && <DepthButton on={settings.depth} />}
-            <Shutter mode={settings.mode} recording={settings.recording} onPress={shutter} />
-            {profile.smartTake && !movie && !settings.recording && !settings.holding && !settings.submenu && (
-              <SmartTake />
-            )}
-            {!settings.submenu && !settings.holding && !settings.recording && (
-              <ControlsButton open={() => update({ tray: true })} />
-            )}
+            {movie ? profile.macro && <Macro {...props} /> : !busy && <DepthButton on={settings.depth} />}
+            <Shutter {...quicktake} />
+            {profile.smartTake && !movie && !busy && !settings.submenu && <SmartTake />}
+            {!settings.submenu && !busy && <ControlsButton open={() => update({ tray: true })} />}
           </div>
           <div className="row modes">
-            {!settings.submenu && !settings.holding && !settings.recording && (
-              <Thumbnail shot={shot} open={() => update({ viewer: true })} />
-            )}
+            {!settings.submenu && !busy && <Thumbnail shot={shot} open={() => update({ viewer: true })} />}
           </div>
-          {!settings.submenu && !settings.holding && !settings.recording && <Flip {...props} />}
-          {!settings.holding && !settings.recording && !settings.submenu && (
+          {!settings.submenu && !busy && <Flip {...props} />}
+          {!busy && !settings.submenu && (
             <ModeDial selected={settings.mode} select={(mode) => update(switchMode(profile, settings, mode))} />
           )}
         </>
@@ -163,9 +197,12 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
       {open === "White Balance" && <SubmenuWhiteBalance {...props} />}
       {open === "Night Mode" && <SubmenuNightMode {...props} />}
       <Countdown settings={settings} />
-      {profile.lighting !== false && !settings.tray && !styling && !movie && !settings.holding && (
-        <Lighting settings={settings} />
-      )}
+      {profile.lighting !== false &&
+        !settings.tray &&
+        !styling &&
+        !movie &&
+        !settings.holding &&
+        !settings.countdown && <Lighting settings={settings} />}
       {styling && <SubmenuStyles {...props} />}
       {open === "Timer" && <SubmenuTimer {...props} />}
       {open === "Center Stage" && <SubmenuCenterStage {...props} />}
