@@ -345,8 +345,10 @@ function formatOf(mode: Mode, c: Controls, current: VideoFormat): VideoFormat {
   return changeFormat(current, choice.includes("4K") ? { resolution: "4K", rate } : { rate });
 }
 
-function centerStageOf(c: Controls): CenterStage {
-  const value = String(c.value ?? `Auto Rotate, ${c.selected}`);
+function centerStageOf(c: Controls, current: CenterStage): CenterStage {
+  if (c.value === undefined) return { ...current, rotate: c.selected === "On" };
+
+  const value = String(c.value);
 
   return { zoom: value.includes("Auto Zoom, On"), rotate: value.includes("Auto Rotate, On") };
 }
@@ -393,7 +395,7 @@ function choose(settings: Settings, c: Controls): Partial<Settings> {
     case "Focus":
       return { focus: focusOf(c.value) };
     case "Center Stage":
-      return { centerStage: centerStageOf(c) };
+      return { centerStage: centerStageOf(c, settings.centerStage) };
     default:
       return {};
   }
