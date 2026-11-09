@@ -86,6 +86,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
         {!still && <video ref={video} autoPlay playsInline muted data-facing={settings.facing} />}
         {settings.level && !still && <Level />}
       </div>
+      {still && settings.display === "inner" && <InnerPreview />}
       {settings.sheet && settings.sheet !== "choose" && <div className="sheet-scrim" />}
       {settings.grid && <Grid />}
       {settings.recording || settings.holding ? (
@@ -150,7 +151,6 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
       <AspectFlip {...props} />
       {settings.viewer && <Viewer shot={shot} close={() => update({ viewer: false })} />}
       {settings.sheet && <Sheet kind={settings.sheet} update={update} />}
-      {!settings.viewer && settings.display === "inner" && <InnerPreview />}
       {still && settings.display === "outer" && !settings.holding && !settings.recording && <div className="system" />}
       {error && <p className="error">{error}</p>}
     </main>
