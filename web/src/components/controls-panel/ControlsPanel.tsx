@@ -138,7 +138,9 @@ export function ControlsPanel({ settings, update }: Props) {
   const narrow = (orientation === "landscape") !== sheet.turned;
 
   const open = (name: Submenu | Toggle) =>
-    isToggle(name) ? update({ on: toggle(settings.on, name) }) : update({ submenu: name, tray: false, expanded: false });
+    isToggle(name)
+      ? update({ on: toggle(settings.on, name) })
+      : update({ submenu: name, tray: false, expanded: false });
 
   return (
     <>
