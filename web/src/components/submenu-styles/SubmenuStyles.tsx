@@ -1,12 +1,45 @@
-import { back, type Props } from "../../state.ts";
+import { useRef, type PointerEvent } from "react";
+import { back, type Props, type Settings, type Update } from "../../state.ts";
 import { Chevron } from "./icons.tsx";
-import { place } from "./styles.ts";
+import { CELL, place, shift, styles, type StyleName } from "./styles.ts";
 import { Swatch } from "./Swatch.tsx";
 import "./submenu-styles.css";
 
-function Scrubber({ selected }: { selected: Props["settings"]["style"] }) {
+const at = (e: PointerEvent<HTMLElement>) => e.nativeEvent.offsetX;
+
+const clamp = (value: number) => Math.min(100, Math.max(-100, Math.round(value)));
+
+function Scrubber({ selected, update }: { selected: StyleName; update: Update }) {
+  const drag = useRef<{ x: number; from: StyleName }>(undefined);
+
   return (
-    <div className="styles-scrubber">
+    <div
+      className="styles-scrubber"
+      role="slider"
+      tabIndex={0}
+      aria-label="Photographic Styles"
+      aria-valuetext={selected.toUpperCase()}
+      aria-valuemin={0}
+      aria-valuemax={styles.length - 1}
+      aria-valuenow={styles.indexOf(selected)}
+      onKeyDown={(e) => {
+        const by = { ArrowUp: 1, ArrowRight: 1, ArrowDown: -1, ArrowLeft: -1 }[e.key];
+
+        if (!by) return;
+
+        e.preventDefault();
+        update({ style: shift(selected, by) });
+      }}
+      onPointerDown={(e) => {
+        e.currentTarget.setPointerCapture(e.pointerId);
+        drag.current = { x: at(e), from: selected };
+      }}
+      onPointerMove={(e) => {
+        if (drag.current) update({ style: shift(drag.current.from, Math.round((drag.current.x - at(e)) / CELL)) });
+      }}
+      onPointerUp={() => (drag.current = undefined)}
+      onPointerCancel={() => (drag.current = undefined)}
+    >
       {place(selected).map(({ entry, x }, i) =>
         entry.divider ? (
           <span key={i} className="styles-divider" style={{ left: x }} />
@@ -21,22 +54,46 @@ function Scrubber({ selected }: { selected: Props["settings"]["style"] }) {
   );
 }
 
-function Pad() {
+function Pad({ pad, update }: { pad: Settings["pad"]; update: Update }) {
+  const { tone, color } = pad;
+
+  const aim = (e: PointerEvent<HTMLElement>) =>
+    update({ pad: { color: clamp(e.nativeEvent.offsetX * 2 - 100), tone: clamp(100 - e.nativeEvent.offsetY * 2) } });
+
   return (
     <>
       <div className="styles-tabs">
         <span data-on>PALETTE</span>
         <span>TEXTURE</span>
       </div>
-      <div className="styles-pad">
-        <span />
+      <div
+        className="styles-pad"
+        role="slider"
+        tabIndex={0}
+        aria-label="Style Pad"
+        aria-valuetext={`Tone ${tone}, Color ${color}`}
+        onKeyDown={(e) => {
+          const step = { ArrowUp: [0, 10], ArrowDown: [0, -10], ArrowRight: [10, 0], ArrowLeft: [-10, 0] }[e.key];
+
+          if (!step) return;
+
+          e.preventDefault();
+          update({ pad: { color: clamp(color + step[0]!), tone: clamp(tone + step[1]!) } });
+        }}
+        onPointerDown={(e) => {
+          e.currentTarget.setPointerCapture(e.pointerId);
+          aim(e);
+        }}
+        onPointerMove={(e) => e.currentTarget.hasPointerCapture(e.pointerId) && aim(e)}
+      >
+        <span style={{ left: 44 + color * 0.44, top: 44 - tone * 0.44 }} />
       </div>
     </>
   );
 }
 
 export function SubmenuStyles({ settings, update }: Props) {
-  const { style, customize } = settings;
+  const { style, customize, pad } = settings;
 
   return (
     <section className="styles" aria-label="Photographic Styles">
@@ -45,10 +102,10 @@ export function SubmenuStyles({ settings, update }: Props) {
         <Chevron />
       </button>
       {customize ? (
-        <Pad />
+        <Pad pad={pad} update={update} />
       ) : (
         <>
-          <Scrubber selected={style} />
+          <Scrubber selected={style} update={update} />
           <button className="styles-customize" onClick={() => update({ customize: true })}>
             CUSTOMIZE
           </button>

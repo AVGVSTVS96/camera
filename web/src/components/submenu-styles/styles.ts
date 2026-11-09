@@ -1,5 +1,3 @@
-export type StyleName = "standard" | "gold" | "natural";
-
 export type Entry = { divider: true } | { divider?: false; name: string; colors: string };
 
 const DIVIDER: Entry = { divider: true };
@@ -63,7 +61,20 @@ export const strip: Entry[] = [
   ),
 ];
 
-const CELL = 58;
+export const styles = strip.flatMap((entry) => (entry.divider ? [] : [entry.name]));
+
+export type StyleName = string;
+
+export const nameOf = (value: string | number | boolean | string[] | null | undefined): StyleName => {
+  const name = String(value).toLowerCase();
+
+  return styles.includes(name) ? name : "standard";
+};
+
+export const shift = (selected: StyleName, by: number): StyleName =>
+  styles[Math.min(styles.length - 1, Math.max(0, styles.indexOf(selected) + by))] ?? selected;
+
+export const CELL = 58;
 const DIVIDER_CELL = 30;
 const SELECTED_X = 196;
 

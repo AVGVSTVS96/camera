@@ -70,14 +70,17 @@
 .tray-handle {
   position: absolute;
   width: 38px;
-  height: 4px;
+  height: 14px;
+  margin-top: -5px;
+  background: linear-gradient(#a4a4a6, #a4a4a6) center / 38px 4px no-repeat;
   border-radius: 2px;
-  background: #a4a4a6;
 }
 
 .tray-handle[data-vertical] {
-  width: 4px;
+  width: 14px;
   height: 38px;
+  margin: 0 0 0 -5px;
+  background-size: 4px 38px;
 }
 
 .screen[data-profile="duo"] .tray {

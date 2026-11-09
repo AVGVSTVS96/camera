@@ -138,7 +138,7 @@ export function ControlsPanel({ settings, update }: Props) {
   const narrow = (orientation === "landscape") !== sheet.turned;
 
   const open = (name: Submenu | Toggle) =>
-    isToggle(name) ? update({ on: toggle(settings.on, name) }) : update({ submenu: name, tray: false });
+    isToggle(name) ? update({ on: toggle(settings.on, name) }) : update({ submenu: name, tray: false, expanded: false });
 
   return (
     <>
@@ -162,10 +162,12 @@ export function ControlsPanel({ settings, update }: Props) {
               <span className="tray-label">{(narrow && short ? short : label).toUpperCase()}</span>
             </button>
           ))}
-          <div
+          <button
             className="tray-handle"
+            aria-label={expanded ? "Dismiss Camera Controls" : "Expand"}
             data-vertical={sheet.handle.vertical || undefined}
             style={{ left: sheet.handle.x, top: sheet.handle.y }}
+            onClick={() => update(expanded ? { tray: false } : { expanded: true })}
           />
         </div>
       </section>

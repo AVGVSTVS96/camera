@@ -1,5 +1,5 @@
 import { duo, type Profile } from "./profile.ts";
-import type { StyleName } from "./components/submenu-styles/styles.ts";
+import { nameOf, type StyleName } from "./components/submenu-styles/styles.ts";
 
 export const modes = ["time-lapse", "slo-mo", "cinematic", "video", "photo", "portrait", "pano"] as const;
 
@@ -128,6 +128,7 @@ export interface Settings extends Pose {
   exposure: number;
   balance: WhiteBalance;
   style: StyleName;
+  pad: { tone: number; color: number };
   resolution: 24 | 48;
   formats: Partial<Record<Mode, VideoFormat>>;
   videoResolution: VideoResolution;
@@ -217,6 +218,7 @@ export function initialSettings(profile: Profile, pose: Pose, mode: Mode = "phot
     exposure: 0,
     balance: "auto",
     style: "standard",
+    pad: { tone: 0, color: 0 },
     resolution: megapixels === "48" ? 48 : 24,
     formats: {
       video: { resolution, rate: 30 },
@@ -290,8 +292,7 @@ const aspects = new Map<string, AspectRatio>([
 
 const exposureOf = (adjust: Controls[string]) => ({ dec: -0.7, inc: 0.7 })[String(adjust)] ?? 0;
 
-const styleOf = (adjust: Controls[string]): StyleName =>
-  adjust === "dec" ? "gold" : adjust === "inc" ? "natural" : "standard";
+const styleOf = (c: Controls): StyleName => (c.adjust ? nameOf(c.value) : "standard");
 
 const megapixelsOf = (selected: Controls[string]) => (named(selected).startsWith("48") ? 48 : 24);
 
@@ -338,7 +339,7 @@ function choose(settings: Settings, c: Controls): Partial<Settings> {
     case "White Balance":
       return { balance: balanceOf(c.selected) };
     case "Styles":
-      return { style: styleOf(c.adjust) };
+      return { style: styleOf(c) };
     case "Resolution":
       return { resolution: megapixelsOf(c.selected) };
     case "Video Format":
