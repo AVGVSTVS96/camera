@@ -1,0 +1,29 @@
+.submenu.live-photo {
+  background: #1f1f1f;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.live-photo-value {
+  position: absolute;
+  inset: 56.33px 0 auto;
+  height: 36px;
+  text-align: center;
+  font-family: ui-rounded, sans-serif;
+  font-size: 31px;
+  line-height: 36px;
+}
+
+.live-photo-option {
+  position: absolute;
+  top: 77.67px;
+  width: 75px;
+  height: 75px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+}
+
+.live-photo-option[data-on] {
+  color: #ffd600;
+}

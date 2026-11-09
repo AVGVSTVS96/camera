@@ -18,6 +18,7 @@ import { SubmenuStyles } from "./components/submenu-styles/SubmenuStyles.tsx";
 import { SubmenuExposure } from "./components/submenu-exposure/SubmenuExposure.tsx";
 import { SmartTake } from "./components/smart-take/SmartTake.tsx";
 import { SubmenuVideoFormat } from "./components/submenu-video-format/SubmenuVideoFormat.tsx";
+import { SubmenuLivePhoto } from "./components/submenu-live-photo/SubmenuLivePhoto.tsx";
 import { SubmenuWhiteBalance } from "./components/submenu-white-balance/SubmenuWhiteBalance.tsx";
 import { Thumbnail } from "./components/thumbnail/Thumbnail.tsx";
 import { TopBar } from "./components/top-bar/TopBar.tsx";
@@ -119,6 +120,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
       <SubmenuExposure settings={settings} />
       {settings.focus && <SubmenuFocus {...props} />}
       {settings.format && <SubmenuVideoFormat {...props} />}
+      {settings.livePhoto && <SubmenuLivePhoto {...props} />}
       {settings.balance && <SubmenuWhiteBalance {...props} />}
       <Countdown settings={settings} />
       {profile.lighting !== false && !settings.tray && !styling && !movie && !settings.holding && (
