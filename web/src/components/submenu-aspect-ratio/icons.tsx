@@ -4,7 +4,7 @@ export function Bracket({ ratio }: { ratio: string }) {
       <path
         d="M1.5 6.5v-3a2 2 0 0 1 2-2h3M15.5 1.5h3a2 2 0 0 1 2 2v3M20.5 16.5v3a2 2 0 0 1-2 2h-3M6.5 21.5h-3a2 2 0 0 1-2-2v-3"
         stroke="currentColor"
-        strokeWidth="2.2"
+        strokeWidth="1.6"
         strokeLinecap="round"
       />
       <text
