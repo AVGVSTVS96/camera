@@ -25,9 +25,7 @@ const live = params.get("live");
 if (id) {
   const state = await loadState(id);
   document.documentElement.dataset.still = "";
-
-  if (!params.has("reached"))
-    document.documentElement.style.setProperty("--elapsed", `${parseFloat(String(state.controls?.t).slice(1)) || 0}s`);
+  document.documentElement.style.setProperty("--elapsed", String(parseFloat(String(state.controls?.t).slice(1)) || 0));
   root.render(
     <ProfileContext value={state.profile ?? duo}>
       <Camera initial={params.has("reached") ? reached(state) : settingsFor(state)} still={id} />

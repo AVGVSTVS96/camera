@@ -81,26 +81,14 @@
   mask: radial-gradient(circle closest-side, transparent 94.5%, #000 95%);
 }
 
-@property --sweep {
-  syntax: "<angle>";
-  inherits: false;
-  initial-value: 0deg;
-}
-
-@keyframes sweep {
-  to {
-    --sweep: 360deg;
-  }
-}
-
 [data-mode="time-lapse"][data-recording] .shutter-button::before {
+  --sweep: round(down, min(var(--elapsed, 0) / 5.5, 1) * 360deg, 6deg);
   -webkit-mask:
     radial-gradient(circle closest-side, transparent 94.5%, #000 95%), conic-gradient(#000 var(--sweep), transparent 0);
   -webkit-mask-composite: source-in;
   mask:
     radial-gradient(circle closest-side, transparent 94.5%, #000 95%), conic-gradient(#000 var(--sweep), transparent 0);
   mask-composite: intersect;
-  animation: sweep 5.5s steps(60) calc(var(--elapsed, 0s) * -1) forwards;
 }
 
 [data-mode="time-lapse"] .shutter-button::after {

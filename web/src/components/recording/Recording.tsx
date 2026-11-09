@@ -40,6 +40,10 @@ function useElapsed(running: boolean) {
     };
   }, [running]);
 
+  useEffect(() => {
+    if (running) document.documentElement.style.setProperty("--elapsed", String(ms / 1000));
+  }, [running, ms]);
+
   const s = Math.floor(ms / 1000);
 
   return `${two(Math.floor(s / 3600))}:${two(Math.floor(s / 60) % 60)}:${two(s % 60)}`;
