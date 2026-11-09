@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useProfile } from "../../profile.ts";
 import type { Props, Settings } from "../../state.ts";
 import { layout, slot } from "./layout.ts";
@@ -27,40 +27,6 @@ function stopsOf({ mode, formats, display, orientation }: Settings, own: number[
 
 const perDoubling = 25;
 
-const rampSeconds = 0.55;
-
-function useRamp(target: number, key: string) {
-  const [value, setValue] = useState(target);
-  const current = useRef({ value: target, key });
-
-  useEffect(() => {
-    const from = current.current.value;
-    const same = current.current.key === key;
-    current.current.key = key;
-
-    if (!same || from === target) {
-      current.current.value = target;
-      setValue(target);
-
-      return;
-    }
-
-    const start = performance.now();
-
-    let frame = requestAnimationFrame(function step() {
-      const t = Math.min(1, (performance.now() - start) / (rampSeconds * 1000));
-      current.current.value = from + (target - from) * t;
-      setValue(current.current.value);
-
-      if (t < 1) frame = requestAnimationFrame(step);
-    });
-
-    return () => cancelAnimationFrame(frame);
-  }, [target, key]);
-
-  return value;
-}
-
 const clamp = (value: number, low: number, high: number) => Math.min(high, Math.max(low, value));
 
 const round = (value: number) => Math.round(value * 100) / 100;
@@ -70,7 +36,6 @@ export function Zoom({ settings, update }: Props) {
   const own = profile.zoom[`${settings.facing}-${settings.mode}`]?.stops ?? [];
   const stops = settings.lenses ? [0.5, 1, 2, settings.zoom === 0.5 ? 1 : settings.zoom] : stopsOf(settings, own);
   const zoom = Math.max(settings.zoom, Math.min(...stops));
-  const labelled = useRamp(zoom, `${settings.facing}-${settings.mode}`);
   const bare = settings.mode === "time-lapse" || settings.mode === "portrait" || profile.name === "duo";
   const hide = useRef<number>(undefined);
 
@@ -212,8 +177,8 @@ export function Zoom({ settings, update }: Props) {
             className="readout"
             transform={`translate(${place.apex.x - place.into[0] * 37} ${place.apex.y - place.into[1] * 37}) rotate(${place.turn ? 90 : 0})`}
           >
-            <text y="5">{zoomLabel(labelled, true, bare)}</text>
-            <text y="21">{Math.round(labelled * 26)}MM</text>
+            <text y="5">{zoomLabel(zoom, true, bare)}</text>
+            <text y="21">{Math.round(zoom * 26)}MM</text>
           </g>
         </svg>
       )}
@@ -231,7 +196,7 @@ export function Zoom({ settings, update }: Props) {
             style={{ translate: offset(i), rotate: `${settings.zoomTurn}deg` }}
             onClick={() => (anchored && stops.length === 1 ? update({ lenses: true }) : update({ zoom: stop }))}
           >
-            {zoomLabel(i === active ? labelled : stop, i === active, bare)}
+            {zoomLabel(i === active ? zoom : stop, i === active, bare)}
           </button>
         ))}
       </div>
