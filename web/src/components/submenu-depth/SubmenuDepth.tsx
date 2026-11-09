@@ -48,7 +48,7 @@ export function SubmenuDepth({ settings, update }: Props) {
     max: fixed ? at : last,
     pitch: -PITCH,
     settings,
-    set: (stop) => update({ aperture: { ...aperture, at: stop } }),
+    set: (stop) => update({ stops: { ...settings.stops, [settings.mode]: stop } }),
   });
 
   return (
@@ -57,7 +57,7 @@ export function SubmenuDepth({ settings, update }: Props) {
         <button
           className="submenu-button depth-reset"
           aria-label="Reset"
-          onClick={() => update({ aperture: { ...aperture, at: home } })}
+          onClick={() => update({ stops: { ...settings.stops, [settings.mode]: undefined } })}
         >
           <Reset />
         </button>

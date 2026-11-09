@@ -144,6 +144,7 @@ export interface Settings extends Pose {
   focus: { value: number; auto: boolean };
   centerStage: CenterStage;
   aperture?: Aperture;
+  stops: Partial<Record<Mode, number | undefined>>;
   depth: boolean;
   lighting: Lighting;
   on: Toggle[];
@@ -193,7 +194,25 @@ export function defaultAperture({ mode, facing, depth }: Pick<Settings, "mode" |
   return facing === "front" ? { first: 3, at: 10, home: 10, last: 21 } : { first: 3, at: 6, home: 6, last: 18 };
 }
 
-export const apertureOf = (settings: Settings) => settings.aperture ?? defaultAperture(settings);
+const clampStop = ({ first, last }: Aperture, at: number) => Math.min(last, Math.max(first, at));
+
+export function apertureOf(settings: Settings): Aperture {
+  if (settings.aperture) return settings.aperture;
+
+  const aperture = defaultAperture(settings);
+  const at = settings.stops[settings.mode];
+
+  return at === undefined ? aperture : { ...aperture, at: clampStop(aperture, at) };
+}
+
+function depthStops(settings: Settings, c: Controls): Settings["stops"] {
+  const ticks = c.adjust === "inc" ? 2 : c.adjust === "dec" ? -2 : 0;
+  const aperture = defaultAperture(settings);
+
+  if (c.control !== "Depth" || !ticks || aperture.off || aperture.unavailable) return {};
+
+  return { [settings.mode]: clampStop(aperture, aperture.at + ticks) };
+}
 
 const startZoom = (profile: Profile, facing: Facing, mode: Mode) => profile.zoom[`${facing}-${mode}`]?.start ?? 1;
 
@@ -243,6 +262,7 @@ export function initialSettings(profile: Profile, pose: Pose, mode: Mode = "phot
     videoResolution: resolution,
     focus: { value: 0, auto: true },
     centerStage: { zoom: false, rotate: false },
+    stops: {},
     depth: false,
     lighting: "natural",
     on: [],
@@ -390,6 +410,7 @@ export function reached(state: ParityState, profile = state.profile ?? duo): Set
   return {
     ...initial,
     ...choose(initial, c),
+    stops: depthStops(initial, c),
     zoom:
       Number.parseFloat(String(c.zoom)) ||
       Number.parseFloat(String(c.via).replace(/^\D+/, "")) ||
