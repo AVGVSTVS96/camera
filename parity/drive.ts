@@ -116,7 +116,9 @@ async function aim(target: Locator) {
   const cover = await target.evaluate((el, { x, y }) => {
     const hit = document.elementFromPoint(x, y);
 
-    return !hit || el.contains(hit) ? "" : `${hit.tagName.toLowerCase()}.${[...hit.classList].join(".")}`;
+    if (!hit) return "nothing at all";
+
+    return el.contains(hit) ? "" : `${hit.tagName.toLowerCase()}.${[...hit.classList].join(".")}`;
   }, at);
 
   return cover ? { miss: `it's covered by ${cover}` } : at;
@@ -159,23 +161,50 @@ async function gesture(driver: Driver, from: Touch, to: Touch, ms: number) {
   }
 }
 
-async function switchMode(page: Page, label: string) {
+async function swipeDial(driver: Driver, toward: number) {
+  const { page } = driver;
+
+  const wheel = await page.evaluate(() => {
+    const el = document.querySelector(".dial");
+    const box = el?.getBoundingClientRect();
+
+    return (
+      box && {
+        x: box.x + box.width / 2,
+        y: box.y + box.height / 2,
+        turn: Number.parseFloat(getComputedStyle(el!).rotate) || 0,
+      }
+    );
+  });
+
+  if (!wheel) return "there is no mode dial";
+
+  const angle = (wheel.turn * Math.PI) / 180;
+  const at = { x: wheel.x, y: wheel.y };
+  const to = { x: at.x + 80 * toward * Math.cos(angle), y: at.y + 80 * toward * Math.sin(angle) };
+  await touch(driver, "touchStart", [at]);
+  await gesture(driver, [at], [to], 200);
+  await touch(driver, "touchEnd", []);
+}
+
+async function switchMode(driver: Driver, label: string) {
+  const { page } = driver;
   const current = async () => dial.indexOf((await settings(page))?.mode.toUpperCase() ?? "");
   const goal = dial.indexOf(label);
 
   for (let hop = 0; hop < dial.length; hop++) {
     const from = await current();
 
-    if (from === goal) return;
-
     if (hop) await settle(page);
+
+    if (from === goal) return;
 
     const candidates = dial.slice(Math.min(from, goal), Math.max(from, goal) + 1).filter((l) => l !== dial[from]);
     const target = await nearest(page, goal > from ? candidates.toReversed() : candidates);
 
-    if (!target) return `no mode label between ${dial[from]} and ${label} can be tapped`;
+    if (target) await tap(page, target);
+    else await swipeDial(driver, goal > from ? -1 : 1);
 
-    await tap(page, target);
     await page.waitForTimeout(40);
   }
 
@@ -208,7 +237,7 @@ export async function perform(driver: Driver, step: Step): Promise<string | unde
 
   if ("wait" in step) return void (await page.clock.runFor(step.wait));
 
-  if ("mode" in step) return switchMode(page, step.mode);
+  if ("mode" in step) return switchMode(driver, step.mode);
 
   if ("tap" in step) {
     const target = await find(page, step.tap);

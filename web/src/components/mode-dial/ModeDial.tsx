@@ -1,18 +1,48 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import { useProfile } from "../../profile.ts";
-import type { Mode } from "../../state.ts";
+import { movieModes, type Mode } from "../../state.ts";
 import "./mode-dial.css";
 
-export function ModeDial({ selected, select }: { selected: Mode; select: (mode: Mode) => void }) {
+const slop = 8;
+const reach = 40;
+
+/** Pointer travel along the dial's own axis, which the dial's rotation turns on the screen. */
+function along(dial: HTMLElement, dx: number, dy: number) {
+  const turn = (Number.parseFloat(getComputedStyle(dial).rotate) || 0) * (Math.PI / 180);
+
+  return { along: dx * Math.cos(turn) + dy * Math.sin(turn), across: dy * Math.cos(turn) - dx * Math.sin(turn) };
+}
+
+export function ModeDial({ selected, select: apply }: { selected: Mode; select: (mode: Mode) => void }) {
   const { modes, name } = useProfile();
+
+  const dial = useRef<HTMLDivElement>(null);
   const labels = useRef<HTMLDivElement>(null);
   const [offset, setOffset] = useState(0);
+  const [pill, setPill] = useState(0);
+  const [drag, setDrag] = useState<number>();
   const [settled, setSettled] = useState(false);
+
+  const select = useCallback(
+    (mode: Mode) => {
+      if (mode === selected) return;
+
+      document.documentElement.dataset.switch = movieModes.has(mode) ? "movie" : "still";
+
+      if (document.startViewTransition) document.startViewTransition(() => flushSync(() => apply(mode)));
+      else apply(mode);
+    },
+    [apply, selected],
+  );
 
   const measure = useCallback(() => {
     const label = labels.current?.querySelector<HTMLElement>(`[data-mode="${selected}"]`);
 
-    if (label) setOffset(-(label.offsetLeft + label.offsetWidth / 2));
+    if (!label) return;
+
+    setOffset(-(label.offsetLeft + label.offsetWidth / 2));
+    setPill(label.offsetWidth);
   }, [selected]);
 
   useLayoutEffect(measure, [measure]);
@@ -24,10 +54,107 @@ export function ModeDial({ selected, select }: { selected: Mode; select: (mode: 
     });
   }, [measure]);
 
+  const step = useCallback(
+    (by: number) => {
+      const next = modes[modes.indexOf(selected) + by];
+
+      if (next) select(next);
+    },
+    [modes, selected, select],
+  );
+
+  useEffect(() => {
+    const screen = dial.current?.closest<HTMLElement>(".screen");
+
+    if (!screen) return;
+
+    let start: { x: number; y: number; id: number } | undefined;
+
+    const down = (e: PointerEvent) => {
+      // SAFETY: pointerdown on the screen always targets an element.
+      const target = e.target as Element;
+
+      start =
+        e.isPrimary && !screen.dataset.sheet && !target.closest("button, input, .dial, .zoom")
+          ? { x: e.clientX, y: e.clientY, id: e.pointerId }
+          : undefined;
+    };
+
+    const up = (e: PointerEvent) => {
+      if (!start || start.id !== e.pointerId || !dial.current) return;
+
+      const { along: a, across } = along(dial.current, e.clientX - start.x, e.clientY - start.y);
+      start = undefined;
+
+      if (Math.abs(a) >= reach && Math.abs(a) > Math.abs(across)) step(a > 0 ? -1 : 1);
+    };
+
+    screen.addEventListener("pointerdown", down);
+    screen.addEventListener("pointerup", up);
+
+    return () => {
+      screen.removeEventListener("pointerdown", down);
+      screen.removeEventListener("pointerup", up);
+    };
+  }, [step]);
+
+  function press(e: React.PointerEvent<HTMLDivElement>) {
+    if (!e.isPrimary) return;
+
+    const origin = { x: e.clientX, y: e.clientY };
+    const el = e.currentTarget;
+    let moved = false;
+
+    const travel = (m: PointerEvent) => along(dial.current!, m.clientX - origin.x, m.clientY - origin.y).along;
+
+    const move = (m: PointerEvent) => {
+      const a = travel(m);
+
+      if (!moved && Math.abs(a) < slop) return;
+
+      if (!moved) el.setPointerCapture(e.pointerId);
+
+      moved = true;
+      setDrag(a);
+    };
+
+    const end = (m: PointerEvent) => {
+      el.removeEventListener("pointermove", move);
+      el.removeEventListener("pointerup", end);
+      el.removeEventListener("pointercancel", end);
+
+      if (!moved) return;
+
+      el.addEventListener("click", (c) => c.stopPropagation(), { capture: true, once: true });
+      setDrag(undefined);
+
+      const centre = -(offset + travel(m));
+      const strip = [...labels.current!.querySelectorAll<HTMLElement>("[data-mode]")];
+      const middle = (label: HTMLElement) => label.offsetLeft + label.offsetWidth / 2;
+      const gap = (label: HTMLElement) => Math.abs(middle(label) - centre);
+
+      const nearest = strip.reduce((best, label) => (gap(label) < gap(best) ? label : best));
+
+      // SAFETY: every label in the strip is rendered with a data-mode from `modes`.
+      select(nearest.dataset.mode as Mode);
+    };
+
+    el.addEventListener("pointermove", move);
+    el.addEventListener("pointerup", end);
+    el.addEventListener("pointercancel", end);
+  }
+
   return (
-    <div className="dial" data-profile={name} aria-label="Camera Mode">
-      <div className="window">
-        <div className="labels" ref={labels} data-settled={settled || undefined} style={{ translate: `${offset}px` }}>
+    <div className="dial" data-profile={name} aria-label="Camera Mode" ref={dial}>
+      <div className="window" onPointerDown={press}>
+        <i className="pill" data-settled={settled || undefined} style={{ width: pill }} />
+        <div
+          className="labels"
+          ref={labels}
+          data-settled={settled || undefined}
+          data-dragging={drag !== undefined || undefined}
+          style={{ translate: `${offset + (drag ?? 0)}px` }}
+        >
           {modes.map((mode) => (
             <button key={mode} data-mode={mode} data-on={mode === selected || undefined} onClick={() => select(mode)}>
               {mode.toUpperCase()}
