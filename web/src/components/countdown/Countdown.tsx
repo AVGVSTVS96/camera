@@ -12,7 +12,7 @@ export function Countdown({ settings }: { settings: Settings }) {
       className="countdown"
       data-menu={submenu === "Timer" || undefined}
       data-running={countdown > 0 || undefined}
-      data-digits={String(digits).length}
+      data-digits={String(timer ?? digits).length}
     >
       <span key={digits}>{digits}</span>
     </div>

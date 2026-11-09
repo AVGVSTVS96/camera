@@ -48,3 +48,10 @@
 .countdown[data-digits="1"] {
   --digits: 1;
 }
+
+.countdown[data-running] {
+  --long: 64.33px;
+  font-weight: 300;
+  font-feature-settings: normal;
+  text-shadow: none;
+}

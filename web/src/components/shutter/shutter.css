@@ -93,10 +93,6 @@
   transition: all 0.3s;
 }
 
-.shutter-button:active span {
-  scale: 0.9;
-}
-
 [data-movie] .shutter-button span {
   background: var(--record);
 }
