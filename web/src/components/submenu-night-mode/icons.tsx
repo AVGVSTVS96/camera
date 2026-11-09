@@ -46,12 +46,7 @@ export const NightMax = () => (
 
 export const NightOff = () => (
   <Glyph dx={1} dy={2}>
-    <path
-      d="M25.6 38.1A35 35 0 0 0 66.3 79"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="4.6"
-    />
+    <path d="M25.6 38.1A35 35 0 0 0 66.3 79" fill="none" stroke="currentColor" strokeWidth="4.6" />
     <path d="M45.3 18.4 32.3 26.3 38.4 28.8 43.4 37.8ZM86.5 61 68.1 62.1 75.2 66.6 79.4 73.5Z" />
     <g transform="translate(0 -3.7)">
       <Dots />
