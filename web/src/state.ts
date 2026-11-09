@@ -64,6 +64,7 @@ export interface Settings {
   on: string[];
   submenu: boolean;
   format: { resolution: "HD" | "4K"; rate: number } | null;
+  resolution: "HD" | "4K" | null;
   balance: string | null;
   livePhoto: LivePhoto | null;
   flashMenu: Flash | null;
@@ -127,6 +128,7 @@ export function initialSettings(profile: Profile, mode: Mode = "photo", facing: 
     on: [],
     submenu: false,
     format: null,
+    resolution: null,
     balance: null,
     livePhoto: null,
     flashMenu: null,
@@ -163,6 +165,9 @@ function formatOf(mode: Mode, c: Controls): Settings["format"] {
 
   return { resolution: Array.isArray(c.selected) ? "HD" : "4K", rate };
 }
+
+const resolutionOf = (c: Controls): Settings["resolution"] =>
+  c.panel === "submenu" && c.control === "Video Resolution" ? (c.selected === "4K" ? "4K" : "HD") : null;
 
 const nightModeOf = (selected: Controls[string]): NightMode => {
   const name = [selected].flat().join().toLowerCase();
@@ -313,6 +318,7 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
     on: c.control && (c.to === "On" || c.to === "Adaptive") ? [String(c.control)] : [],
     submenu: c.panel === "submenu" || c.panel === "styles customize",
     format: formatOf(mode, c),
+    resolution: resolutionOf(c),
     flashMenu: c.panel === "submenu" && c.control === "Flash" ? flashChoice(c) : null,
     balance: c.panel === "submenu" && c.control === "White Balance" ? String(c.selected).toLowerCase() : null,
     livePhoto: livePhotoOf(c),

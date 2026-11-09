@@ -1,0 +1,28 @@
+import type { Props } from "../../state.ts";
+import { Submenu } from "../submenu/Submenu.tsx";
+import "./submenu-video-resolution.css";
+
+const options = ["HD", "4K"] as const;
+
+export function SubmenuVideoResolution({ settings, update }: Props) {
+  const { resolution } = settings;
+
+  if (!resolution) return null;
+
+  return (
+    <Submenu title="Resolution" className="vr" back={() => update({ submenu: false, resolution: null })}>
+      <output className="vr-value">{resolution}</output>
+      {options.map((name, i) => (
+        <button
+          key={name}
+          className="vr-option"
+          data-on={name === resolution || undefined}
+          style={{ left: 112.67 + 112.33 * i }}
+          onClick={() => update({ resolution: name })}
+        >
+          {name}
+        </button>
+      ))}
+    </Submenu>
+  );
+}

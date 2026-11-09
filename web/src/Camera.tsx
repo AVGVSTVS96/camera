@@ -23,6 +23,7 @@ import { SubmenuDepth } from "./components/submenu-depth/SubmenuDepth.tsx";
 import { SubmenuFlash } from "./components/submenu-flash/SubmenuFlash.tsx";
 import { SubmenuExposure } from "./components/submenu-exposure/SubmenuExposure.tsx";
 import { SmartTake } from "./components/smart-take/SmartTake.tsx";
+import { SubmenuVideoResolution } from "./components/submenu-video-resolution/SubmenuVideoResolution.tsx";
 import { SubmenuVideoFormat } from "./components/submenu-video-format/SubmenuVideoFormat.tsx";
 import { SubmenuLivePhoto } from "./components/submenu-live-photo/SubmenuLivePhoto.tsx";
 import { SubmenuNightMode } from "./components/submenu-night-mode/SubmenuNightMode.tsx";
@@ -130,6 +131,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
       <SubmenuDepth {...props} />
       {settings.focus && <SubmenuFocus {...props} />}
       {settings.format && <SubmenuVideoFormat {...props} />}
+      {settings.resolution && <SubmenuVideoResolution {...props} />}
       {settings.livePhoto && <SubmenuLivePhoto {...props} />}
       {settings.aspect && <SubmenuAspectRatio {...props} />}
       {settings.flashMenu && <SubmenuFlash {...props} />}
