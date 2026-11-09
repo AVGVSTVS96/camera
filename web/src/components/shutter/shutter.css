@@ -6,11 +6,20 @@
 .screen[data-profile="simulator"] {
   --record: #ff383c;
   --band: rgb(52 52 53 / 0.62);
-  --rim: inset 0 0 0 0.67px rgb(0 0 0 / 0.75);
+  --rim:
+    inset 0 0 0 0.5px rgb(0 0 0 / 0.7), inset 0 0 1.5px 1px rgb(255 255 255 / 0.35),
+    inset 0 1.5px 1px -1px rgb(255 255 255 / 0.7), inset 0 -1.5px 1px -1px rgb(255 255 255 / 0.7);
 }
 
-.screen[data-profile="simulator"][data-movie] {
+.screen[data-profile="simulator"][data-movie][data-facing="front"],
+.screen[data-profile="simulator"][data-mode="cinematic"],
+.screen[data-profile="simulator"][data-mode="slo-mo"],
+.screen[data-profile="simulator"][data-mode="time-lapse"] {
   --band: none;
+}
+
+.screen[data-profile="simulator"][data-mode="cinematic"] {
+  --rim: inset 0 0 0 0.67px rgb(255 255 255 / 0.3);
 }
 
 .screen[data-profile="duo"] {
@@ -28,6 +37,27 @@
   box-shadow: var(--rim);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
+}
+
+[data-mode="slo-mo"] .shutter-button,
+[data-mode="time-lapse"] .shutter-button {
+  position: relative;
+}
+
+[data-mode="slo-mo"] .shutter-button::before,
+[data-mode="time-lapse"] .shutter-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-conic-gradient(#fff 0 1.2deg, transparent 0 3deg);
+  -webkit-mask: radial-gradient(circle, transparent 29px, #000 29.5px 33px, transparent 33.5px);
+  mask: radial-gradient(circle, transparent 29px, #000 29.5px 33px, transparent 33.5px);
+}
+
+[data-mode="time-lapse"] .shutter-button::before {
+  background:
+    repeating-conic-gradient(#fff 0 0.8deg, transparent 0 30deg),
+    repeating-conic-gradient(#fff 0 1.2deg, transparent 0 6deg);
 }
 
 .shutter-button span {

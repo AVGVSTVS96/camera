@@ -72,6 +72,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
       data-orientation={settings.orientation}
       data-fold={settings.fold}
       data-profile={profile.name}
+      data-facing={settings.facing}
       data-sheet={settings.sheet}
       data-submenu={settings.submenu || undefined}
       data-styles={settings.styles || undefined}
