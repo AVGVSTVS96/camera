@@ -184,7 +184,7 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
                 open={() => {
                   const { x, y, width, height } = document.querySelector(".shutter-button")!.getBoundingClientRect();
                   setFrom({ x: x + width / 2, y: y + height / 2 });
-                  update({ tray: true });
+                  update({ tray: true, expanded: false });
                 }}
               />
             )}
