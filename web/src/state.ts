@@ -151,9 +151,9 @@ export function initialSettings(profile: Profile, mode: Mode = "photo", facing: 
 function formatOf(mode: Mode, c: Controls): Settings["format"] {
   if (c.panel !== "submenu" || c.control !== "Video Format") return null;
 
-  const picked = Array.isArray(c.selected) ? c.selected : [c.selected];
-  const rate =
-    Number.parseInt(String(picked.find((s) => String(s).includes("frames")))) || (mode === "slo-mo" ? 120 : 30);
+  const picked = [c.selected].flat();
+  const named = picked.find((s) => String(s).includes("frames"));
+  const rate = Number.parseInt(String(named)) || (mode === "slo-mo" ? 120 : 30);
 
   return { resolution: Array.isArray(c.selected) ? "HD" : "4K", rate };
 }

@@ -2,6 +2,8 @@ import type { Facing, Mode, Props } from "../../state.ts";
 import { Submenu } from "../submenu/Submenu.tsx";
 import "./submenu-video-format.css";
 
+const steps = [91.67, 61.33, 53.33];
+
 const resolutions = ["HD", "4K"] as const;
 
 const rates = ({ mode, facing }: { mode: Mode; facing: Facing }) => {
@@ -20,6 +22,10 @@ export function SubmenuVideoFormat({ settings, update }: Props) {
   if (!format) return null;
 
   const dot = defaultRate(mode);
+  const all = rates(settings);
+  const step = steps[all.length - 2] ?? 53.33;
+  const left = all.length === 4 ? 156.67 : 187.33;
+  const place = (i: number, top: number) => ({ left: left + step * i, top, width: step - 8 });
 
   return (
     <Submenu title="Format" className="vf" back={() => update({ submenu: false, format: null })}>
@@ -35,19 +41,19 @@ export function SubmenuVideoFormat({ settings, update }: Props) {
           className="vf-option"
           data-on={r === format.resolution || undefined}
           data-dot={r === "HD" || undefined}
-          style={{ left: 156.67 + 53.33 * i, top: 61 }}
+          style={place(i, 61)}
           onClick={() => update({ format: { ...format, resolution: r } })}
         >
           {r}
         </button>
       ))}
-      {rates(settings).map((rate, i) => (
+      {all.map((rate, i) => (
         <button
           key={rate}
           className="vf-option vf-rate"
           data-on={rate === format.rate || undefined}
           data-dot={rate === dot || undefined}
-          style={{ left: 156.67 + 53.33 * i, top: 105 }}
+          style={place(i, 105)}
           onClick={() => update({ format: { ...format, rate } })}
         >
           {rate}
