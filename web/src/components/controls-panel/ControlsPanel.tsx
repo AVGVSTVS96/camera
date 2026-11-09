@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useEffectEvent, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { useProfile } from "../../profile.ts";
 import { isToggle, toggle, type Props, type Settings, type Submenu, type Toggle } from "../../state.ts";
 import { arrange } from "./layout.ts";
@@ -152,6 +152,39 @@ export function ControlsPanel({ settings, update, from, closing, gone }: PanelPr
 
   const narrow = (orientation === "landscape") !== sheet.turned;
 
+  const tray = useRef<HTMLElement>(null);
+  const finish = useEffectEvent(gone);
+
+  useLayoutEffect(() => {
+    const box = tray.current;
+    const menu = document.querySelector<HTMLElement>(".submenu, .styles");
+
+    if (!closing || !box || !menu) return;
+
+    const turned = orientation === "landscape";
+    const [width, height] = turned ? [menu.offsetHeight, menu.offsetWidth] : [menu.offsetWidth, menu.offsetHeight];
+
+    const [x, y] = menu.matches(".submenu")
+      ? [menu.offsetLeft, menu.offsetTop]
+      : [menu.offsetLeft + menu.offsetWidth / 2, menu.offsetTop + menu.offsetHeight / 2];
+
+    const shrink = box.animate(
+      [
+        {},
+        {
+          left: `${x - width / 2}px`,
+          top: `${y - height / 2}px`,
+          width: `${width}px`,
+          height: `${height}px`,
+          opacity: 0,
+        },
+      ],
+      { delay: 165, duration: 550, easing: "cubic-bezier(0, 0, 0.58, 1)", fill: "both" },
+    );
+
+    shrink.finished.then(finish, () => {});
+  }, [closing, orientation]);
+
   const open = (name: Submenu | Toggle) =>
     isToggle(name)
       ? update({ on: toggle(settings.on, name), expanded: true })
@@ -161,11 +194,12 @@ export function ControlsPanel({ settings, update, from, closing, gone }: PanelPr
     <>
       <div className="tray-backdrop" data-closing={closing || undefined} onClick={dismiss} />
       <section
+        ref={tray}
         className="tray"
         aria-label="Camera controls"
         data-closing={closing || undefined}
         data-handoff={settings.submenu ? true : undefined}
-        onAnimationEnd={() => closing && gone()}
+        onAnimationEnd={() => closing && !settings.submenu && gone()}
         style={{
           left: sheet.left,
           top: sheet.top,
