@@ -188,11 +188,14 @@ export function ControlsPanel({ settings, update, from, closing, gone }: PanelPr
   }, [closing, orientation]);
 
   const open = (name: Submenu | Toggle) => {
+    if (!isToggle(name)) return update({ submenu: name, tray: false, expanded: false });
+
+    const on = toggle(settings.on, name);
+
     if (name === "Smart Take" && unseen("smart-take")) {
       remember("smart-take");
-      update({ tray: false, expanded: false });
-    } else if (isToggle(name)) update({ on: toggle(settings.on, name), expanded: true });
-    else update({ submenu: name, tray: false, expanded: false });
+      update({ on, tray: false, expanded: false });
+    } else update({ on, expanded: true });
   };
 
   return (
