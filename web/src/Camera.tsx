@@ -18,6 +18,7 @@ import { Sheet } from "./components/sheets/Sheet.tsx";
 import { Shutter } from "./components/shutter/Shutter.tsx";
 import { SubmenuStyles } from "./components/submenu-styles/SubmenuStyles.tsx";
 import { SubmenuDepth } from "./components/submenu-depth/SubmenuDepth.tsx";
+import { SubmenuFlash } from "./components/submenu-flash/SubmenuFlash.tsx";
 import { SubmenuExposure } from "./components/submenu-exposure/SubmenuExposure.tsx";
 import { SmartTake } from "./components/smart-take/SmartTake.tsx";
 import { SubmenuVideoFormat } from "./components/submenu-video-format/SubmenuVideoFormat.tsx";
@@ -128,6 +129,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
       {settings.format && <SubmenuVideoFormat {...props} />}
       {settings.livePhoto && <SubmenuLivePhoto {...props} />}
       {settings.aspect && <SubmenuAspectRatio {...props} />}
+      {settings.flashMenu && <SubmenuFlash {...props} />}
       {settings.balance && <SubmenuWhiteBalance {...props} />}
       <Countdown settings={settings} />
       {profile.lighting !== false && !settings.tray && !styling && !movie && !settings.holding && (

@@ -1,0 +1,22 @@
+.flash-value {
+  position: absolute;
+  inset: 56px 0 auto;
+  height: 36px;
+  text-align: center;
+  font-size: 28px;
+  line-height: 36px;
+}
+
+.flash-option {
+  position: absolute;
+  top: 78px;
+  width: 75px;
+  height: 75px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+}
+
+.flash-option[data-on] {
+  color: #ffcc00;
+}

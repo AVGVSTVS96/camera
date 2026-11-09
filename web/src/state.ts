@@ -66,6 +66,7 @@ export interface Settings {
   format: { resolution: "HD" | "4K"; rate: number } | null;
   balance: string | null;
   livePhoto: LivePhoto | null;
+  flashMenu: Flash | null;
   exposure: number | null;
   focus?: { value: number; auto: boolean };
   styles: boolean;
@@ -124,6 +125,7 @@ export function initialSettings(profile: Profile, mode: Mode = "photo", facing: 
     format: null,
     balance: null,
     livePhoto: null,
+    flashMenu: null,
     exposure: null,
     styles: false,
     style: "standard",
@@ -166,6 +168,8 @@ const livePhotoOf = (c: Controls): LivePhoto | null =>
         ? "on"
         : "off"
     : null;
+
+const flashChoice = (c: Controls): Flash => ({ on: "on", off: "off" })[String(c.selected).toLowerCase()] ?? "auto";
 
 const lightingControls = ["Aspect Ratio", "Exposure", "Flash", "Live Photo", "Timer"];
 
@@ -292,6 +296,7 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
     on: c.control && (c.to === "On" || c.to === "Adaptive") ? [String(c.control)] : [],
     submenu: c.panel === "submenu",
     format: formatOf(mode, c),
+    flashMenu: c.panel === "submenu" && c.control === "Flash" ? flashChoice(c) : null,
     balance: c.panel === "submenu" && c.control === "White Balance" ? String(c.selected).toLowerCase() : null,
     livePhoto: livePhotoOf(c),
     exposure: c.panel === "submenu" && c.control === "Exposure" ? exposureOf(c) : null,
