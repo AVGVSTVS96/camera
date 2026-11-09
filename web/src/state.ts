@@ -152,6 +152,7 @@ export interface Settings extends Pose {
   countdown: number;
   holding: boolean;
   recording: boolean;
+  paused: boolean;
   viewer: boolean;
   sheet?: Sheet;
 }
@@ -245,6 +246,7 @@ export function initialSettings(profile: Profile, pose: Pose, mode: Mode = "phot
     countdown: 0,
     holding: false,
     recording: false,
+    paused: false,
     viewer: false,
   };
 }
@@ -387,6 +389,7 @@ export function reached(state: ParityState, profile = state.profile ?? duo): Set
     countdown: c.action === "countdown running" ? (timerOf(c) ?? 0) - (state.id.endsWith("-2") ? 3 : 1) : 0,
     holding: c.action === "shutter held (QuickTake)",
     recording: c.action === "recording",
+    paused: false,
     viewer: state.mode === "viewer",
     sheet: sheets.get(String(c.sheet)),
   };

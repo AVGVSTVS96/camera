@@ -1,5 +1,5 @@
 import { useEffect, useEffectEvent, useRef, useState } from "react";
-import { record, snapshot, useCamera } from "./capture.ts";
+import { record, snapshot, useCamera, type Recording as Take } from "./capture.ts";
 import { useLibrary } from "./library.ts";
 import { AspectFlip } from "./components/aspect-flip/AspectFlip.tsx";
 import { ControlsButton } from "./components/controls-button/ControlsButton.tsx";
@@ -55,7 +55,7 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
   if (settings.tray && !shown) setShown(true);
 
   const lock = useRef<HTMLButtonElement>(null);
-  const stop = useRef<() => Promise<File>>(undefined);
+  const take = useRef<Take>(undefined);
   const { video, stream, error } = useCamera(settings, !still);
   const update: Update = (change) => setSettings((s) => ({ ...s, ...change }));
   const movie = movieModes.has(settings.mode);
@@ -87,39 +87,52 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
   }, [onSettings, settings]);
 
   async function finish() {
-    const end = stop.current;
+    const current = take.current;
 
-    if (!end || !video.current) return;
+    if (!current || !video.current) return;
 
-    stop.current = undefined;
-    update({ holding: false, recording: false });
-    const [file, frame] = await Promise.all([end(), snapshot(video.current)]);
+    take.current = undefined;
+    update({ holding: false, recording: false, paused: false });
+    const [file, frame] = await Promise.all([current.stop(), snapshot(video.current)]);
     add({ url: URL.createObjectURL(file), file, poster: frame.url, frame: frame.file });
   }
 
   async function capture() {
     if (!video.current || !stream) return;
 
-    if (stop.current) return finish();
+    if (take.current) return finish();
 
     if (!movie) return add(await snapshot(video.current));
 
-    stop.current = record(stream);
+    take.current = record(stream);
     update({ recording: true });
   }
 
   function shutter() {
     if (settings.countdown) return update({ countdown: 0 });
 
-    if (settings.timer && !stop.current) return update({ countdown: settings.timer });
+    if (settings.timer && !take.current) return update({ countdown: settings.timer });
 
     return capture();
+  }
+
+  function pause() {
+    const paused = !settings.paused;
+
+    if (paused) take.current?.pause();
+    else take.current?.resume();
+
+    update({ paused });
+  }
+
+  async function takePicture() {
+    if (video.current) add(await snapshot(video.current));
   }
 
   function hold() {
     if (!stream) return;
 
-    stop.current = record(stream);
+    take.current = record(stream);
     update({ holding: true });
   }
 
@@ -180,7 +193,7 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
       {settings.sheet && settings.sheet !== "choose" && <div className="sheet-scrim" />}
       {settings.grid && <Grid />}
       {settings.recording || settings.holding ? (
-        <Recording settings={settings} lockRef={lock} />
+        <Recording settings={settings} lockRef={lock} onPause={pause} onStill={takePicture} />
       ) : (
         (profile.badges || settings.tray) && (
           <div className="row top">

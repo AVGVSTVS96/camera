@@ -72,19 +72,29 @@ export function snapshot(video: HTMLVideoElement) {
   );
 }
 
-export function record(stream: MediaStream) {
+export interface Recording {
+  stop: () => Promise<File>;
+  pause: () => void;
+  resume: () => void;
+}
+
+export function record(stream: MediaStream): Recording {
   const type = ["video/mp4", "video/webm"].find((t) => MediaRecorder.isTypeSupported(t)) ?? "";
   const recorder = new MediaRecorder(stream, { mimeType: type });
   const chunks: Blob[] = [];
   recorder.ondataavailable = (e) => chunks.push(e.data);
   recorder.start();
 
-  return () =>
-    new Promise<File>((resolve) => {
-      recorder.onstop = () =>
-        resolve(new File(chunks, `VID_${Date.now()}.${type.includes("mp4") ? "mp4" : "webm"}`, { type }));
-      recorder.stop();
-    });
+  return {
+    stop: () =>
+      new Promise<File>((resolve) => {
+        recorder.onstop = () =>
+          resolve(new File(chunks, `VID_${Date.now()}.${type.includes("mp4") ? "mp4" : "webm"}`, { type }));
+        recorder.stop();
+      }),
+    pause: () => recorder.pause(),
+    resume: () => recorder.resume(),
+  };
 }
 
 export async function save(file: File) {
