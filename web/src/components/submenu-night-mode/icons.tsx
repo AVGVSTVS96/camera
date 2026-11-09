@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-const moon = "M45 21.7A34 34 0 1 0 86.7 64A31 31 0 0 1 45 21.7Z";
+const moon = "M45 21.7A33.2 33.2 0 1 0 86.7 64A31 31 0 0 1 45 21.7Z";
 
 const dots = [
   [57.8, 22.5],
@@ -13,9 +13,9 @@ const dots = [
   [86.2, 50.5],
 ] as const;
 
-function Glyph({ children }: { children: ReactNode }) {
+function Glyph({ children, dx = 0, dy = 0 }: { children: ReactNode; dx?: number; dy?: number }) {
   return (
-    <svg width="30" height="30" viewBox="10.5 9.5 90 90" fill="currentColor" aria-hidden>
+    <svg width="30" height="30" viewBox={`${10.5 - dx} ${9.5 - dy} 90 90`} fill="currentColor" aria-hidden>
       {children}
     </svg>
   );
@@ -25,9 +25,7 @@ const Dots = () => dots.map(([cx, cy]) => <circle key={`${cx}-${cy}`} cx={cx} cy
 
 export const NightAuto = () => (
   <Glyph>
-    <g transform="translate(-0.8 -0.8)">
-      <path d={moon} />
-    </g>
+    <path d={moon} />
     <path
       d="M58.2 50.3 68.7 24.5 79.9 50.3M62.3 40h12.8"
       fill="none"
@@ -40,14 +38,14 @@ export const NightAuto = () => (
 );
 
 export const NightMax = () => (
-  <Glyph>
+  <Glyph dx={1.5} dy={2}>
     <path d={moon} />
     <Dots />
   </Glyph>
 );
 
 export const NightOff = () => (
-  <Glyph>
+  <Glyph dx={1} dy={2}>
     <path
       d="M25.6 38.1A35 35 0 0 0 66.3 79"
       fill="none"
