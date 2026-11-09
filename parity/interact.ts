@@ -204,6 +204,7 @@ async function time(browser: Browser, url: URL, name?: string) {
       if ("outside" in route) return { id: t.id, component: t.component, verdict: "missing" as const };
 
       const driver = await open(browser, url, state, route.launch);
+      await driver.page.addStyleTag({ content: ".viewfinder { box-shadow: 0 0 0 100vmax #000 }" });
 
       try {
         for (const step of route.steps) {
