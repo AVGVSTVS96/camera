@@ -1,12 +1,13 @@
+import type { ReactNode } from "react";
 import type { Flash, Props } from "../../state.ts";
-import { Bolt } from "../controls-panel/icons.tsx";
 import { Submenu } from "../submenu/Submenu.tsx";
+import { Automatic, Off, On } from "./icons.tsx";
 import "./submenu-flash.css";
 
-const options: { id: Flash; label: string; name: string }[] = [
-  { id: "auto", label: "Automatic", name: "Auto" },
-  { id: "on", label: "On", name: "On" },
-  { id: "off", label: "Off", name: "Off" },
+const options: { id: Flash; label: string; name: string; glyph: ReactNode }[] = [
+  { id: "auto", label: "Automatic", name: "Auto", glyph: <Automatic /> },
+  { id: "on", label: "On", name: "On", glyph: <On /> },
+  { id: "off", label: "Off", name: "Off", glyph: <Off /> },
 ];
 
 export function SubmenuFlash({ settings, update }: Props) {
@@ -15,7 +16,7 @@ export function SubmenuFlash({ settings, update }: Props) {
   return (
     <Submenu title="Flash" className="flash" back={() => update({ submenu: false, flashMenu: null })}>
       <output className="flash-value">{current.name}</output>
-      {options.map(({ id, label }, i) => (
+      {options.map(({ id, label, glyph }, i) => (
         <button
           key={id}
           className="flash-option"
@@ -24,7 +25,7 @@ export function SubmenuFlash({ settings, update }: Props) {
           aria-label={label}
           onClick={() => update({ flashMenu: id })}
         >
-          <Bolt flash={id} />
+          {glyph}
         </button>
       ))}
     </Submenu>
