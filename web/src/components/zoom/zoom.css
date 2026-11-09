@@ -24,6 +24,10 @@
   text-shadow: none;
 }
 
+.screen[data-profile="duo"][data-mode="video"] .zoom [data-on] {
+  background: rgb(255 255 255 / 0.2);
+}
+
 .zoom[data-dial] {
   opacity: 0.1;
 }
