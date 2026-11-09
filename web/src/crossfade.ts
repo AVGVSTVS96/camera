@@ -1,7 +1,7 @@
 import { flushSync } from "react-dom";
 
 const still = ".viewfinder, .dial";
-const looks = ["width", "height", "backgroundColor", "boxShadow", "color"] as const;
+const looks = ["width", "height", "borderRadius", "transform", "backgroundColor", "boxShadow", "color"] as const;
 
 /** Markup that didn't change can still look different when the screen's attributes restyle it. */
 function alike(before: Element, after: Element) {
@@ -21,7 +21,8 @@ function fade(old: Element, now: Element, timing: KeyframeAnimationOptions, fade
 
     const same = before && after && alike(before, after);
 
-    if (before?.matches(still) || (same && before.outerHTML === after.outerHTML)) before.remove();
+    if ((before?.matches(still) && after?.matches(still)) || (same && before.outerHTML === after.outerHTML))
+      before.remove();
     else if (same && before.children.length && after.children.length) fade(before, after, timing, fades);
     else {
       if (before) fades.push(before.animate({ opacity: [1, 0] }, { ...timing, fill: "both" }));
