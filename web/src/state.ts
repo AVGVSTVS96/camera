@@ -179,12 +179,11 @@ const livePhotoOf = (c: Controls): LivePhoto | null =>
         : "off"
     : null;
 
-const flashChoices = new Map<string, Flash>([
-  ["on", "on"],
-  ["off", "off"],
-]);
+const flashChoice = (c: Controls): Flash => {
+  const name = String(c.selected).toLowerCase();
 
-const flashChoice = (c: Controls) => flashChoices.get(String(c.selected).toLowerCase()) ?? "auto";
+  return name === "on" || name === "off" ? name : "auto";
+};
 
 const lightingControls = ["Aspect Ratio", "Exposure", "Flash", "Live Photo", "Timer"];
 
