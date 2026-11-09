@@ -32,9 +32,10 @@ export const Seconds = ({ value }: { value: number }) => (
       textAnchor="middle"
       fill="currentColor"
       stroke="none"
-      fontFamily="system-ui" fontVariantNumeric="slashed-zero" letterSpacing="-0.5"
-      fontSize={value > 9 ? 12.500 : 15}
+      fontSize={value > 9 ? 12.5 : 15}
       fontWeight="500"
+      letterSpacing="-0.5"
+      style={{ fontVariantNumeric: "slashed-zero" }}
     >
       {value}
     </text>
