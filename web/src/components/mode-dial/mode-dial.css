@@ -70,7 +70,7 @@
 }
 
 .dial[data-profile="duo"] .window {
-  mask: none;
+  mask: linear-gradient(to right, rgb(0 0 0 / 0.2), #000 7%, #000 91%, rgb(0 0 0 / 0.4));
 }
 
 .dial[data-profile="duo"] .labels [data-on] {
@@ -82,7 +82,7 @@
 }
 
 .screen[data-mode="video"] .dial[data-profile="duo"] .labels [data-on] {
-  background: rgb(255 255 215 / 0.36);
+  background: rgb(255 250 185 / 0.49);
 }
 
 .screen[data-sheet] .dial {
