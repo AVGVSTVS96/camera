@@ -7,6 +7,15 @@
   -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
   color: #fff;
+  animation: submenu-in 0.34s cubic-bezier(0, 0, 0.58, 1);
+}
+
+@keyframes submenu-in {
+  from {
+    opacity: 0;
+    scale: 0.9;
+    filter: blur(8px);
+  }
 }
 
 .screen[data-orientation="portrait"][data-display="outer"] .submenu {
