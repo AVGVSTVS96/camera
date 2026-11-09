@@ -6,6 +6,7 @@
   --w: 100vw;
   --h: 100dvh;
   --chrome: var(--w);
+  --chrome-h: var(--h);
   --side: 175px;
   --glyph-turn: 0deg;
 }
@@ -14,19 +15,28 @@
   --chrome: min(var(--w), var(--h) * 9 / 16);
 }
 
+.screen[data-movie][data-orientation="landscape"] {
+  --chrome: min(var(--w), var(--h) * 16 / 9);
+  --chrome-h: min(var(--h), var(--w) * 9 / 16);
+}
+
 .screen[data-orientation="landscape"] {
   --glyph-turn: 90deg;
 }
 
 .viewfinder {
   position: absolute;
-  inset-block: 0;
+  top: 50%;
   left: 50%;
   width: var(--chrome);
-  translate: -50%;
+  height: var(--chrome-h);
+  translate: -50% -50%;
   overflow: hidden;
   background: #1c1c1e;
-  transition: width var(--switch-time, 0.35s) var(--switch-ease, ease) var(--switch-delay, 0s);
+  transition-property: width, height;
+  transition-duration: var(--switch-time, 0.35s);
+  transition-timing-function: var(--switch-ease, ease);
+  transition-delay: var(--switch-delay, 0s);
 }
 
 [data-still] .screen {

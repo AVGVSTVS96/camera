@@ -73,9 +73,16 @@
 }
 
 .screen[data-display="inner"][data-orientation="portrait"]:is([data-movie], [data-holding], [data-wide]) .viewfinder {
-  top: 98px;
-  left: 134px;
+  inset: 98px auto 0 134px;
   width: 535px;
+  height: auto;
+  translate: none;
+}
+
+.screen[data-display="inner"][data-orientation="landscape"]:is([data-movie], [data-holding], [data-wide]) .viewfinder {
+  inset: 0 0 auto 98px;
+  width: auto;
+  height: 535px;
   translate: none;
 }
 

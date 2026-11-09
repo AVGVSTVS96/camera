@@ -60,9 +60,9 @@
   --edge: #0000002b;
   position: absolute;
   left: var(--gx, calc(50% - var(--chrome) / 2));
-  top: var(--gy, 0px);
+  top: var(--gy, calc(50% - var(--chrome-h) / 2));
   width: var(--gw, var(--chrome));
-  height: var(--gh, 100%);
+  height: var(--gh, var(--chrome-h));
   background:
     linear-gradient(
       to right,
