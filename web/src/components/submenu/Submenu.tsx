@@ -71,7 +71,7 @@ export function Submenu({
   children: ReactNode;
 }) {
   return (
-    <section className={`submenu ${className}`} style={{ clipPath: `path("${PANEL}")` }} aria-label={title}>
+    <section className={`submenu ${className}`} style={{ clipPath: `path("${PANEL}")` }}>
       <svg className="submenu-rim" viewBox={`0 0 ${WIDTH} ${HEIGHT}`} aria-hidden>
         <defs>
           <linearGradient id="submenu-rim" x1="0" y1="0.3" x2="0" y2="1">

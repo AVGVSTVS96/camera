@@ -4,7 +4,7 @@ import { createRoot } from "react-dom/client";
 import { Camera } from "./Camera.tsx";
 import { restore, unseen } from "./memory.ts";
 import { duo, ProfileContext, type Profile } from "./profile.ts";
-import { initialSettings, loadState, poseOf, settingsFor, type Settings } from "./state.ts";
+import { initialSettings, loadState, poseOf, reached, settingsFor, type Settings } from "./state.ts";
 
 declare global {
   interface Window {
@@ -27,7 +27,7 @@ if (id) {
   document.documentElement.dataset.still = "";
   root.render(
     <ProfileContext value={state.profile ?? duo}>
-      <Camera initial={settingsFor(state)} still={id} />
+      <Camera initial={params.has("reached") ? reached(state) : settingsFor(state)} still={id} />
     </ProfileContext>,
   );
   await document.fonts.ready;

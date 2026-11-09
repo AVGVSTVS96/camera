@@ -52,7 +52,7 @@ bun run interact photo-outer-portrait-flash-on   # one state, its verdict and wh
 
 It opens the real app (`?live=<id>`) in Chromium as a phone of that state's size, with a gray fake camera, Apple's plate behind it and a paused clock, then replays the taps Apple's capture scripts made from launch: Camera Controls → Expand → Flash → On. Each step finds its target the way VoiceOver does, by Apple's accessibility label (any case), so a control needs Apple's label (`aria-label`, or its text) to be reachable. Taps and gestures are real touches; waits move the clock; sliders take ArrowUp/ArrowDown, one tick each. Each state ends as:
 
-- **reachable**: the app's settings equal `settingsFor(state)` (the fields that follow capture history are skipped) and the live screenshot scores within 3 points of the forced one, per component.
+- **reachable**: the app's settings equal `reached(state)` and the live screenshot scores within 3 points of the forced one, per component. The forced render for this comparison is `?state=<id>&reached`, which shows `reached()` and leaves out `settingsFor()`'s leftovers.
 - **unreachable**: a step's target is missing or covered, or a step changed nothing and the end state is wrong. The step is named.
 - **wrong**: every step did something, but the settings differ (each field is listed) or the live render scores lower.
 
@@ -64,6 +64,17 @@ The full run from `~/Developer/camera` adds a Live column (reachable / wrong / u
 cd ~/Developer/camera && git pull
 TURN_POOL=parity TURN_SLOTS=4 BROWSERS=8 turn bun run interact
 ```
+
+### Remembered vs simulator artifact
+
+`settingsFor()` adds what Apple's simulator carried over from earlier captures to `reached()`, so the still scorer matches Apple's pixels. The answer key's `manifest.jsonl` order shows where each one came from, and none of them follows from the taps a person makes from launch, so the live app doesn't implement them and `interact` doesn't count them:
+
+- `depth`: tapping Depth turns it on, and `reached()` and the Depth button do that. What is left over is the oracle not turning it off after `*-depth-depth`, so every later control state in that pose (Flash, Timer, White Balance, Night Mode, ...) shows it on.
+- `lighting`: the `*-lighting-inc/dec` states move the Portrait Lighting cube, and the states after them keep where it stopped.
+- `zoomTurn`: the stops' glyph turn follows the Device Hub orientation the last touch left behind (a viewfinder tap flips it 180 in portrait Photo), not any control.
+- `wideTimeLapse`, `apertureOf`, sticky 4K: Time-lapse left on the ultra wide lens, the f-stop and the 4K choice from earlier states in the pose.
+
+Camera does keep Portrait Lighting and Depth while the app stays open, and the live model does too: `switchMode` and every submenu leave `lighting` and `depth` alone, so a route that sets them keeps them. A turn of the stops with the device (Apple rotates glyphs, not the window) is real, but it follows the pose and belongs to posture, not to these leftovers. A difference that isn't one of these fields is a real difference: it stays "wrong".
 
 ## What you own
 

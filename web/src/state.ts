@@ -348,6 +348,8 @@ function choose(settings: Settings, c: Controls): Partial<Settings> {
       return format ? { formats: { ...formats, [mode]: formatOf(mode, c, format) } } : {};
     case "Video Resolution":
       return { videoResolution: c.selected === "4K" ? "4K" : "HD" };
+    case "Depth":
+      return c.selected === "Depth" ? { depth: true } : {};
     case "Focus":
       return { focus: focusOf(c.value) };
     case "Center Stage":

@@ -107,7 +107,7 @@ function differences(want: Settings, got: Settings) {
 async function forced(browser: Browser, url: URL, state: State) {
   const context = await phone(browser, state);
   const page = await context.newPage();
-  await page.goto(new URL(`/?state=${state.id}`, url).href);
+  await page.goto(new URL(`/?state=${state.id}&reached`, url).href);
   await page.waitForSelector("html[data-ready]");
   const path = join(dir, "forced", `${state.id}.png`);
   await page.screenshot({ path });
