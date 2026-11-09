@@ -79,6 +79,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
       data-styles={settings.styles || undefined}
       data-countdown={settings.countdown || undefined}
       data-holding={settings.holding || undefined}
+      data-wide={settings.aspect === "16:9" || undefined}
       data-recording={settings.recording || undefined}
       style={still ? { backgroundImage: `url(/plates/${still}.png)` } : undefined}
     >
@@ -120,7 +121,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
             )}
           </div>
           <div className="row modes">
-            {!settings.submenu && !settings.holding && !settings.recording && (
+            {!settings.submenu && !settings.aspect && !settings.holding && !settings.recording && (
               <Thumbnail shot={shot} open={() => update({ viewer: true })} />
             )}
           </div>

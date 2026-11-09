@@ -25,7 +25,7 @@
     inset -2px 0 0 #fff;
 }
 
-.screen:is([data-movie], [data-holding]) .inner-edge {
+.screen:is([data-movie], [data-holding], [data-wide]) .inner-edge {
   inset: 98px 0 0 134px;
 }
 
@@ -36,7 +36,7 @@
     inset 0 -3px 0 #fff;
 }
 
-.screen:is([data-movie], [data-holding])[data-orientation="landscape"] .inner-edge {
+.screen:is([data-movie], [data-holding], [data-wide])[data-orientation="landscape"] .inner-edge {
   inset: 0 0 134px 98px;
 }
 
@@ -56,7 +56,7 @@
   white-space: nowrap;
 }
 
-.screen:is([data-movie], [data-holding]) .inner-preview {
+.screen:is([data-movie], [data-holding], [data-wide]) .inner-preview {
   left: 401.5px;
   top: 572px;
 }
@@ -67,12 +67,12 @@
   rotate: 90deg;
 }
 
-.screen:is([data-movie], [data-holding])[data-orientation="landscape"] .inner-preview {
+.screen:is([data-movie], [data-holding], [data-wide])[data-orientation="landscape"] .inner-preview {
   left: 573px;
   top: 268px;
 }
 
-.screen[data-display="inner"][data-orientation="portrait"]:is([data-movie], [data-holding]) .viewfinder {
+.screen[data-display="inner"][data-orientation="portrait"]:is([data-movie], [data-holding], [data-wide]) .viewfinder {
   top: 98px;
   left: 134px;
   width: 535px;
