@@ -84,6 +84,7 @@ export interface Settings {
   sheet?: Sheet;
   timer: number | null;
   timerMenu: boolean;
+  resolutionMenu: 24 | 48 | null;
   depth: boolean;
   aperture: Aperture | null;
   orientation: Orientation;
@@ -144,6 +145,7 @@ export function initialSettings(profile: Profile, mode: Mode = "photo", facing: 
     recording: false,
     timer: null,
     timerMenu: false,
+    resolutionMenu: null,
     depth: false,
     aperture: null,
     orientation: "portrait",
@@ -215,6 +217,8 @@ const focusOf = (c: Controls) =>
   c.panel === "submenu" && c.control === "Focus"
     ? { value: Number.parseFloat(String(c.value)) || 0, auto: c.value === "Auto" }
     : undefined;
+
+const resolutionOf = (selected: Controls["selected"]) => ([selected].flat().join().startsWith("48") ? 48 : 24);
 
 const timerOf = (c: Controls) => Number.parseInt(String(c.control === "Timer" ? c.selected : c.timer)) || null;
 
@@ -329,6 +333,7 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
     sheet: sheets.get(String(c.sheet)),
     timer: timerOf(c),
     timerMenu: c.control === "Timer",
+    resolutionMenu: c.panel === "submenu" && c.control === "Resolution" ? resolutionOf(c.selected) : null,
     depth: depthOn(state, c),
     aperture: c.panel === "submenu" && c.control === "Depth" ? apertureOf(state, c) : null,
     orientation: state.orientation,

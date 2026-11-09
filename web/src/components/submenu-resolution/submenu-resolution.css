@@ -1,0 +1,27 @@
+.submenu.resolution {
+  background: #1f1f1f;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border-radius: 46px;
+}
+
+.resolution-value {
+  position: absolute;
+  inset: 56.67px 0 auto;
+  text-align: center;
+  font-size: 30px;
+  line-height: 36px;
+}
+
+.resolution-option {
+  position: absolute;
+  top: 78px;
+  height: 75px;
+  padding-bottom: 12px;
+  font-size: 17px;
+  color: #fff;
+}
+
+.resolution-option[data-on] {
+  color: #ffd600;
+}

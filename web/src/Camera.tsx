@@ -16,6 +16,7 @@ import { ModeDial } from "./components/mode-dial/ModeDial.tsx";
 import { Recording } from "./components/recording/Recording.tsx";
 import { Sheet } from "./components/sheets/Sheet.tsx";
 import { Shutter } from "./components/shutter/Shutter.tsx";
+import { SubmenuResolution } from "./components/submenu-resolution/SubmenuResolution.tsx";
 import { SubmenuTimer } from "./components/submenu-timer/SubmenuTimer.tsx";
 import { SubmenuStyles } from "./components/submenu-styles/SubmenuStyles.tsx";
 import { SubmenuDepth } from "./components/submenu-depth/SubmenuDepth.tsx";
@@ -132,6 +133,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
       {settings.livePhoto && <SubmenuLivePhoto {...props} />}
       {settings.aspect && <SubmenuAspectRatio {...props} />}
       {settings.flashMenu && <SubmenuFlash {...props} />}
+      {settings.resolutionMenu && <SubmenuResolution {...props} />}
       {settings.balance && <SubmenuWhiteBalance {...props} />}
       {settings.nightMenu && <SubmenuNightMode {...props} />}
       <Countdown settings={settings} />
