@@ -164,6 +164,7 @@ async function check(browser: Browser, url: URL, state: State): Promise<Reached>
 
     const shot = join(dir, "live", `${state.id}.png`);
 
+    await page.addStyleTag({ content: ".thumb img { visibility: hidden }" });
     await page.screenshot({ path: shot });
 
     const [ours, theirs] = await Promise.all([
