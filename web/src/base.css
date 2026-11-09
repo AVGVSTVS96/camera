@@ -93,3 +93,7 @@ button {
 [role="slider"] {
   outline: none;
 }
+
+.screen {
+  touch-action: none;
+}

@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useProfile } from "../../profile.ts";
 import type { Props, Settings } from "../../state.ts";
 import { layout, slot } from "./layout.ts";
@@ -25,6 +25,12 @@ function stopsOf({ mode, formats, display, orientation }: Settings, own: number[
   return format.resolution === "4K" ? [1, 2] : own;
 }
 
+const perDoubling = 25;
+
+const clamp = (value: number, low: number, high: number) => Math.min(high, Math.max(low, value));
+
+const round = (value: number) => Math.round(value * 100) / 100;
+
 export function Zoom({ settings, update }: Props) {
   const profile = useProfile();
   const own = profile.zoom[`${settings.facing}-${settings.mode}`]?.stops ?? [];
@@ -48,18 +54,106 @@ export function Zoom({ settings, update }: Props) {
       : stops.length - 1
     : stops.lastIndexOf(Math.max(...stops.filter((s) => s <= zoom + 0.001)));
 
-  if (!stops.length) return null;
-
   const place = layout(settings, profile.name === "duo");
   const [ax, ay] = place.along;
   const shift = anchored ? place.lone - (place.vertical ? place.y : place.x) : 0;
   const marker = Math.atan2(-place.into[1], -place.into[0]) * (180 / Math.PI) - 90;
 
+  const low = settings.mode === "portrait" ? 0.5 : Math.min(...stops);
+  const high = Math.max(10, ...stops);
+  const self = useRef<HTMLDivElement>(null);
+  const latest = useRef({ zoom: settings.zoom, low, high, update });
+
+  useEffect(() => {
+    latest.current = { zoom: settings.zoom, low, high, update };
+  });
+
   function open() {
     clearTimeout(hide.current);
     update({ dial: true });
-    hide.current = window.setTimeout(() => update({ dial: false }), 2000);
+    hide.current = window.setTimeout(() => update({ dial: false }), 2600);
   }
+
+  function drag(e: React.PointerEvent<HTMLDivElement>) {
+    const grab = e.currentTarget;
+    const from = { x: e.clientX, y: e.clientY, zoom: settings.zoom };
+    let turning = false;
+
+    const move = (m: PointerEvent) => {
+      const along = (m.clientX - from.x) * ax + (m.clientY - from.y) * ay;
+
+      if (!turning && Math.hypot(m.clientX - from.x, m.clientY - from.y) < 8) return;
+
+      if (!turning) grab.setPointerCapture(e.pointerId);
+
+      turning = true;
+      open();
+      update({
+        zoom: round(clamp(from.zoom * 2 ** (along / perDoubling), low, high)),
+        ...(settings.mode === "portrait" && { lenses: true }),
+      });
+    };
+
+    const end = () => {
+      grab.removeEventListener("pointermove", move);
+      grab.removeEventListener("pointerup", end);
+      grab.removeEventListener("pointercancel", end);
+    };
+
+    grab.addEventListener("pointermove", move);
+    grab.addEventListener("pointerup", end);
+    grab.addEventListener("pointercancel", end);
+  }
+
+  useEffect(() => {
+    const screen = self.current?.closest<HTMLElement>(".screen");
+
+    if (!screen) return;
+
+    const touches = new Map<number, { x: number; y: number }>();
+    let pinch: { span: number; zoom: number } | undefined;
+
+    const span = () => {
+      const [a, b] = [...touches.values()];
+
+      return Math.hypot(b.x - a.x, b.y - a.y);
+    };
+
+    const down = (e: PointerEvent) => {
+      if (e.pointerType === "mouse") return;
+
+      touches.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      pinch = touches.size === 2 ? { span: span(), zoom: latest.current.zoom } : undefined;
+    };
+
+    const move = (e: PointerEvent) => {
+      if (!touches.has(e.pointerId)) return;
+
+      touches.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+      if (!pinch) return;
+
+      const range = latest.current;
+      range.update({ zoom: round(clamp(pinch.zoom * (span() / pinch.span), range.low, range.high)) });
+    };
+
+    const up = (e: PointerEvent) => {
+      touches.delete(e.pointerId);
+      pinch = undefined;
+    };
+
+    screen.addEventListener("pointerdown", down);
+    screen.addEventListener("pointermove", move);
+    screen.addEventListener("pointerup", up);
+    screen.addEventListener("pointercancel", up);
+
+    return () => {
+      screen.removeEventListener("pointerdown", down);
+      screen.removeEventListener("pointermove", move);
+      screen.removeEventListener("pointerup", up);
+      screen.removeEventListener("pointercancel", up);
+    };
+  }, []);
 
   const offset = (i: number) => {
     const k = anchored ? i : i - active;
@@ -67,6 +161,8 @@ export function Zoom({ settings, update }: Props) {
 
     return `${along * ax + (place.vertical ? 0 : shift)}px ${along * ay + (place.vertical ? shift : 0)}px`;
   };
+
+  if (!stops.length) return null;
 
   return (
     <>
@@ -88,10 +184,11 @@ export function Zoom({ settings, update }: Props) {
         </svg>
       )}
       <div
+        ref={self}
         className="zoom"
         data-dial={showDial || undefined}
         style={{ left: place.x, top: place.y }}
-        onPointerMove={(e) => e.buttons && open()}
+        onPointerDown={drag}
       >
         {stops.map((stop, i) => (
           <button
