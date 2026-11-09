@@ -25,6 +25,20 @@ function stopsOf({ mode, formats, display, orientation }: Settings, own: number[
   return format.resolution === "4K" ? [1, 2] : own;
 }
 
+const lensBlur = [
+  { filter: "blur(0)" },
+  { filter: "blur(4px)", offset: 0.1 },
+  { filter: "blur(8px)", offset: 0.85 },
+  { filter: "blur(0)" },
+];
+
+/** The preview blurs while Camera ramps to a tapped stop. */
+function zoomTo(stop: number, from: number, update: Props["update"]) {
+  if (stop !== from) document.querySelector(".viewfinder")?.animate(lensBlur, { duration: 550, delay: 40 });
+
+  update({ zoom: stop });
+}
+
 const clamp = (value: number, low: number, high: number) => Math.min(high, Math.max(low, value));
 
 const round = (value: number) => Math.round(value * 100) / 100;
@@ -208,7 +222,9 @@ export function Zoom({ settings, update }: Props) {
             key={i}
             data-on={i === active || undefined}
             style={{ translate: offset(i), rotate: `${settings.zoomTurn}deg` }}
-            onClick={() => (anchored && stops.length === 1 ? update({ lenses: true }) : update({ zoom: stop }))}
+            onClick={() =>
+              anchored && stops.length === 1 ? update({ lenses: true }) : zoomTo(stop, settings.zoom, update)
+            }
           >
             {zoomLabel(i === active ? zoom : stop, i === active, bare)}
           </button>
