@@ -1,19 +1,11 @@
-.submenu.aspect {
-  background: #1f1f1f;
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
-}
-
-.aspect .submenu-button {
-  background: #191919;
-}
-
 .aspect-readout {
   position: absolute;
   inset: 56.3px 0 auto;
   text-align: center;
-  font-size: 36px;
-  font-weight: 500;
+  font-family: ui-rounded, system-ui;
+  font-size: 26px;
+  letter-spacing: -0.4px;
+  font-weight: 550;
   line-height: 36px;
 }
 
