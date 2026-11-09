@@ -67,6 +67,7 @@ export interface Settings {
   balance: string | null;
   livePhoto: LivePhoto | null;
   flashMenu: Flash | null;
+  nightMenu: NightMode | null;
   exposure: number | null;
   focus?: { value: number; auto: boolean };
   styles: boolean;
@@ -98,6 +99,8 @@ const sheets = new Map<string, Sheet>([
   ["photographic-styles-choose", "choose"],
 ]);
 
+export type NightMode = "auto" | "max" | "off";
+
 export type Update = (change: Partial<Settings>) => void;
 
 export interface Props {
@@ -126,6 +129,7 @@ export function initialSettings(profile: Profile, mode: Mode = "photo", facing: 
     balance: null,
     livePhoto: null,
     flashMenu: null,
+    nightMenu: null,
     exposure: null,
     styles: false,
     style: "standard",
@@ -157,6 +161,9 @@ function formatOf(mode: Mode, c: Controls): Settings["format"] {
 
   return { resolution: Array.isArray(c.selected) ? "HD" : "4K", rate };
 }
+
+const nightModeOf = (selected: Controls[string]): NightMode =>
+  ([selected].flat().map((s) => String(s).toLowerCase()).find((s) => s === "max" || s === "off") as NightMode) ?? "auto";
 
 const exposureOf = (c: Controls) => ({ dec: -0.7, inc: 0.7 })[String(c.adjust)] ?? 0;
 
@@ -304,6 +311,7 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
     flashMenu: c.panel === "submenu" && c.control === "Flash" ? flashChoice(c) : null,
     balance: c.panel === "submenu" && c.control === "White Balance" ? String(c.selected).toLowerCase() : null,
     livePhoto: livePhotoOf(c),
+    nightMenu: c.panel === "submenu" && c.control === "Night Mode" ? nightModeOf(c.selected) : null,
     exposure: c.panel === "submenu" && c.control === "Exposure" ? exposureOf(c) : null,
     focus: focusOf(c),
     styles: c.control === "Styles",

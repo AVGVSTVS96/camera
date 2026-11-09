@@ -23,6 +23,7 @@ import { SubmenuExposure } from "./components/submenu-exposure/SubmenuExposure.t
 import { SmartTake } from "./components/smart-take/SmartTake.tsx";
 import { SubmenuVideoFormat } from "./components/submenu-video-format/SubmenuVideoFormat.tsx";
 import { SubmenuLivePhoto } from "./components/submenu-live-photo/SubmenuLivePhoto.tsx";
+import { SubmenuNightMode } from "./components/submenu-night-mode/SubmenuNightMode.tsx";
 import { SubmenuWhiteBalance } from "./components/submenu-white-balance/SubmenuWhiteBalance.tsx";
 import { Thumbnail } from "./components/thumbnail/Thumbnail.tsx";
 import { TopBar } from "./components/top-bar/TopBar.tsx";
@@ -131,6 +132,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
       {settings.aspect && <SubmenuAspectRatio {...props} />}
       {settings.flashMenu && <SubmenuFlash {...props} />}
       {settings.balance && <SubmenuWhiteBalance {...props} />}
+      {settings.nightMenu && <SubmenuNightMode {...props} />}
       <Countdown settings={settings} />
       {profile.lighting !== false && !settings.tray && !styling && !movie && !settings.holding && (
         <Lighting settings={settings} />
