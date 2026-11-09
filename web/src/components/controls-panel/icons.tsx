@@ -3,7 +3,6 @@ import type { Flash } from "../../state.ts";
 
 const slash = (d = "M4 3.5 20 20.5") => (
   <>
-    <path d={d} stroke="#000" strokeWidth={3.4} />
     <path d={d} />
   </>
 );
@@ -125,12 +124,16 @@ const moon = "M15.5 17.6A8 8 0 0 1 9.2 4.4a8.3 8.3 0 1 0 10.4 10.4 8 8 0 0 1-4.1
 export const NightMode = ({ off = false }: { off?: boolean }) =>
   off ? (
     <Icon size={34}>
-      <path d={moon} transform="translate(-1.5 .5) scale(1.1)" strokeWidth={1.5} />
+      <path
+        d="M5.5 8.8a8.4 8.4 0 0 0 13.8 8.4M9.6 4.2a6 6 0 0 0 .6 7.2M19.3 17.2a6.4 6.4 0 0 1-4.2.8"
+        strokeWidth={1.7}
+      />
       {[
-        [14, 14],
-        [17.5, 11.5],
-        [11, 17],
-        [16, 17.5],
+        [14.5, 13],
+        [18, 10.5],
+        [12.5, 17],
+        [17, 16.5],
+        [19, 14],
       ].map(([x, y]) => (
         <circle key={`${x}${y}`} cx={x} cy={y} r={0.8} fill="currentColor" stroke="none" />
       ))}
@@ -138,8 +141,12 @@ export const NightMode = ({ off = false }: { off?: boolean }) =>
     </Icon>
   ) : (
     <Icon size={34}>
-      <path d={moon} fill="currentColor" stroke="none" transform="translate(-3.2 3) scale(1.2)" />
-      <text x="17.5" y="9.4" fontSize="10" fontWeight="500" fill="currentColor" stroke="none" textAnchor="middle">
+      <mask id="crescent">
+        <circle cx="10.5" cy="13.5" r="8.6" fill="#fff" />
+        <circle cx="15.8" cy="8.2" r="7.2" fill="#000" />
+      </mask>
+      <circle cx="10.5" cy="13.5" r="8.6" fill="currentColor" stroke="none" mask="url(#crescent)" />
+      <text x="17.6" y="9.6" fontSize="10.5" fontWeight="500" fill="currentColor" stroke="none" textAnchor="middle">
         A
       </text>
     </Icon>
@@ -147,10 +154,10 @@ export const NightMode = ({ off = false }: { off?: boolean }) =>
 
 export const LivePhoto = () => (
   <Icon size={34}>
-    <circle cx="11" cy="11" r="9.6" strokeDasharray="0.1 2.6" strokeWidth={1.7} />
-    <circle cx="11" cy="11" r="5.5" />
-    <circle cx="11" cy="11" r="2.4" />
-    <circle cx="18" cy="18" r="5.2" fill="currentColor" stroke="none" />
+    <circle cx="11.5" cy="11.5" r="10.2" strokeDasharray="0.1 1.75" strokeWidth={1.1} />
+    <circle cx="11.5" cy="11.5" r="6.6" strokeWidth={1.4} />
+    <circle cx="11.5" cy="11.5" r="2.8" strokeWidth={2} />
+    <circle cx="18.2" cy="18.2" r="5.2" fill="currentColor" stroke="none" />
     <path d="m16.1 20.2 1.9-4.7 1.9 4.7m-3.1-1.5h2.4" stroke="#000" strokeWidth={1.2} />
   </Icon>
 );
