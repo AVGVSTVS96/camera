@@ -52,6 +52,7 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
 
   if (settings.tray && !shown) setShown(true);
 
+  const lock = useRef<HTMLButtonElement>(null);
   const stop = useRef<() => Promise<File>>(undefined);
   const { video, stream, error } = useCamera(settings, !still);
   const update: Update = (change) => setSettings((s) => ({ ...s, ...change }));
@@ -75,9 +76,13 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
   }, [onSettings, settings]);
 
   async function finish() {
-    const [file, frame] = await Promise.all([stop.current!(), snapshot(video.current!)]);
+    const end = stop.current;
+
+    if (!end || !video.current) return;
+
     stop.current = undefined;
     update({ holding: false, recording: false });
+    const [file, frame] = await Promise.all([end(), snapshot(video.current)]);
     setShot({ url: URL.createObjectURL(file), file, poster: frame.url });
   }
 
@@ -123,9 +128,9 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
 
   const quicktake = {
     mode: settings.mode,
-    orientation: settings.orientation,
     recording: settings.recording,
     holding: settings.holding,
+    lock,
     onPress: shutter,
     onHold: hold,
     onLock: () => update({ holding: false, recording: true }),
@@ -159,7 +164,7 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
       {settings.sheet && settings.sheet !== "choose" && <div className="sheet-scrim" />}
       {settings.grid && <Grid />}
       {settings.recording || settings.holding ? (
-        <Recording settings={settings} />
+        <Recording settings={settings} lockRef={lock} />
       ) : (
         (profile.badges || settings.tray) && (
           <div className="row top">

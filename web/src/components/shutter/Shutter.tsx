@@ -1,5 +1,5 @@
-import { useRef, type PointerEvent } from "react";
-import type { Mode, Orientation } from "../../state.ts";
+import { useRef, type PointerEvent, type RefObject } from "react";
+import type { Mode } from "../../state.ts";
 import "./shutter.css";
 
 const movies: Partial<Record<Mode, [string, string]>> = {
@@ -10,13 +10,12 @@ const movies: Partial<Record<Mode, [string, string]>> = {
 };
 
 const holdMs = 500;
-const lockAt = 165;
 
 interface ShutterProps {
   mode: Mode;
-  orientation: Orientation;
   recording: boolean;
   holding: boolean;
+  lock: RefObject<HTMLElement | null>;
   onPress: () => void;
   onHold: () => void;
   onLock: () => void;
@@ -31,7 +30,7 @@ interface Touch {
   locked: boolean;
 }
 
-export function Shutter({ mode, orientation, recording, holding, onPress, onHold, onLock, onRelease }: ShutterProps) {
+export function Shutter({ mode, recording, holding, lock, onPress, onHold, onLock, onRelease }: ShutterProps) {
   const touch = useRef<Touch>(undefined);
   const swallow = useRef(false);
   const stopping = recording || holding;
@@ -54,12 +53,14 @@ export function Shutter({ mode, orientation, recording, holding, onPress, onHold
 
   function move(e: PointerEvent<HTMLButtonElement>) {
     const t = touch.current;
+    const target = lock.current?.getBoundingClientRect();
 
-    if (!t?.held || t.locked) return;
+    if (!t?.held || t.locked || !target) return;
 
-    const slid = orientation === "landscape" ? e.clientY - t.y : e.clientX - t.x;
+    const toward = { x: target.x + target.width / 2 - t.x, y: target.y + target.height / 2 - t.y };
+    const slid = (e.clientX - t.x) * toward.x + (e.clientY - t.y) * toward.y;
 
-    if (slid < lockAt) return;
+    if (slid < toward.x ** 2 + toward.y ** 2) return;
 
     t.locked = true;
     onLock();

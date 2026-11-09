@@ -1,3 +1,4 @@
+import type { RefObject } from "react";
 import "./recording.css";
 import type { Settings } from "../../state.ts";
 
@@ -15,7 +16,7 @@ const lock = (
   </svg>
 );
 
-export function Recording({ settings }: { settings: Settings }) {
+export function Recording({ settings, lockRef }: { settings: Settings; lockRef: RefObject<HTMLButtonElement | null> }) {
   const { mode, holding, recording } = settings;
   const stills = mode === "video" || mode === "slo-mo";
 
@@ -28,7 +29,7 @@ export function Recording({ settings }: { settings: Settings }) {
         </button>
       )}
       {(holding || (recording && stills)) && (
-        <button className="recording-still" data-holding={holding || undefined} aria-label="Take Picture">
+        <button ref={lockRef} className="recording-still" data-holding={holding || undefined} aria-label="Take Picture">
           {holding && lock}
         </button>
       )}
