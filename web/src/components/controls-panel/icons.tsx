@@ -1,11 +1,7 @@
 import { bolt, Icon } from "../../icons.tsx";
 import type { Flash } from "../../state.ts";
 
-const slash = (d = "M4 3.5 20 20.5") => (
-  <>
-    <path d={d} />
-  </>
-);
+const slash = (d = "M4 3.5 20 20.5") => <path d={d} />;
 
 export const Aspect = () => (
   <Icon size={34}>
@@ -84,7 +80,7 @@ export const SmartTake = () => (
 export const Depth = ({ off = false }: { off?: boolean }) => (
   <Icon size={34}>
     <path d="M15.5 4.5c-2.6-.6-3.9.6-4.5 3.4l-2.3 10c-.5 2.2-1.6 2.9-3.7 2.6M8 10h7" />
-    {off && <path d="M5 5.5 19 19.5" />}
+    {off && slash("M5 5.5 19 19.5")}
   </Icon>
 );
 
@@ -97,7 +93,7 @@ export const Bolt = ({ flash }: { flash: Flash }) =>
     </Icon>
   ) : (
     <Icon size={34}>
-      <path d={bolt} fill="currentColor" stroke="none" transform="translate(.4 .2) scale(1)" />
+      <path d={bolt} fill="currentColor" stroke="none" transform="translate(.4 .2)" />
       {flash === "off" && slash()}
     </Icon>
   );
