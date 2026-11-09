@@ -95,7 +95,14 @@ function Glyph({ turn, scale, children }: { turn: number; scale: number; childre
   );
 }
 
-type Shade = readonly [topLeft: number, topRight: number, wedgeLeft: number, wedgeRight: number, lower: number];
+type Shade = readonly [
+  topLeft: number,
+  topRight: number,
+  wedgeLeft: number,
+  wedgeRight: number,
+  lower: number,
+  veil?: number,
+];
 
 // Gray levels of Apple's translucent faces, so a black viewfinder darkens them the way it does there.
 const shades: Record<Exclude<Lighting, "natural">, Shade> = {
@@ -103,14 +110,16 @@ const shades: Record<Exclude<Lighting, "natural">, Shade> = {
   contour: [230, 235, 152, 155, 239],
   stage: [88, 105, 84, 96, 232],
   "stage-mono": [88, 105, 84, 96, 232],
-  "high-key-mono": [235, 255, 255, 255, 109],
+  "high-key-mono": [230, 255, 232, 255, 109, 0.95],
 };
 
 const veil = (level: number, alpha: number) => `rgb(${level} ${level} ${level} / ${alpha})`;
 
 export function CubeFaces({ turn, scale, effect }: { turn: number; scale: number; effect: Lighting }) {
   const shade = effect === "natural" ? undefined : shades[effect];
-  const [topLeft = 0, topRight = 0, wedgeLeft = 0, wedgeRight = 0, lower = 0] = shade ?? [];
+  const [topLeft = 0, topRight = 0, wedgeLeft = 0, wedgeRight = 0, lower = 0, sheer] = shade ?? [];
+  const topAlpha = sheer ?? 0.888;
+  const wedgeAlpha = sheer ?? 0.664;
 
   return (
     <Glyph turn={turn} scale={scale}>
@@ -119,8 +128,10 @@ export function CubeFaces({ turn, scale, effect }: { turn: number; scale: number
           <path d={outline} />
         </clipPath>
         <linearGradient id="lighting-top" x1="0" x2="1">
-          <stop offset="0" stopColor={veil(topLeft, 0.888)} />
-          <stop offset="1" stopColor={veil(topRight, 0.888)} />
+          <stop offset="0" stopColor={veil(topLeft, topAlpha)} />
+          <stop offset="0.5" stopColor={veil(topLeft, topAlpha)} />
+          <stop offset="0.5" stopColor={veil(topRight, topAlpha)} />
+          <stop offset="1" stopColor={veil(topRight, topAlpha)} />
         </linearGradient>
         <radialGradient id="lighting-cloud" cx="0" cy="6.5" r="6.5" gradientUnits="userSpaceOnUse">
           <stop offset="0" stopColor="#3c3c3c" stopOpacity="0.6" />
@@ -134,8 +145,8 @@ export function CubeFaces({ turn, scale, effect }: { turn: number; scale: number
         {shade ? (
           <>
             <polygon points={pts([0, 0], upperLeft, top, upperRight)} fill="url(#lighting-top)" />
-            <polygon points={pts([0, 0], upperLeft, lowerLeft)} fill={veil(wedgeLeft, 0.664)} />
-            <polygon points={pts([0, 0], upperRight, lowerRight)} fill={veil(wedgeRight, 0.664)} />
+            <polygon points={pts([0, 0], upperLeft, lowerLeft)} fill={veil(wedgeLeft, wedgeAlpha)} />
+            <polygon points={pts([0, 0], upperRight, lowerRight)} fill={veil(wedgeRight, wedgeAlpha)} />
             <polygon points={pts([0, 0], lowerLeft, bottom, lowerRight)} fill={veil(lower, 0.874)} />
             <g fill="none" stroke="#ffe27a" strokeOpacity="0.55" strokeWidth="1.6" filter="url(#lighting-soft)">
               {effect === "contour" && <polyline points={pts(upperLeft, [0, 0], upperRight)} />}
