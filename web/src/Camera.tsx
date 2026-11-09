@@ -193,7 +193,7 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
       {settings.sheet && settings.sheet !== "choose" && <div className="sheet-scrim" />}
       {settings.grid && <Grid />}
       {settings.recording || settings.holding ? (
-        <Recording settings={settings} lockRef={lock} onPause={pause} onStill={takePicture} />
+        <Recording settings={settings} lockRef={lock} still={!!still} onPause={pause} onStill={takePicture} />
       ) : (
         (profile.badges || settings.tray) && (
           <div className="row top">

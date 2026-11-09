@@ -11,7 +11,7 @@ const pause = (
 
 const resume = (
   <svg viewBox="0 0 55 55" aria-hidden>
-    <path d="M22.5 18.9v17.2c0 .9 1 1.4 1.7.9l13.2-8.6c.6-.4.6-1.3 0-1.7l-13.2-8.6c-.7-.5-1.7 0-1.7.8z" />
+    <circle cx="27.5" cy="27.5" r="10" fill="var(--record)" />
   </svg>
 );
 
@@ -34,7 +34,10 @@ function useElapsed(running: boolean) {
     const from = Date.now() - total.current;
     const tick = setInterval(() => setMs((total.current = Date.now() - from)), 100);
 
-    return () => clearInterval(tick);
+    return () => {
+      clearInterval(tick);
+      setMs((total.current = Date.now() - from));
+    };
   }, [running]);
 
   const s = Math.floor(ms / 1000);
@@ -45,13 +48,14 @@ function useElapsed(running: boolean) {
 interface RecordingProps {
   settings: Settings;
   lockRef: RefObject<HTMLButtonElement | null>;
+  still: boolean;
   onPause: () => void;
   onStill: () => void;
 }
 
-export function Recording({ settings, lockRef, onPause, onStill }: RecordingProps) {
+export function Recording({ settings, lockRef, still, onPause, onStill }: RecordingProps) {
   const { mode, holding, recording, paused } = settings;
-  const elapsed = useElapsed(!paused);
+  const elapsed = useElapsed(!still && !paused);
   const stills = mode === "video" || mode === "slo-mo";
 
   return (
