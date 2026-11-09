@@ -42,6 +42,8 @@ const place = (right: boolean, bottom: boolean, reverse: boolean) =>
     bottom ? HEIGHT - b * RADIUS : b * RADIUS,
   ]);
 
+const curves = (p: number[][]) => [1, 4, 7].map((j) => `C${p[j]} ${p[j + 1]} ${p[j + 2]}`).join("");
+
 const squircle = () => {
   const sides = [
     place(false, false, true),
@@ -49,8 +51,6 @@ const squircle = () => {
     place(true, true, true),
     place(false, true, false),
   ];
-
-  const curves = (p: number[][]) => [1, 4, 7].map((j) => `C${p[j]} ${p[j + 1]} ${p[j + 2]}`).join("");
 
   return `M${sides[0][0]}${sides.map((p, i) => `${i ? `L${p[0]}` : ""}${curves(p)}`).join("")}Z`;
 };
