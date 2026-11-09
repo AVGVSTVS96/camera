@@ -148,7 +148,8 @@ function formatOf(mode: Mode, c: Controls): Settings["format"] {
   if (c.panel !== "submenu" || c.control !== "Video Format") return null;
 
   const picked = Array.isArray(c.selected) ? c.selected : [c.selected];
-  const rate = Number.parseInt(String(picked.find((s) => String(s).includes("frames")))) || (mode === "slo-mo" ? 120 : 30);
+  const rate =
+    Number.parseInt(String(picked.find((s) => String(s).includes("frames")))) || (mode === "slo-mo" ? 120 : 30);
 
   return { resolution: Array.isArray(c.selected) ? "HD" : "4K", rate };
 }
