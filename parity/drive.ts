@@ -195,9 +195,9 @@ async function switchMode(driver: Driver, label: string) {
   for (let hop = 0; hop < dial.length; hop++) {
     const from = await current();
 
-    if (hop) await settle(page);
-
     if (from === goal) return;
+
+    if (hop) await settle(page);
 
     const candidates = dial.slice(Math.min(from, goal), Math.max(from, goal) + 1).filter((l) => l !== dial[from]);
     const target = await nearest(page, goal > from ? candidates.toReversed() : candidates);
@@ -205,7 +205,9 @@ async function switchMode(driver: Driver, label: string) {
     if (target) await tap(page, target);
     else await swipeDial(driver, goal > from ? -1 : 1);
 
-    await page.waitForTimeout(40);
+    await page
+      .waitForFunction((was) => window.camera?.mode.toUpperCase() !== was, dial[from], { polling: 16, timeout: 500 })
+      .catch(() => {});
   }
 
   return `tapping mode labels never reached ${label}`;
