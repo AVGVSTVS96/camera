@@ -2,7 +2,7 @@ import { join } from "node:path";
 import type { Browser, BrowserContext, CDPSession, Locator, Page } from "playwright";
 import { storageKey } from "../web/src/memory.ts";
 import type { Settings } from "../web/src/state.ts";
-import type { Launch, Step } from "./graph.ts";
+import { dismissals, type Launch, type Step } from "./graph.ts";
 import type { State } from "./states.ts";
 
 const frame = 1000 / 60;
@@ -206,6 +206,8 @@ async function switchMode(driver: Driver, label: string) {
     if (from === goal) return;
 
     if (hop) await settle(page);
+
+    if ((await settings(page))?.sheet) await perform(driver, { firstOf: dismissals });
 
     const candidates = dial.slice(Math.min(from, goal), Math.max(from, goal) + 1).filter((l) => l !== dial[from]);
     const target = await nearest(page, goal > from ? candidates.toReversed() : candidates);

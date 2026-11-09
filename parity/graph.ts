@@ -38,7 +38,7 @@ const dialLabels = new Map([["slow-motion-video", "SLO-MO"]]);
 
 const dialLabel = (mode: string) => dialLabels.get(mode) ?? mode.toUpperCase();
 
-const dismissals = ["Continue", "Not Now", "OK", "Done", "Close"];
+export const dismissals = ["Continue", "Not Now", "OK", "Done", "Close"];
 
 const lightings = [
   "NATURAL LIGHT",
