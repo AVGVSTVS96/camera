@@ -193,6 +193,12 @@ export const switchMode = (
   flash: movieModes.has(mode) === movieModes.has(from) ? flash : defaultFlash(mode),
 });
 
+export const flipCamera = (profile: Profile, { mode, facing }: Settings): Partial<Settings> => {
+  const to = facing === "front" ? "back" : "front";
+
+  return { facing: to, zoom: startZoom(profile, to, mode), night: to === "front" ? "off" : "auto" };
+};
+
 export function initialSettings(profile: Profile, pose: Pose, mode: Mode = "photo", facing: Facing = "back"): Settings {
   const [, megapixels] = profile.photoFormat.split(" ");
   const resolution = profile.videoFormat.startsWith("4K") ? "4K" : "HD";

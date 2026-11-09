@@ -18,3 +18,10 @@
   bottom: auto;
   top: 34px;
 }
+
+.viewfinder::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}

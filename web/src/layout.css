@@ -43,7 +43,7 @@
   object-fit: cover;
 }
 
-.viewfinder video[data-facing="user"] {
+.viewfinder video[data-facing="front"] {
   scale: -1 1;
 }
 
