@@ -162,8 +162,11 @@ function formatOf(mode: Mode, c: Controls): Settings["format"] {
   return { resolution: Array.isArray(c.selected) ? "HD" : "4K", rate };
 }
 
-const nightModeOf = (selected: Controls[string]): NightMode =>
-  ([selected].flat().map((s) => String(s).toLowerCase()).find((s) => s === "max" || s === "off") as NightMode) ?? "auto";
+const nightModeOf = (selected: Controls[string]): NightMode => {
+  const name = [selected].flat().join().toLowerCase();
+
+  return name === "max" || name === "off" ? name : "auto";
+};
 
 const exposureOf = (c: Controls) => ({ dec: -0.7, inc: 0.7 })[String(c.adjust)] ?? 0;
 
