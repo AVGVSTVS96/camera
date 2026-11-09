@@ -78,7 +78,7 @@ export async function open(browser: Browser, url: URL, state: State, launch: Lau
 
   await page.addStyleTag({
     content: `.screen { background: #000 url(/plates/${plate}.png) 0 0 / 100% 100% !important }
-      .viewfinder { background: none !important; box-shadow: 0 0 0 100vmax #000 }
+      .viewfinder { background: none !important }
       .viewfinder video { visibility: hidden }`,
   });
 
