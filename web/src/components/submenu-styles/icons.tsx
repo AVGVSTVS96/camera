@@ -5,10 +5,10 @@ export const Chevron = () => (
     viewBox="0 0 36 36"
     fill="none"
     stroke="#fff"
-    strokeWidth="2.2"
+    strokeWidth="1.8"
     strokeLinecap="round"
     strokeLinejoin="round"
   >
-    <path d="M20.5 10.5 13 18l7.5 7.5" />
+    <path d="M19.6 11.8 13.4 18l6.2 6.2" />
   </svg>
 );
