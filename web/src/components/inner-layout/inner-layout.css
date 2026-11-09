@@ -84,24 +84,28 @@
   --glyph-turn: 0deg;
 }
 
-.screen[data-display="inner"] .viewfinder::after {
-  content: "";
+.inner-edge {
   position: absolute;
   inset: 210px 0 0;
+  pointer-events: none;
   box-shadow:
     inset 3px 3px 0 #fff,
     inset -2px 0 0 #fff;
 }
 
-.screen[data-display="inner"][data-orientation="landscape"] .viewfinder::after {
+.screen:is([data-movie], [data-holding]) .inner-edge {
+  inset: 98px 0 0 134px;
+}
+
+.screen[data-orientation="landscape"] .inner-edge {
   inset: 0 0 0 210px;
   box-shadow:
     inset 3px 3px 0 #fff,
     inset 0 -3px 0 #fff;
 }
 
-.screen[data-display="inner"][data-movie] .viewfinder::after {
-  inset: 0;
+.screen:is([data-movie], [data-holding])[data-orientation="landscape"] .inner-edge {
+  inset: 0 0 134px 98px;
 }
 
 .inner-preview,
@@ -120,7 +124,7 @@
   white-space: nowrap;
 }
 
-.screen[data-movie] .inner-preview {
+.screen:is([data-movie], [data-holding]) .inner-preview {
   left: 401.5px;
   top: 572px;
 }
@@ -131,12 +135,12 @@
   rotate: 90deg;
 }
 
-.screen[data-movie][data-orientation="landscape"] .inner-preview {
+.screen:is([data-movie], [data-holding])[data-orientation="landscape"] .inner-preview {
   left: 573px;
   top: 268px;
 }
 
-.screen[data-display="inner"][data-orientation="portrait"][data-movie] .viewfinder {
+.screen[data-display="inner"][data-orientation="portrait"]:is([data-movie], [data-holding]) .viewfinder {
   top: 98px;
   left: 134px;
   width: 535px;
@@ -156,6 +160,6 @@
   display: none;
 }
 
-.screen[data-display="inner"][data-recording] :is(.zoom, .timer, .thumb, .flip, .controls-button) {
+.screen[data-display="inner"][data-mode="time-lapse"][data-recording] :is(.zoom, .timer, .thumb, .flip, .controls-button) {
   display: none;
 }

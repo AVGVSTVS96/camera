@@ -35,6 +35,7 @@ export function InnerViewer({ empty }: { empty: boolean }) {
 export function InnerPreview() {
   return (
     <>
+      <div className="inner-edge" />
       <p className="inner-preview">Live Preview</p>
       <div className="inner-home" />
     </>
