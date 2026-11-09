@@ -61,6 +61,7 @@ export interface Settings {
   expanded: boolean;
   on: string[];
   submenu: boolean;
+  format: { resolution: "HD" | "4K"; rate: number } | null;
   balance: string | null;
   exposure: number | null;
   focus?: { value: number; auto: boolean };
@@ -106,6 +107,7 @@ export function initialSettings(profile: Profile, mode: Mode = "photo", facing: 
     expanded: false,
     on: [],
     submenu: false,
+    format: null,
     balance: null,
     exposure: null,
     styles: false,
@@ -124,6 +126,16 @@ export function initialSettings(profile: Profile, mode: Mode = "photo", facing: 
     orientation: "portrait",
     display: "outer",
   };
+}
+
+// Apple's simulator keeps 4K once chosen, so every Video Format state after the first shows it.
+function formatOf(mode: Mode, c: Controls): Settings["format"] {
+  if (c.panel !== "submenu" || c.control !== "Video Format") return null;
+
+  const picked = Array.isArray(c.selected) ? c.selected : [c.selected];
+  const rate = Number.parseInt(String(picked.find((s) => String(s).includes("frames")))) || (mode === "slo-mo" ? 120 : 30);
+
+  return { resolution: Array.isArray(c.selected) ? "HD" : "4K", rate };
 }
 
 const exposureOf = (c: Controls) => ({ dec: -0.7, inc: 0.7 })[String(c.adjust)] ?? 0;
@@ -213,6 +225,7 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
     expanded: c.panel === "expanded" || c.control !== undefined,
     on: c.control && (c.to === "On" || c.to === "Adaptive") ? [String(c.control)] : [],
     submenu: c.panel === "submenu",
+    format: formatOf(mode, c),
     balance: c.panel === "submenu" && c.control === "White Balance" ? String(c.selected).toLowerCase() : null,
     exposure: c.panel === "submenu" && c.control === "Exposure" ? exposureOf(c) : null,
     focus: focusOf(c),
