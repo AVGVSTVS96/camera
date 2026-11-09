@@ -1,3 +1,4 @@
+import { useSlider } from "../../slider.ts";
 import { back, type Props } from "../../state.ts";
 import { Chevron, Mountains, Person } from "./icons.tsx";
 import "./submenu-focus.css";
@@ -8,10 +9,21 @@ const dots = [
 ];
 
 const stopsPerUnit = 40;
+const STEP = 0.05;
+const PITCH = 30;
 
 export function SubmenuFocus({ settings, update }: Props) {
   const { value, auto } = settings.focus;
   const stop = Math.min(Math.round(value * stopsPerUnit), dots.length - 1);
+
+  const slider = useSlider({
+    value: Math.round(value / STEP),
+    min: 0,
+    max: Math.round(1 / STEP),
+    pitch: PITCH,
+    settings,
+    set: (step) => update({ focus: { value: Math.round(step * STEP * 100) / 100, auto: false } }),
+  });
 
   return (
     <section className="focus" aria-label="Focus">
@@ -33,7 +45,14 @@ export function SubmenuFocus({ settings, update }: Props) {
       <span className="focus-mountains">
         <Mountains />
       </span>
-      <div className="focus-track" role="slider" aria-label="Focus" aria-valuenow={value}>
+      <div
+        className="focus-track"
+        role="slider"
+        aria-label="Focus"
+        aria-valuenow={value}
+        aria-valuetext={auto ? "Auto" : value.toFixed(2)}
+        {...slider}
+      >
         {dots.map((x) => (
           <i key={x} className="focus-dot" style={{ left: x }} />
         ))}

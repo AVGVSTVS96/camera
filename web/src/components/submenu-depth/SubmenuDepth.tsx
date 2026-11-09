@@ -1,3 +1,4 @@
+import { useSlider } from "../../slider.ts";
 import { apertureOf, back, type Props } from "../../state.ts";
 import { Reset } from "../submenu-exposure/icons.tsx";
 import { Submenu } from "../submenu/Submenu.tsx";
@@ -32,11 +33,21 @@ const stops = [
 
 const REACH = 9;
 const STOPS_PER_MARK = 3;
+const PITCH = 15;
 
 export function SubmenuDepth({ settings, update }: Props) {
   const aperture = apertureOf(settings);
   const { at, home, first, last, off, unavailable } = aperture;
   const marks = Array.from({ length: last - first + 1 }, (_, i) => first + i).filter((i) => Math.abs(i - at) <= REACH);
+
+  const slider = useSlider({
+    value: at,
+    min: first,
+    max: last,
+    pitch: -PITCH,
+    settings,
+    set: (stop) => update({ aperture: { ...aperture, at: stop } }),
+  });
 
   return (
     <Submenu title="Depth" className="depth" back={() => update(back)}>
@@ -64,6 +75,7 @@ export function SubmenuDepth({ settings, update }: Props) {
         role="slider"
         aria-label="Depth slider"
         aria-valuetext={off ? "Off" : `ƒ${stops[at]}`}
+        {...slider}
       >
         {marks.map((i) => (
           <i
@@ -71,10 +83,10 @@ export function SubmenuDepth({ settings, update }: Props) {
             className="depth-tick"
             data-selected={i === at || undefined}
             data-major={i % STOPS_PER_MARK === 0 || undefined}
-            style={{ left: 189 + 15 * (i - at) }}
+            style={{ left: 189 + PITCH * (i - at) }}
           />
         ))}
-        {at !== home && <i className="depth-home" style={{ left: 187 + 15 * (home - at) }} />}
+        {at !== home && <i className="depth-home" style={{ left: 187 + PITCH * (home - at) }} />}
       </div>
       {unavailable && <p className="depth-caption">Depth is unavailable.</p>}
     </Submenu>
