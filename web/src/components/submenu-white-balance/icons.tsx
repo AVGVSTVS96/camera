@@ -21,17 +21,29 @@ function Glyph({ children }: { children: ReactNode }) {
 export const Awb = () => <b className="wb-awb">AWB</b>;
 
 export const Bulb = () => (
-  <Glyph>
-    <path d="M8 14.5c0-1.3-1.5-2.200-1.500-4.200a4.500 4.500 0 0 1 9 0c0 2-1.500 2.900-1.500 4.200ZM8.500 17h5M9.500 19h3" />
-    <path d="M11 1.500v1.500M3.500 4.500l1.100 1.100M18.500 4.500l-1.100 1.100M1.500 10h1.500M19 10h1.500" />
-  </Glyph>
+  <svg width="15" height="17" viewBox="0 0 15 17" fill="none" stroke="currentColor" aria-hidden>
+    <path
+      d="M6 12.4 5.6 10.7C5 9 4.3 8 4.3 6.9a3.200 3.200 0 0 1 6.400 0c0 1.100-.7 2.100-1.300 3.800L9 12.400Z"
+      strokeWidth=".7"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M5.500 13h4M5.400 14.100h4.200M7.500 1.100v1.500M2.800 2.800l1.500 1.400M12.200 2.800l-1.500 1.400M1.200 7.200H3M12 7.200h1.800"
+      strokeWidth=".9"
+    />
+    <path d="M6 14.700h3q-.5.900-1.500.900t-1.500-.9Z" fill="currentColor" stroke="none" />
+  </svg>
 );
 
 export const Tube = () => (
-  <Glyph>
-    <rect x="4" y="8" width="14" height="6" rx="3" />
-    <path d="M7 11h8M11 2v2.500M5 4l1.200 1.600M17 4l-1.200 1.600M11 17.500V20M5 19l1.200-1.600M17 19l-1.200-1.600" />
-  </Glyph>
+  <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" aria-hidden>
+    <rect x="1" y="4" width="11" height="3.900" rx=".8" fill="currentColor" stroke="none" />
+    <path d="M1.900 5h1.600v1.900H1.900ZM9.500 5h1.600v1.900H9.500Z" fill="#202020" stroke="none" />
+    <path
+      d="M6.500.6v1.900M2.500 1.500l1.700 1.400M10.500 1.500 8.800 2.900M6.500 9.600v1.900M2.500 10.600l1.700-1.400M10.500 10.600 8.800 9.200"
+      strokeWidth=".9"
+    />
+  </svg>
 );
 
 export const Sun = () => (
