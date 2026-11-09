@@ -342,7 +342,7 @@ function choose(settings: Settings, c: Controls): Partial<Settings> {
     case "Live Photo":
       return { live: liveOf(c.selected) };
     case "Night Mode":
-      return { night: nightOf(c.selected) };
+      return Array.isArray(c.selected) ? {} : { night: nightOf(c.selected) };
     case "Aspect Ratio":
       return { aspect: aspects.get([c.selected].flat().join()) ?? "4:3" };
     case "Exposure":
