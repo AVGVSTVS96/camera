@@ -1,5 +1,6 @@
 import { join } from "node:path";
 import type { Browser, BrowserContext, CDPSession, Locator, Page } from "playwright";
+import { storageKey } from "../web/src/memory.ts";
 import type { Settings } from "../web/src/state.ts";
 import type { Launch, Step } from "./graph.ts";
 import type { State } from "./states.ts";
@@ -60,6 +61,13 @@ export async function open(browser: Browser, url: URL, state: State, launch: Lau
       navigator.mediaDevices.getUserMedia = () =>
         Promise.reject(new DOMException("Permission denied", "NotAllowedError"));
     });
+  }
+
+  if (!launch.firstRun) {
+    await page.addInitScript(([key, seen]) => localStorage.setItem(key, seen), [
+      storageKey,
+      '{"seen":["styles"]}',
+    ] as const);
   }
 
   await page.clock.install({ time: new Date("2026-11-08T09:41:00") });

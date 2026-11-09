@@ -33,6 +33,7 @@ import { Thumbnail } from "./components/thumbnail/Thumbnail.tsx";
 import { TopBar } from "./components/top-bar/TopBar.tsx";
 import { Viewer } from "./components/viewer/Viewer.tsx";
 import { Zoom } from "./components/zoom/Zoom.tsx";
+import { preserve, remember, unseen } from "./memory.ts";
 import { useProfile } from "./profile.ts";
 import { movieModes, poseOf, switchMode, type Settings, type Update } from "./state.ts";
 
@@ -71,6 +72,14 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
 
     return () => removeEventListener("resize", follow);
   }, [still]);
+
+  useEffect(() => {
+    if (still) return;
+
+    if (settings.sheet === "intro" || settings.sheet === "styles") remember(settings.sheet);
+
+    preserve(settings);
+  }, [still, settings]);
 
   useEffect(() => {
     onSettings?.(settings);
@@ -204,7 +213,15 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
           </div>
           {!settings.submenu && !busy && <Flip {...props} />}
           {!busy && !settings.submenu && (
-            <ModeDial selected={settings.mode} select={(mode) => update(switchMode(profile, settings, mode))} />
+            <ModeDial
+              selected={settings.mode}
+              select={(mode) =>
+                update({
+                  ...switchMode(profile, settings, mode),
+                  sheet: mode === "cinematic" ? unseen("intro") : undefined,
+                })
+              }
+            />
           )}
         </>
       )}

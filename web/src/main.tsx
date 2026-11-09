@@ -2,7 +2,8 @@ import "./base.css";
 import "./layout.css";
 import { createRoot } from "react-dom/client";
 import { Camera } from "./Camera.tsx";
-import { duo, ProfileContext } from "./profile.ts";
+import { restore, unseen } from "./memory.ts";
+import { duo, ProfileContext, type Profile } from "./profile.ts";
 import { initialSettings, loadState, poseOf, settingsFor, type Settings } from "./state.ts";
 
 declare global {
@@ -10,6 +11,11 @@ declare global {
     camera?: Settings;
   }
 }
+
+const launch = (profile: Profile): Settings => ({
+  ...restore(initialSettings(profile, poseOf(innerWidth, innerHeight))),
+  sheet: unseen("styles"),
+});
 
 const root = createRoot(document.getElementById("root")!);
 const params = new URLSearchParams(location.search);
@@ -30,12 +36,9 @@ if (id) {
   const { profile = duo } = await loadState(live);
   root.render(
     <ProfileContext value={profile}>
-      <Camera
-        initial={initialSettings(profile, poseOf(innerWidth, innerHeight))}
-        onSettings={(settings) => (window.camera = settings)}
-      />
+      <Camera initial={launch(profile)} onSettings={(settings) => (window.camera = settings)} />
     </ProfileContext>,
   );
 } else {
-  root.render(<Camera initial={initialSettings(duo, poseOf(innerWidth, innerHeight))} />);
+  root.render(<Camera initial={launch(duo)} />);
 }
