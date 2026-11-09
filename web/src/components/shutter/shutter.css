@@ -7,7 +7,7 @@
   --record: #ff383c;
   --band: rgb(52 52 53 / 0.62);
   --rim:
-    inset 0 0 0 0.5px rgb(0 0 0 / 0.7), inset 0 0 1.5px 1px rgb(255 255 255 / 0.35),
+    inset 0 0 0 0.5px rgb(0 0 0 / 0.7), inset 0 0 1px 0.5px rgb(255 255 255 / 0.25),
     inset 0 1.5px 1px -1px rgb(255 255 255 / 0.7), inset 0 -1.5px 1px -1px rgb(255 255 255 / 0.7);
 }
 
@@ -91,4 +91,16 @@
 
 [data-countdown] .shutter-button span {
   background: #fff;
+}
+
+.screen[data-display="inner"][data-orientation="portrait"][data-movie] .row.shutter {
+  translate: 0 1px;
+}
+
+.screen[data-display="inner"][data-orientation^="landscape"][data-movie] .row.shutter {
+  translate: 1px 0;
+}
+
+.screen[data-display="outer"][data-orientation^="landscape"][data-movie] .row.shutter {
+  translate: -1px 0;
 }
