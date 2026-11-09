@@ -8,7 +8,7 @@ function Ring({ children }: { children: ReactNode }) {
       viewBox="0 0 25 25"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth="2.300"
       strokeLinecap="round"
       aria-hidden
     >
@@ -19,22 +19,22 @@ function Ring({ children }: { children: ReactNode }) {
 
 export const Off = () => (
   <Ring>
-    <circle cx="12.5" cy="12.5" r="10.5" />
-    <path d="M4.500 4.500l16 16" />
+    <path d="M12.500 2A10.500 10.500 0 0 1 21.600 17.750M3.400 7.250A10.500 10.500 0 0 0 12.500 23v-2.500M3 2.500l20 20" />
   </Ring>
 );
 
 export const Seconds = ({ value }: { value: number }) => (
   <Ring>
-    <path d="M12.500 2a10.500 10.500 0 1 1-10.500 10.500c0-2.500.9-4.700 2.400-6.400M9.500 3.200l3-1.200-1 3.200" />
+    <path d="M13.500 2.100A10.500 10.500 0 1 1 7.250 3.400M13.500 1.500v3" />
     <text
       x="12.500"
       y="17"
       textAnchor="middle"
       fill="currentColor"
       stroke="none"
-      fontSize={value > 9 ? 11 : 13.500}
-      fontWeight="500"
+      fontFamily="ui-monospace, monospace"
+      fontSize={value > 9 ? 12 : 14}
+      fontWeight="600"
     >
       {value}
     </text>
