@@ -138,6 +138,7 @@ export interface Settings extends Pose {
   balance: WhiteBalance;
   style: StyleName;
   pad: { tone: number; color: number };
+  texture: boolean;
   resolution: 24 | 48;
   formats: Partial<Record<Mode, VideoFormat>>;
   videoResolution: VideoResolution;
@@ -244,6 +245,7 @@ export function initialSettings(profile: Profile, pose: Pose, mode: Mode = "phot
     balance: "auto",
     style: "standard",
     pad: { tone: 0, color: 0 },
+    texture: false,
     resolution: megapixels === "48" ? 48 : 24,
     formats: {
       video: { resolution, rate: 30 },
@@ -252,7 +254,7 @@ export function initialSettings(profile: Profile, pose: Pose, mode: Mode = "phot
     },
     videoResolution: resolution,
     focus: { value: 0, auto: true },
-    centerStage: { zoom: false, rotate: false },
+    centerStage: { zoom: true, rotate: false },
     stops: {},
     depth: false,
     lighting: "natural",
@@ -426,6 +428,7 @@ export function reached(state: ParityState, profile = state.profile ?? duo): Set
     expanded: c.panel === "expanded" || (c.panel === "open" && c.control !== undefined),
     submenu: submenuOf(c),
     customize: c.selected === "Customize" || c.panel === "styles customize",
+    texture: c.tab === "Texture",
     dial: c.zoomDial === "open",
     lenses: mode === "portrait" && ("zoomButton" in c || c.zoomDial === "open"),
     picked: c.portraitLighting !== undefined,

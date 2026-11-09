@@ -2,8 +2,10 @@ import type { Settings, Sheet } from "./state.ts";
 
 export const storageKey = "camera";
 
+type Seen = Sheet | "smart-take";
+
 interface Memory {
-  seen: Sheet[];
+  seen: Seen[];
   live?: Settings["live"];
 }
 
@@ -18,9 +20,9 @@ function read(): Memory {
 const write = (change: Partial<Memory>) => localStorage.setItem(storageKey, JSON.stringify({ ...read(), ...change }));
 
 /** The first-run sheet to show now, if Camera hasn't shown it before. */
-export const unseen = (sheet: "intro" | "styles") => (read().seen.includes(sheet) ? undefined : sheet);
+export const unseen = <T extends Seen>(sheet: T) => (read().seen.includes(sheet) ? undefined : sheet);
 
-export function remember(sheet: Sheet) {
+export function remember(sheet: Seen) {
   const { seen } = read();
 
   if (!seen.includes(sheet)) write({ seen: [...seen, sheet] });

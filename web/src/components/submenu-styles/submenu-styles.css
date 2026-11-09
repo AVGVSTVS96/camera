@@ -135,7 +135,7 @@
   letter-spacing: 2px;
 }
 
-.styles-tabs span {
+.styles-tabs button {
   display: grid;
   place-items: center;
   width: 91.67px;
@@ -143,11 +143,11 @@
   padding-left: 2px;
 }
 
-.styles-tabs span + span {
+.styles-tabs button + button {
   width: 94.33px;
 }
 
-.styles-tabs span[data-on] {
+.styles-tabs button[data-on] {
   background: rgb(255 255 255 / 0.09);
   color: #ffd60a;
 }
@@ -192,4 +192,79 @@
   height: 11.3px;
   border-radius: 50%;
   background: #fff;
+}
+
+.styles-texture {
+  position: absolute;
+  top: 70.7px;
+  width: 70px;
+  height: 100px;
+  translate: -50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 11.7px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  line-height: 14px;
+  color: rgb(255 255 255 / 0.85);
+}
+
+.styles-texture svg {
+  box-sizing: content-box;
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 50%;
+  background: #2c2c2e;
+}
+
+.styles-texture[data-on] {
+  color: #fff;
+}
+
+.styles-texture[data-on] svg {
+  background: #ececec;
+  color: #1c1c1e;
+}
+
+.styles-texture span {
+  width: 54px;
+  text-align: center;
+}
+
+.styles-texture[data-slot="0"] {
+  left: 74.7px;
+}
+.styles-texture[data-slot="1"] {
+  left: 145px;
+}
+.styles-texture[data-slot="2"] {
+  left: 211px;
+}
+.styles-texture[data-slot="3"] {
+  left: 277px;
+}
+.styles-texture[data-slot="4"] {
+  left: 379px;
+}
+
+.styles-texture-rule {
+  position: absolute;
+  left: 327px;
+  top: 74px;
+  width: 2px;
+  height: 43px;
+  border-radius: 1px;
+  background: rgb(255 255 255 / 0.3);
+}
+
+.styles-texture-note {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 201px;
+  text-align: center;
+  font-size: 13px;
+  letter-spacing: 0;
+  color: rgb(255 255 255 / 0.3);
 }

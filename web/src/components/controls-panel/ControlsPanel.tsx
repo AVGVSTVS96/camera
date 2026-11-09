@@ -1,5 +1,6 @@
 import { useEffectEvent, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { useProfile } from "../../profile.ts";
+import { remember, unseen } from "../../memory.ts";
 import { isToggle, toggle, type Props, type Settings, type Submenu, type Toggle } from "../../state.ts";
 import { arrange } from "./layout.ts";
 import {
@@ -186,10 +187,13 @@ export function ControlsPanel({ settings, update, from, closing, gone }: PanelPr
     return () => shrink.cancel();
   }, [closing, orientation]);
 
-  const open = (name: Submenu | Toggle) =>
-    isToggle(name)
-      ? update({ on: toggle(settings.on, name), expanded: true })
-      : update({ submenu: name, tray: false, expanded: false });
+  const open = (name: Submenu | Toggle) => {
+    if (name === "Smart Take" && unseen("smart-take")) {
+      remember("smart-take");
+      update({ tray: false, expanded: false });
+    } else if (isToggle(name)) update({ on: toggle(settings.on, name), expanded: true });
+    else update({ submenu: name, tray: false, expanded: false });
+  };
 
   return (
     <>

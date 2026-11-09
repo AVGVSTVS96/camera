@@ -66,7 +66,7 @@ export async function open(browser: Browser, url: URL, state: State, launch: Lau
   if (!launch.firstRun) {
     await page.addInitScript(([key, seen]) => localStorage.setItem(key, seen), [
       storageKey,
-      JSON.stringify({ seen: ["styles", "intro"] }),
+      JSON.stringify({ seen: state.controls?.smartTake ? ["styles", "intro"] : ["styles", "intro", "smart-take"] }),
     ] as const);
   }
 
