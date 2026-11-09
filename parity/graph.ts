@@ -194,6 +194,10 @@ export class Graph {
         : { parent: `${id}-${suffix}-inc`, steps: [{ adjust: name, by: -4 }] };
     }
 
+    if (c.selected === "Reset") {
+      return { parent: `${id}-submenu`, steps: [{ adjust: null, by: 2 }, { tap: "Reset" }] };
+    }
+
     if (c.selected && !Array.isArray(c.selected)) {
       return { parent: `${id}-submenu`, steps: [{ tap: String(c.selected) }] };
     }
