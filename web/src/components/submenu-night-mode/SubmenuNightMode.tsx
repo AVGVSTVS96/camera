@@ -15,7 +15,7 @@ export function SubmenuNightMode({ settings, update }: Props) {
 
   return (
     <Submenu title="Night Mode" className="nm" back={() => update({ submenu: false, nightMenu: null })}>
-      <p className="nm-value">{current.label}</p>
+      <p className="nm-value" data-long={current.id === "max" || undefined}>{current.label}</p>
       {options.map(({ id, label, glyph }, i) => (
         <button
           key={id}

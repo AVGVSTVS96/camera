@@ -17,8 +17,12 @@
   inset: 56.33px 0 auto;
   height: 36px;
   text-align: center;
-  font-size: 26px;
+  font-size: 31px;
   line-height: 36px;
+}
+
+.nm-value[data-long] {
+  font-size: 26px;
 }
 
 .nm-option {
