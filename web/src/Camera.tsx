@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { record, snapshot, useCamera, type Shot } from "./capture.ts";
 import { AspectFlip } from "./components/aspect-flip/AspectFlip.tsx";
 import { ControlsButton } from "./components/controls-button/ControlsButton.tsx";
@@ -36,7 +36,13 @@ import { Zoom } from "./components/zoom/Zoom.tsx";
 import { useProfile } from "./profile.ts";
 import { movieModes, type Settings, type Update } from "./state.ts";
 
-export function Camera({ initial, still }: { initial: Settings; still?: string }) {
+interface CameraProps {
+  initial: Settings;
+  still?: string;
+  onSettings?: (settings: Settings) => void;
+}
+
+export function Camera({ initial, still, onSettings }: CameraProps) {
   const profile = useProfile();
   const [settings, setSettings] = useState(initial);
   const [shot, setShot] = useState<Shot>();
@@ -46,6 +52,10 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
   const movie = movieModes.has(settings.mode);
   const props = { settings, update };
   const styling = settings.submenu && settings.styles;
+
+  useEffect(() => {
+    onSettings?.(settings);
+  }, [onSettings, settings]);
 
   async function shutter() {
     if (!video.current || !stream) return;

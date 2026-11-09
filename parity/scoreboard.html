@@ -160,6 +160,15 @@
         display: inline-block;
         width: 52px;
       }
+      .live {
+        margin: 0;
+        padding: 6px 14px 0;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .live[data-reach="reachable"] {
+        color: light-dark(#15803d, #4ade80);
+      }
       #worst {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -201,6 +210,7 @@
           <th>Elements</th>
           <th>States</th>
           <th>Duo</th>
+          <th title="Reached by tapping in the live app: reachable / reached wrong / unreachable">Live</th>
           <th>What it is</th>
         </tr>
       </thead>
@@ -227,6 +237,10 @@
       } = await fetch("camera-parity/results.json", {
         cache: "no-store",
       }).then((r) => r.json());
+      const interact = await fetch("camera-parity/interact.json", { cache: "no-store" })
+        .then((r) => r.json())
+        .catch(() => null);
+      const reach = Object.fromEntries((interact?.components ?? []).map((c) => [c.name, c]));
       const updated = new Date(Math.max(...states.map((r) => r.time))).toLocaleString();
       document.querySelector("#summary").textContent =
         `${states.length} states · ${score.toFixed(1)}% overall · simulator ${simulator.toFixed(1)}% · Duo ${duo.toFixed(1)}% · updated ${updated}`;
@@ -243,6 +257,7 @@
             <td>${c.elements === null || c.elements === undefined ? "–" : `${c.elements.toFixed(1)}%`}</td>
             <td>${c.states}</td>
             <td>${c.duo === null ? "–" : `${c.duo.toFixed(1)}%`}</td>
+            <td>${reach[c.name] ? `${reach[c.name].reachable} / ${reach[c.name].wrong} / ${reach[c.name].unreachable}` : "–"}</td>
             <td class="about">${c.about}</td>
           </tr>`,
         )
@@ -258,6 +273,11 @@
           </figure>`,
         )
         .join("");
+      const live = (id) => {
+        const s = interact?.states[id];
+
+        return s ? `<p class="live" data-reach="${s.reach}">Live: ${s.reach}${s.why ? ` · ${s.why}` : ""}</p>` : "";
+      };
       function show(name) {
         const rows = name
           ? states
@@ -281,6 +301,7 @@
               <figure><a href="${img(r, "ours")}"><img loading="lazy" src="${img(r, "ours")}" alt=""></a><figcaption>Ours</figcaption></figure>
               <figure><a href="${img(r, "diff")}"><img loading="lazy" src="${img(r, "diff")}" alt=""></a><figcaption>Diff</figcaption></figure>
             </div>
+            ${live(r.id)}
             <ul class="marks">${(r.marks ?? [])
               .filter((m) => !name || m.components.includes(name))
               .slice(0, 3)

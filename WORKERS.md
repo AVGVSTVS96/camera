@@ -41,6 +41,30 @@ TURN_POOL=parity TURN_SLOTS=4 PROCESSES=8 BROWSERS=1 turn bun run diff
 
 `PROCESSES` splits the states across that many processes, each with `BROWSERS` WebKits; all 1,171 states take about 12 minutes this way.
 
+## Prove behavior
+
+`bun run diff` scores states forced through `?state=`. `bun run interact` checks that a person can reach them:
+
+```sh
+TURN_POOL=parity TURN_SLOTS=4 turn bun run interact --component <component> --sample 12
+bun run interact photo-outer-portrait-flash-on   # one state, its verdict and why
+```
+
+It opens the real app (`?live=<id>`) in Chromium as a phone of that state's size, with a gray fake camera, Apple's plate behind it and a paused clock, then replays the taps Apple's capture scripts made from launch: Camera Controls → Expand → Flash → On. Each step finds its target the way VoiceOver does, by Apple's accessibility label (any case), so a control needs Apple's label (`aria-label`, or its text) to be reachable. Taps and gestures are real touches; waits move the clock; sliders take ArrowUp/ArrowDown, one tick each. Each state ends as:
+
+- **reachable**: the app's settings equal `settingsFor(state)` (the fields that follow capture history are skipped) and the live screenshot scores within 3 points of the forced one, per component.
+- **unreachable**: a step's target is missing or covered, or a step changed nothing and the end state is wrong. The step is named.
+- **wrong**: every step did something, but the settings differ (each field is listed) or the live render scores lower.
+
+Your component's transitions are timed too: CSS animations are paused and stepped frame by frame, measured as `tools/motion.py` measures Apple's videos, and match when the duration is within 15% and the progress curve within 0.1 RMSE of `motion.json`.
+
+The full run from `~/Developer/camera` adds a Live column (reachable / wrong / unreachable) to the scoreboard:
+
+```sh
+cd ~/Developer/camera && git pull
+TURN_POOL=parity TURN_SLOTS=4 BROWSERS=8 turn bun run interact
+```
+
 ## What you own
 
 `web/src/components/<component>/`: its markup, its styles (`<component>.css`) and its icons (`icons.tsx`). Start every selector you add with your component's own class, since all CSS is global.
