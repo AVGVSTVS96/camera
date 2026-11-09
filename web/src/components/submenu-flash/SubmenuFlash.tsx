@@ -15,7 +15,9 @@ export function SubmenuFlash({ settings, update }: Props) {
 
   return (
     <Submenu title="Flash" className="flash" back={() => update({ submenu: false, flashMenu: null })}>
-      <output className="flash-value">{current.name}</output>
+      <output className="flash-value" data-auto={current.id === "auto" || undefined}>
+        {current.name}
+      </output>
       {options.map(({ id, label, glyph }, i) => (
         <button
           key={id}

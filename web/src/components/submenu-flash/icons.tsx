@@ -1,13 +1,13 @@
 import { bolt, Icon } from "../../icons.tsx";
 
-const centered = "translate(12 12) scale(.96) translate(-11.75 -12)";
+const centered = "translate(12 12) scale(.92) translate(-11.75 -12)";
 
-const Bolt = () => <path d={bolt} fill="currentColor" stroke="none" transform={centered} />;
+const Bolt = () => <path d={bolt} fill="currentColor" strokeWidth={1.2} transform={centered} />;
 
 export const Automatic = () => (
   <Icon size={30}>
     <Bolt />
-    <circle cx="17.2" cy="16.6" r="4.7" fill="currentColor" stroke="none" />
+    <circle cx="17.2" cy="16.6" r="4.7" fill="currentColor" stroke="#1f1f1f" strokeWidth={1.6} paintOrder="stroke" />
     <path d="m15.4 19 1.8-4.6 1.8 4.6m-3-1.5h2.4" stroke="#1f1f1f" strokeWidth={1.1} />
   </Icon>
 );

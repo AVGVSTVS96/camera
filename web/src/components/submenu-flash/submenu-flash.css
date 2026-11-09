@@ -25,3 +25,7 @@
 .flash {
   --glyph-turn: 0deg;
 }
+
+.flash-value[data-auto] {
+  translate: -1.33px 0;
+}
