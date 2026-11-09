@@ -225,8 +225,8 @@ const touches = /^(shutter tapped|long-press|drag|tap viewfinder)/;
 // Apple's simulator leaves the zoom stops turned the way the device last was, so the turn follows the capture history rather than any control.
 function zoomTurnOf(state: ParityState, c: Controls) {
   const portrait = state.orientation === "portrait";
-  const touched = touches.test(String(c.action));
 
+  const touched = touches.test(String(c.action));
   if (state.mode === "photo" && portrait && touched) return 180;
 
   const sideways = state.display === "inner" && (state.mode === "photo" || (state.mode === "cinematic" && !portrait));
