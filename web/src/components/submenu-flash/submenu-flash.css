@@ -20,3 +20,7 @@
 .flash-option[data-on] {
   color: #ffcc00;
 }
+
+.flash {
+  --glyph-turn: 0deg;
+}
