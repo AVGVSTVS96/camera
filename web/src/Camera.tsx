@@ -57,7 +57,8 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
   const { video, stream, error } = useCamera(settings, !still);
   const update: Update = (change) => setSettings((s) => ({ ...s, ...change }));
   const movie = movieModes.has(settings.mode);
-  const busy = settings.holding || settings.recording || settings.countdown > 0;
+  const counting = settings.countdown > 0;
+  const busy = settings.holding || settings.recording || counting;
   const props = { settings, update };
   const open = settings.submenu;
   const styling = open === "Styles";
@@ -112,19 +113,24 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
     update({ holding: true });
   }
 
-  const tick = useEffectEvent((left: number) => {
-    update({ countdown: left - 1 });
+  const count = useEffectEvent(() => {
+    let left = settings.countdown;
 
-    if (left === 1) capture();
+    return setInterval(() => {
+      left -= 1;
+      update({ countdown: left });
+
+      if (!left) capture();
+    }, 1000);
   });
 
   useEffect(() => {
-    if (!settings.countdown) return;
+    if (!counting || still) return;
 
-    const next = setTimeout(tick, 1000, settings.countdown);
+    const every = count();
 
-    return () => clearTimeout(next);
-  }, [settings.countdown]);
+    return () => clearInterval(every);
+  }, [counting, still]);
 
   const quicktake = {
     mode: settings.mode,
@@ -150,7 +156,7 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
       data-sheet={settings.sheet}
       data-submenu={open ?? undefined}
       data-styles={styling || undefined}
-      data-countdown={settings.countdown > 0 || undefined}
+      data-countdown={counting || undefined}
       data-holding={settings.holding || undefined}
       data-wide={settings.aspect === "16:9" || undefined}
       data-recording={settings.recording || undefined}

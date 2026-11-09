@@ -230,7 +230,7 @@ export class Graph {
 
     if (action === "countdown running") {
       return state.id.endsWith("-2")
-        ? { parent: `${prefix}-timer-countdown`, steps: [{ wait: 1000 }] }
+        ? { parent: `${prefix}-timer-countdown`, steps: [{ wait: 2000 }] }
         : { parent: `${prefix}-timer-10s-armed`, steps: [shutter, { wait: 1200 }] };
     }
 

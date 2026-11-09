@@ -381,7 +381,7 @@ export function reached(state: ParityState, profile = state.profile ?? duo): Set
     dial: c.zoomDial === "open",
     lenses: mode === "portrait" && ("zoomButton" in c || c.zoomDial === "open"),
     picked: c.portraitLighting !== undefined,
-    countdown: c.action === "countdown running" ? (timerOf(c) ?? 0) - (state.id.endsWith("-2") ? 2 : 1) : 0,
+    countdown: c.action === "countdown running" ? (timerOf(c) ?? 0) - (state.id.endsWith("-2") ? 3 : 1) : 0,
     holding: c.action === "shutter held (QuickTake)",
     recording: c.action === "recording",
     viewer: state.mode === "viewer",
