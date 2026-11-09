@@ -243,7 +243,7 @@ const focusOf = (c: Controls) =>
     ? { value: Number.parseFloat(String(c.value)) || 0, auto: c.value === "Auto" }
     : undefined;
 
-const resolutionOf = (selected: Controls["selected"]) => ([selected].flat().join().startsWith("48") ? 48 : 24);
+const megapixelsOf = (selected: Controls["selected"]) => ([selected].flat().join().startsWith("48") ? 48 : 24);
 
 const timerOf = (c: Controls) => Number.parseInt(String(c.control === "Timer" ? c.selected : c.timer)) || null;
 
@@ -360,7 +360,7 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
     sheet: sheets.get(String(c.sheet)),
     timer: timerOf(c),
     timerMenu: c.control === "Timer",
-    resolutionMenu: c.panel === "submenu" && c.control === "Resolution" ? resolutionOf(c.selected) : null,
+    resolutionMenu: c.panel === "submenu" && c.control === "Resolution" ? megapixelsOf(c.selected) : null,
     depth: depthOn(state, c),
     aperture: c.panel === "submenu" && c.control === "Depth" ? apertureOf(state, c) : null,
     orientation: state.orientation,
