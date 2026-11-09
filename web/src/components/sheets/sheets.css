@@ -1,7 +1,7 @@
 .sheet {
   position: absolute;
   inset: 0;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.86px;
   --x: 50px;
   --w: 366px;
   --t: 170.33px;
@@ -20,7 +20,8 @@
 }
 
 [data-sheet] .zoom,
-[data-sheet] .lighting {
+[data-sheet] .lighting,
+[data-sheet][data-display="inner"][data-orientation="landscape"] .row.shutter {
   display: none;
 }
 
