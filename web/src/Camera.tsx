@@ -10,6 +10,7 @@ import { Grid, Level } from "./components/grid/Grid.tsx";
 import { InnerViewer } from "./components/inner-layout/InnerViewer.tsx";
 import { Lighting } from "./components/lighting/Lighting.tsx";
 import { Macro } from "./components/macro/Macro.tsx";
+import { SubmenuAspectRatio } from "./components/submenu-aspect-ratio/SubmenuAspectRatio.tsx";
 import { SubmenuFocus } from "./components/submenu-focus/SubmenuFocus.tsx";
 import { ModeDial } from "./components/mode-dial/ModeDial.tsx";
 import { Recording } from "./components/recording/Recording.tsx";
@@ -124,6 +125,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
       {settings.focus && <SubmenuFocus {...props} />}
       {settings.format && <SubmenuVideoFormat {...props} />}
       {settings.livePhoto && <SubmenuLivePhoto {...props} />}
+      {settings.aspect && <SubmenuAspectRatio {...props} />}
       {settings.balance && <SubmenuWhiteBalance {...props} />}
       <Countdown settings={settings} />
       {profile.lighting !== false && !settings.tray && !styling && !movie && !settings.holding && (

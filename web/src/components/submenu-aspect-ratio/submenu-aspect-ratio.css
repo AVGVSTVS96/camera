@@ -1,0 +1,32 @@
+.submenu.aspect {
+  background: #1f1f1f;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.aspect .submenu-button {
+  background: #191919;
+}
+
+.aspect-readout {
+  position: absolute;
+  inset: 56.3px 0 auto;
+  text-align: center;
+  font-size: 36px;
+  font-weight: 500;
+  line-height: 36px;
+}
+
+.aspect-option {
+  position: absolute;
+  top: 77.67px;
+  width: 75px;
+  height: 75px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+}
+
+.aspect-option[data-on] {
+  color: #ffd600;
+}

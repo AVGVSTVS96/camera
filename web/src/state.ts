@@ -74,6 +74,7 @@ export interface Settings {
   countdown: boolean;
   holding: boolean;
   square: boolean;
+  aspect: string | null;
   lighting: Lighting;
   picked: boolean;
   viewer: boolean;
@@ -129,6 +130,7 @@ export function initialSettings(profile: Profile, mode: Mode = "photo", facing: 
     countdown: false,
     holding: false,
     square: false,
+    aspect: null,
     lighting: "natural",
     picked: false,
     viewer: false,
@@ -195,6 +197,15 @@ const focusOf = (c: Controls) =>
 
 const timerOf = (c: Controls) => Number.parseInt(String(c.control === "Timer" ? c.selected : c.timer)) || null;
 
+const aspectNames = new Map([
+  ["4 by 3", "4:3"],
+  ["16 by 9", "16:9"],
+  ["Square", "1:1"],
+]);
+
+const aspectOf = (c: Controls) =>
+  c.panel === "submenu" && c.control === "Aspect Ratio" ? (aspectNames.get([c.selected].flat().join()) ?? "4:3") : null;
+
 const hasOptions = (c: Controls) => Array.isArray(c.selected);
 
 // Apple's simulator keeps Depth on or off from earlier captures, so its value follows the capture history rather than any control.
@@ -258,6 +269,7 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
     countdown: c.action === "countdown running",
     holding: c.action === "shutter held (QuickTake)",
     square: c.control === "Aspect Ratio" && c.selected === "Square",
+    aspect: aspectOf(c),
     lighting: appleLightings.get(String(c.portraitLighting)) ?? rememberedLighting(state),
     picked: c.portraitLighting !== undefined,
     viewer: state.mode === "viewer",
