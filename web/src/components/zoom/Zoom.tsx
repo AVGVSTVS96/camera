@@ -80,7 +80,7 @@ export function Zoom({ settings, update }: Props) {
     let turning = false;
 
     const move = (m: PointerEvent) => {
-      const along = (m.clientX - from.x) * ax + (m.clientY - from.y) * ay;
+      const along = (m.clientX - from.x) * Math.abs(ax) + (m.clientY - from.y) * Math.abs(ay);
 
       if (!turning && Math.hypot(m.clientX - from.x, m.clientY - from.y) < 8) return;
 
