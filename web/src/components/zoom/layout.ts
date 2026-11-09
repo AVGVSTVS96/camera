@@ -1,6 +1,6 @@
 import type { Settings } from "../../state.ts";
 
-const outer = { reach: 132, radius: 258 };
+const outer = { reach: 132, radius: 258, perDoubling: 34 };
 const inner = { reach: 195, radius: 383 };
 
 const places = {
@@ -35,6 +35,7 @@ const places = {
     lone: 635,
     along: [-1, 0],
     into: [0, 1],
+    perDoubling: 85,
     ...inner,
   },
   "inner-landscape": {
@@ -46,6 +47,7 @@ const places = {
     lone: 34,
     along: [0, 1],
     into: [1, 0],
+    perDoubling: 36,
     ...inner,
   },
 } as const;
@@ -66,6 +68,7 @@ export function layout(s: Settings, duo: boolean) {
     x: p.vertical ? depth : p.cross,
     y: p.vertical ? p.cross : depth,
     lone: p.lone,
+    perDoubling: p.perDoubling,
     along: p.along,
     vertical: p.vertical,
     into: p.into,

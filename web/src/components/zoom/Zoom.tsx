@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { useProfile } from "../../profile.ts";
 import type { Props, Settings } from "../../state.ts";
 import { layout, slot } from "./layout.ts";
+import { useRamp } from "./ramp.ts";
 import "./zoom.css";
 
 function zoomLabel(value: number, active: boolean, bare: boolean) {
@@ -25,17 +26,19 @@ function stopsOf({ mode, formats, display, orientation }: Settings, own: number[
   return format.resolution === "4K" ? [1, 2] : own;
 }
 
-const perDoubling = 25;
-
 const clamp = (value: number, low: number, high: number) => Math.min(high, Math.max(low, value));
 
 const round = (value: number) => Math.round(value * 100) / 100;
+
+const tenth = (value: number) => Math.round(value * 10) / 10;
 
 export function Zoom({ settings, update }: Props) {
   const profile = useProfile();
   const own = profile.zoom[`${settings.facing}-${settings.mode}`]?.stops ?? [];
   const stops = settings.lenses ? [0.5, 1, 2, settings.zoom === 0.5 ? 1 : settings.zoom] : stopsOf(settings, own);
+  const self = useRef<HTMLDivElement>(null);
   const zoom = Math.max(settings.zoom, Math.min(...stops));
+  const shown = useRamp(zoom, `${settings.mode}${settings.facing}`, self);
   const bare = settings.mode === "time-lapse" || settings.mode === "portrait" || profile.name === "duo";
   const hide = useRef<number>(undefined);
 
@@ -63,7 +66,7 @@ export function Zoom({ settings, update }: Props) {
   const front = settings.facing === "front";
   const low = front ? 1 : settings.mode === "portrait" ? 0.5 : Math.min(...stops);
   const high = front ? 2 : Math.max(10, ...stops);
-  const self = useRef<HTMLDivElement>(null);
+  const cinematic = settings.mode === "cinematic";
   const latest = useRef({ zoom: settings.zoom, low, high, update });
 
   useEffect(() => {
@@ -76,7 +79,7 @@ export function Zoom({ settings, update }: Props) {
     let turning = false;
 
     const move = (m: PointerEvent) => {
-      const along = (m.clientX - from.x) * Math.abs(ax) + (m.clientY - from.y) * Math.abs(ay);
+      const along = ((m.clientX - from.x) * Math.abs(ax) + (m.clientY - from.y) * Math.abs(ay)) * (cinematic ? -1 : 1);
 
       if (!turning && Math.hypot(m.clientX - from.x, m.clientY - from.y) < 8) return;
 
@@ -86,7 +89,7 @@ export function Zoom({ settings, update }: Props) {
       clearTimeout(hide.current);
       update({
         dial: true,
-        zoom: round(clamp(from.zoom * 2 ** (along / perDoubling), low, high)),
+        zoom: tenth(clamp(from.zoom * 2 ** (along / (cinematic ? place.perDoubling : 25)), low, high)),
         ...(settings.mode === "portrait" && { lenses: true }),
       });
     };
@@ -175,8 +178,8 @@ export function Zoom({ settings, update }: Props) {
             className="readout"
             transform={`translate(${place.apex.x - place.into[0] * 37} ${place.apex.y - place.into[1] * 37}) rotate(${place.turn ? 90 : 0})`}
           >
-            <text y="5">{zoomLabel(zoom, true, bare)}</text>
-            <text y="21">{Math.round(zoom * 26)}MM</text>
+            <text y="5">{zoomLabel(shown, true, bare)}</text>
+            <text y="21">{Math.round(shown * 26)}MM</text>
           </g>
         </svg>
       )}
@@ -194,7 +197,7 @@ export function Zoom({ settings, update }: Props) {
             style={{ translate: offset(i), rotate: `${settings.zoomTurn}deg` }}
             onClick={() => (anchored && stops.length === 1 ? update({ lenses: true }) : update({ zoom: stop }))}
           >
-            {zoomLabel(i === active ? zoom : stop, i === active, bare)}
+            {zoomLabel(i === active ? shown : stop, i === active, bare)}
           </button>
         ))}
       </div>

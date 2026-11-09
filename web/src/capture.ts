@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useRamp } from "./components/zoom/ramp.ts";
 import type { Settings } from "./state.ts";
 
 declare global {
@@ -17,6 +18,7 @@ export interface Shot {
 export function useCamera(settings: Settings, enabled: boolean) {
   const video = useRef<HTMLVideoElement>(null);
   const [stream, setStream] = useState<MediaStream>();
+  const zoom = useRamp(settings.zoom, `${settings.mode}${settings.facing}`, video);
 
   useEffect(() => {
     if (!enabled) return;
@@ -45,9 +47,9 @@ export function useCamera(settings: Settings, enabled: boolean) {
     const track = stream?.getVideoTracks()[0];
 
     if (track && "zoom" in track.getCapabilities()) {
-      track.applyConstraints({ advanced: [{ zoom: settings.zoom }] }).catch(() => {});
+      track.applyConstraints({ advanced: [{ zoom }] }).catch(() => {});
     }
-  }, [stream, settings.zoom]);
+  }, [stream, zoom]);
 
   return { video, stream };
 }

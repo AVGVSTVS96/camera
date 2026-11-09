@@ -27,7 +27,7 @@ export const transitions: Transition[] = [
   { id: "record-start-video", component: "shutter", from: "video:default", trigger: { tap: "shutter" } },
   { id: "camera-flip", component: "flip", from: "default", trigger: { tap: "Camera Chooser" } },
   { id: "zoom-dial-open", component: "zoom", from: "default", trigger: { swipe: "zoom" } },
-  { id: "zoom-ramp-0.5-to-1.3", component: "zoom", from: "default", trigger: { pinch: 1.3 } },
+  { id: "zoom-ramp-0.5-to-1.3", component: "zoom", from: "default", trigger: { zoom: "1" } },
   {
     id: "unfold-outer-to-inner",
     component: "inner-layout",
