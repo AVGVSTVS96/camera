@@ -268,9 +268,9 @@ const megapixelsOf = (selected: Controls["selected"]) => ([selected].flat().join
 function centerStageOf(c: Controls): CenterStage | null {
   if (c.panel !== "submenu" || c.control !== "Center Stage") return null;
 
-  const [zoom, rotate] = Array.isArray(c.selected) ? c.selected : ["Off", c.selected];
+  const value = String(c.value ?? `Auto Rotate, ${c.selected}`);
 
-  return { zoom: zoom === "On", rotate: rotate === "On" };
+  return { zoom: value.includes("Auto Zoom, On"), rotate: value.includes("Auto Rotate, On") };
 }
 
 const timerOf = (c: Controls) => Number.parseInt(String(c.control === "Timer" ? c.selected : c.timer)) || null;
