@@ -65,6 +65,6 @@ git fetch origin && git rebase origin/main && bun run check
 until git push origin HEAD:main; do git fetch origin && git rebase origin/main || break; done
 ```
 
-A push rejected because main moved rebases and tries again. A rebase conflict stops the loop: resolve it keeping both sides' intent, `git rebase --continue`, run `bun run check`, push again.
+Every push runs `bun run verify` (check plus build) through `.githooks/pre-push`, which `bun install` turns on, so what reaches main always builds, even after a rebase merged two workers' changes. A push rejected because main moved rebases and tries again. A rebase conflict stops the loop: resolve it keeping both sides' intent, `git rebase --continue`, run `bun run check`, push again.
 
 When you're done: `git worktree remove ~/Developer/camera-wt/<component>`.

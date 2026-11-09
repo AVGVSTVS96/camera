@@ -14,6 +14,8 @@
     "lint": "oxlint",
     "fmt": "oxfmt",
     "check": "bun run --cwd web typecheck && oxlint && oxfmt --check",
+    "verify": "bun run check && bun run build",
+    "prepare": "git config core.hooksPath .githooks",
     "specs": "bun parity/specs.ts",
     "publish:parity": "bun parity/publish.ts"
   },
