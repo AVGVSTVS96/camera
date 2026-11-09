@@ -163,27 +163,31 @@ async function switchMode(page: Page, label: string) {
   const current = async () => dial.indexOf((await settings(page))?.mode.toUpperCase() ?? "");
   const goal = dial.indexOf(label);
 
-  for (let hop = 0; hop < dial.length && (await current()) !== goal; hop++) {
+  for (let hop = 0; hop < dial.length; hop++) {
     const from = await current();
-    const way = Math.sign(goal - from);
+
+    if (from === goal) return;
+
+    if (hop) await settle(page);
+
     const candidates = dial.slice(Math.min(from, goal), Math.max(from, goal) + 1).filter((l) => l !== dial[from]);
-    let tapped = false;
+    const target = await nearest(page, goal > from ? candidates.toReversed() : candidates);
 
-    for (const next of way > 0 ? candidates.toReversed() : candidates) {
-      const target = await find(page, next);
+    if (!target) return `no mode label between ${dial[from]} and ${label} can be tapped`;
 
-      if (target && !("miss" in (await aim(target)))) {
-        await tap(page, target);
-        await settle(page);
-        tapped = true;
-        break;
-      }
-    }
-
-    if (!tapped) return `no mode label between ${dial[from]} and ${label} can be tapped`;
+    await tap(page, target);
+    await page.waitForTimeout(40);
   }
 
-  if ((await current()) !== goal) return `tapping mode labels never reached ${label}`;
+  return `tapping mode labels never reached ${label}`;
+}
+
+async function nearest(page: Page, labels: string[]) {
+  for (const label of labels) {
+    const target = await find(page, label);
+
+    if (target && !("miss" in (await aim(target)))) return target;
+  }
 }
 
 async function zoomStops(page: Page) {
