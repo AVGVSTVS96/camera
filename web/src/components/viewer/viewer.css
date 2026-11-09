@@ -16,6 +16,7 @@
 .viewer .empty {
   font-size: 22px;
   font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
 .viewer .back {
@@ -24,22 +25,109 @@
   right: 24px;
   width: 48px;
   height: 48px;
+  display: grid;
+  place-items: center;
   border-radius: 50%;
-  background: rgb(255 255 255 / 0.72);
+  background: #f9f9f9;
   box-shadow:
-    0 0 0 0.5px rgb(0 0 0 / 0.08),
-    0 2px 8px rgb(0 0 0 / 0.12);
+    0 0 0 0.5px #c7c7c7,
+    0 4px 10px rgb(0 0 0 / 0.06);
+}
+
+.viewer .back svg {
+  translate: -2.2px 0;
 }
 
 [data-display="inner"][data-orientation="portrait"] .viewer .back {
+  top: 24px;
   right: auto;
   left: 20px;
 }
 
 [data-display="inner"][data-orientation="landscape"] .viewer .back {
   top: 120px;
+  right: auto;
+  left: 879px;
 }
 
 [data-display="outer"][data-orientation="portrait"] .viewer .back {
   top: 170px;
+}
+
+.viewer-status,
+.viewer-home {
+  position: absolute;
+  pointer-events: none;
+}
+
+.viewer-status {
+  --ring-x: 597px;
+  --ring-y: 24px;
+  inset: 0;
+}
+
+.viewer-ring {
+  position: absolute;
+  left: var(--ring-x);
+  top: var(--ring-y);
+}
+
+.viewer-clock {
+  position: absolute;
+  left: var(--clock-x);
+  top: var(--clock-y);
+  width: 34px;
+  text-align: center;
+  font:
+    700 17px/14px system-ui,
+    sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
+[data-display="outer"][data-orientation="portrait"] .viewer-status {
+  --ring-x: 396px;
+  --ring-y: 105.3px;
+  --clock-x: 401.5px;
+  --clock-y: 85.5px;
+}
+
+[data-display="inner"][data-orientation="portrait"] .viewer-status {
+  --ring-x: 599.3px;
+  --ring-y: 23.3px;
+  --clock-x: 552px;
+  --clock-y: 41px;
+}
+
+[data-display="inner"][data-orientation="landscape"] .viewer-status {
+  --ring-x: 881px;
+  --ring-y: 52.7px;
+  --clock-x: 886px;
+  --clock-y: 33px;
+}
+
+[data-display="outer"][data-orientation="landscape"] .viewer-status {
+  display: none;
+}
+
+.viewer-home {
+  display: none;
+}
+
+[data-display="outer"][data-orientation="portrait"] .viewer-home {
+  display: block;
+  left: 150px;
+  top: 667px;
+  width: 168px;
+  height: 5px;
+  border-radius: 2.5px;
+  background: linear-gradient(90deg, #a0a0a0, #555 12%, #555 88%, #a0a0a0);
+}
+
+[data-display="outer"][data-orientation="portrait"] .viewer ~ .system::before {
+  top: 29px;
+  height: 37px;
+}
+
+[data-display="outer"] .viewer ~ .system::after {
+  display: none;
 }

@@ -7,7 +7,7 @@ import { Countdown } from "./components/countdown/Countdown.tsx";
 import { DepthButton } from "./components/depth-button/DepthButton.tsx";
 import { Flip } from "./components/flip/Flip.tsx";
 import { Grid, Level } from "./components/grid/Grid.tsx";
-import { InnerPreview, InnerViewer } from "./components/inner-layout/InnerViewer.tsx";
+import { InnerPreview } from "./components/inner-layout/InnerPreview.tsx";
 import { Lighting } from "./components/lighting/Lighting.tsx";
 import { Macro } from "./components/macro/Macro.tsx";
 import { SubmenuAspectRatio } from "./components/submenu-aspect-ratio/SubmenuAspectRatio.tsx";
@@ -149,7 +149,6 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
       {settings.centerStage && <SubmenuCenterStage {...props} />}
       <AspectFlip {...props} />
       {settings.viewer && <Viewer shot={shot} close={() => update({ viewer: false })} />}
-      {settings.viewer && settings.display === "inner" && <InnerViewer empty={!shot} />}
       {settings.sheet && <Sheet kind={settings.sheet} update={update} />}
       {!settings.viewer && settings.display === "inner" && <InnerPreview />}
       {still && settings.display === "outer" && !settings.holding && !settings.recording && <div className="system" />}

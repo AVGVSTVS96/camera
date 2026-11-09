@@ -1,4 +1,5 @@
 import type { Shot } from "../../capture.ts";
+import { Status } from "./Status.tsx";
 import "./viewer.css";
 
 export function Viewer({ shot, close }: { shot?: Shot; close: () => void }) {
@@ -15,10 +16,12 @@ export function Viewer({ shot, close }: { shot?: Shot; close: () => void }) {
       ) : (
         <p className="empty">No Photos or Videos</p>
       )}
+      {!shot && <Status />}
+      {!shot && <div className="viewer-home" />}
       <button className="back" aria-label="Back" onClick={close}>
         <svg
-          width="13"
-          height="18"
+          width="14.6"
+          height="20.2"
           viewBox="0 0 13 18"
           fill="none"
           stroke="currentColor"
