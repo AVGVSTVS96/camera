@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, statSync } from "node:fs";
+import { existsSync, mkdirSync, renameSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { PNG } from "pngjs";
 import { out } from "./paths.ts";
@@ -44,7 +44,8 @@ async function feed(state: State) {
 
 async function write(file: string, image: PNG) {
   mkdirSync(join(out, "plates"), { recursive: true });
-  await Bun.write(file, PNG.sync.write(image));
+  await Bun.write(`${file}.${process.pid}`, PNG.sync.write(image));
+  renameSync(`${file}.${process.pid}`, file);
 }
 
 export interface Scene {

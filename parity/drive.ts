@@ -74,6 +74,7 @@ export async function open(browser: Browser, url: URL, state: State, launch: Lau
   await page.clock.pauseAt(new Date("2026-11-08T10:41:00"));
   await page.goto(new URL(`/?live=${state.id}`, url).href);
   await page.waitForFunction(() => window.camera && document.fonts.status === "loaded", null, { polling: 50 });
+  await page.evaluate((src) => Object.assign(new Image(), { src }).decode(), `/plates/${plate}.png`);
 
   await page.addStyleTag({
     content: `.screen { background: #000 url(/plates/${plate}.png) 0 0 / 100% 100% !important }

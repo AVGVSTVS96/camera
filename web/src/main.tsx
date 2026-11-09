@@ -30,7 +30,9 @@ if (id) {
       <Camera initial={params.has("reached") ? reached(state) : settingsFor(state)} still={id} />
     </ProfileContext>,
   );
-  await document.fonts.ready;
+  const plate = new Image();
+  plate.src = `/plates/${id}.png`;
+  await Promise.all([document.fonts.ready, plate.decode()]);
   requestAnimationFrame(() => requestAnimationFrame(() => (document.documentElement.dataset.ready = "")));
 } else if (live) {
   const { profile = duo } = await loadState(live);
