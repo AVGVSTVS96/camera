@@ -1,5 +1,6 @@
 import { useEffect, useEffectEvent, useRef, useState } from "react";
-import { record, snapshot, useCamera, type Shot } from "./capture.ts";
+import { record, snapshot, useCamera } from "./capture.ts";
+import { useLibrary } from "./library.ts";
 import { AspectFlip } from "./components/aspect-flip/AspectFlip.tsx";
 import { ControlsButton } from "./components/controls-button/ControlsButton.tsx";
 import { ControlsPanel } from "./components/controls-panel/ControlsPanel.tsx";
@@ -46,7 +47,7 @@ interface CameraProps {
 export function Camera({ initial, still, onSettings }: CameraProps) {
   const profile = useProfile();
   const [settings, setSettings] = useState(initial);
-  const [shot, setShot] = useState<Shot>();
+  const { shots, add } = useLibrary();
   const [shown, setShown] = useState(settings.tray);
   const [from, setFrom] = useState<{ x: number; y: number }>();
   const closing = shown && !settings.tray;
@@ -93,7 +94,7 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
     stop.current = undefined;
     update({ holding: false, recording: false });
     const [file, frame] = await Promise.all([end(), snapshot(video.current)]);
-    setShot({ url: URL.createObjectURL(file), file, poster: frame.url });
+    add({ url: URL.createObjectURL(file), file, poster: frame.url, frame: frame.file });
   }
 
   async function capture() {
@@ -101,7 +102,7 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
 
     if (stop.current) return finish();
 
-    if (!movie) return setShot(await snapshot(video.current));
+    if (!movie) return add(await snapshot(video.current));
 
     stop.current = record(stream);
     update({ recording: true });
@@ -209,7 +210,7 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
             )}
           </div>
           <div className="row modes">
-            {!settings.submenu && !busy && <Thumbnail shot={shot} open={() => update({ viewer: true })} />}
+            {!settings.submenu && !busy && <Thumbnail shot={shots.at(-1)} open={() => update({ viewer: true })} />}
           </div>
           {!settings.submenu && !busy && <Flip {...props} />}
           {!busy && !settings.submenu && (
@@ -248,7 +249,7 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
       {open === "Timer" && <SubmenuTimer {...props} />}
       {open === "Center Stage" && <SubmenuCenterStage {...props} />}
       <AspectFlip {...props} />
-      {settings.viewer && <Viewer shot={shot} close={() => update({ viewer: false })} />}
+      {settings.viewer && <Viewer shots={shots} close={() => update({ viewer: false })} />}
       {settings.sheet && <Sheet kind={settings.sheet} update={update} />}
       {still && settings.display === "outer" && !settings.holding && !settings.recording && <div className="system" />}
       {error && <p className="error">{error}</p>}

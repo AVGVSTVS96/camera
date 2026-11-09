@@ -11,6 +11,7 @@ export interface Shot {
   url: string;
   file: File;
   poster?: string;
+  frame?: File;
 }
 
 export function useCamera(settings: Settings, enabled: boolean) {
