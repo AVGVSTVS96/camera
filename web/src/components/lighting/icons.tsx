@@ -8,8 +8,7 @@ const dots = Array.from({ length: 15 }, (_, i) => {
 });
 
 const looks: Record<Lighting, string> = {
-  natural:
-    "radial-gradient(circle at 50% 78%, #fff 22%, rgb(255 255 255 / 0.85) 45%, rgb(255 255 255 / 0.4) 75%, rgb(255 255 255 / 0.12))",
+  natural: "radial-gradient(circle at 50% 30%, #fff 12%, #f2f2f2 35%, #c4c4c4 70%, #8a8a8a)",
   studio:
     "linear-gradient(#dbdbdb, #cdcdcd 20%, #c4c4c4 40%, #b4b4b4 50%, #a0a0a0 60%, #7e7e7e 75%, #6a6a6a 90%, #888)",
   contour:
