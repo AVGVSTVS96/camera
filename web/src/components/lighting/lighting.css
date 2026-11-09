@@ -10,7 +10,6 @@
 }
 
 .lighting-band {
-  z-index: 0;
   pointer-events: auto;
   touch-action: none;
   outline: none;

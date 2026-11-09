@@ -185,7 +185,6 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
         </div>
       ) : (
         <>
-          {!settings.countdown && <Zoom {...props} />}
           <div className="row shutter">
             {movie ? profile.macro && <Macro {...props} /> : !busy && <DepthButton on={settings.depth} />}
             <Shutter {...quicktake} />
@@ -227,6 +226,7 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
         !movie &&
         !settings.holding &&
         !settings.countdown && <Lighting {...props} />}
+      {!settings.tray && !styling && !settings.countdown && <Zoom {...props} />}
       {styling && <SubmenuStyles {...props} />}
       {open === "Timer" && <SubmenuTimer {...props} />}
       {open === "Center Stage" && <SubmenuCenterStage {...props} />}
