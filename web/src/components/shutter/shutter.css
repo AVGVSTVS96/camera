@@ -114,7 +114,7 @@
 }
 
 [data-recording] .shutter-button span {
-  transition: all 0.36s cubic-bezier(0, 0, 0.58, 1) 0.06s;
+  transition: all 0.36s ease-out 0.06s;
 }
 
 [data-recording] .shutter-button span,

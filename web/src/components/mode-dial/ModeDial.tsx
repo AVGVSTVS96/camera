@@ -21,12 +21,11 @@ const blur = [
   { filter: "blur(0)" },
 ];
 
-/** The viewfinder blurs while it resizes between 4:3 and 16:9 inside a frame that shows its edge. */
-function resize({ delay, duration, easing }: KeyframeAnimationOptions) {
-  const timing = { delay, duration, easing, fill: "backwards" } as const;
-  const viewfinder = document.querySelector(".viewfinder");
-
-  for (const child of viewfinder?.children ?? []) child.animate(blur, timing);
+/** The preview blurs while the viewfinder resizes between 4:3 and 16:9. */
+function blurPreview({ delay, duration, easing }: KeyframeAnimationOptions) {
+  for (const child of document.querySelector(".viewfinder")?.children ?? []) {
+    child.animate(blur, { delay, duration, easing, fill: "backwards" });
+  }
 }
 
 function switchTiming() {
@@ -57,9 +56,7 @@ export function ModeDial({ selected, select: apply }: { selected: Mode; select: 
 
       const timing = switchTiming();
 
-      if (movieModes.has(mode) !== movieModes.has(selected)) {
-        resize(timing);
-      }
+      if (movieModes.has(mode) !== movieModes.has(selected)) blurPreview(timing);
 
       crossfade(() => apply(mode), timing);
     },
