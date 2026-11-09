@@ -157,16 +157,15 @@ export function ControlsPanel({ settings, update, from, closing, gone }: PanelPr
 
   useLayoutEffect(() => {
     const box = tray.current;
-    const menu = document.querySelector<HTMLElement>(".submenu, .styles");
+    const menu = document.querySelector<HTMLElement>(".submenu, .styles, .exposure, .focus");
 
-    if (!closing || !box || !menu) return;
+    if (!closing || !box?.offsetParent || !menu) return;
 
     const turned = orientation === "landscape";
     const [width, height] = turned ? [menu.offsetHeight, menu.offsetWidth] : [menu.offsetWidth, menu.offsetHeight];
-
-    const [x, y] = menu.matches(".submenu")
-      ? [menu.offsetLeft, menu.offsetTop]
-      : [menu.offsetLeft + menu.offsetWidth / 2, menu.offsetTop + menu.offsetHeight / 2];
+    const screen = box.offsetParent.getBoundingClientRect();
+    const target = menu.getBoundingClientRect();
+    const [x, y] = [target.x + target.width / 2 - screen.x, target.y + target.height / 2 - screen.y];
 
     const shrink = box.animate(
       [
@@ -183,6 +182,8 @@ export function ControlsPanel({ settings, update, from, closing, gone }: PanelPr
     );
 
     shrink.finished.then(finish, () => {});
+
+    return () => shrink.cancel();
   }, [closing, orientation]);
 
   const open = (name: Submenu | Toggle) =>
