@@ -1,5 +1,6 @@
 import { useEffect, useEffectEvent, useRef, useState } from "react";
 import { record, snapshot, useCamera, type Recording as Take } from "./capture.ts";
+import { crossfade } from "./crossfade.ts";
 import { useLibrary } from "./library.ts";
 import { AspectFlip } from "./components/aspect-flip/AspectFlip.tsx";
 import { ControlsButton } from "./components/controls-button/ControlsButton.tsx";
@@ -65,10 +66,17 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
   const open = settings.submenu;
   const styling = open === "Styles";
 
+  const follow = useEffectEvent(() => {
+    const pose = poseOf(innerWidth, innerHeight);
+    const apply = () => setSettings((s) => ({ ...s, ...pose }));
+
+    if (pose.display === settings.display) apply();
+    else crossfade(apply, { duration: 308, easing: "cubic-bezier(0, 0, 0.58, 1)" });
+  });
+
   useEffect(() => {
     if (still) return;
 
-    const follow = () => setSettings((s) => ({ ...s, ...poseOf(innerWidth, innerHeight) }));
     addEventListener("resize", follow);
 
     return () => removeEventListener("resize", follow);
@@ -105,7 +113,7 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
     if (!movie) return add(await snapshot(video.current));
 
     take.current = record(stream);
-    update({ recording: true });
+    crossfade(() => update({ recording: true }), { delay: 60, duration: 360, easing: "cubic-bezier(0, 0, 0.58, 1)" });
   }
 
   function shutter() {

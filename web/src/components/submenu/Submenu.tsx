@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { crossfade } from "../../crossfade.ts";
 import "./submenu.css";
 
 function Chevron() {
@@ -83,7 +84,11 @@ export function Submenu({
         <path d={PANEL} fill="none" stroke="url(#submenu-rim)" strokeWidth="4" opacity="0.15" />
         <path d={PANEL} fill="none" stroke="url(#submenu-rim)" strokeWidth="2" opacity="0.5" />
       </svg>
-      <button className="submenu-button submenu-back" aria-label="Back" onClick={back}>
+      <button
+        className="submenu-button submenu-back"
+        aria-label="Back"
+        onClick={() => crossfade(back, { delay: 166, duration: 553, easing: "cubic-bezier(0, 0, 0.58, 1)" })}
+      >
         <Chevron />
       </button>
       <h2 className="submenu-title">{title.toUpperCase()}</h2>

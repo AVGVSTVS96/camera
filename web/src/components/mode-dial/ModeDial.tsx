@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useEffectEvent, useLayoutEffect, useRef, useState } from "react";
-import { flushSync } from "react-dom";
+import { crossfade } from "../../crossfade.ts";
 import { useProfile } from "../../profile.ts";
 import { movieModes, type Mode } from "../../state.ts";
 import "./mode-dial.css";
@@ -12,6 +12,16 @@ function along(dial: HTMLElement, dx: number, dy: number) {
   const turn = (Number.parseFloat(getComputedStyle(dial).rotate) || 0) * (Math.PI / 180);
 
   return { along: dx * Math.cos(turn) + dy * Math.sin(turn), across: dy * Math.cos(turn) - dx * Math.sin(turn) };
+}
+
+function switchTiming() {
+  const root = getComputedStyle(document.documentElement);
+
+  return {
+    delay: Number.parseFloat(root.getPropertyValue("--switch-delay")) * 1000,
+    duration: Number.parseFloat(root.getPropertyValue("--switch-time")) * 1000,
+    easing: root.getPropertyValue("--switch-ease"),
+  };
 }
 
 export function ModeDial({ selected, select: apply }: { selected: Mode; select: (mode: Mode) => void }) {
@@ -30,8 +40,7 @@ export function ModeDial({ selected, select: apply }: { selected: Mode; select: 
 
       document.documentElement.dataset.switch = movieModes.has(mode) ? "movie" : "still";
 
-      if (document.startViewTransition) document.startViewTransition(() => flushSync(() => apply(mode)));
-      else apply(mode);
+      crossfade(() => apply(mode), switchTiming());
     },
     [apply, selected],
   );

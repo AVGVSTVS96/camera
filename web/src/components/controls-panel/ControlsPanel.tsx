@@ -164,6 +164,7 @@ export function ControlsPanel({ settings, update, from, closing, gone }: PanelPr
         className="tray"
         aria-label="Camera controls"
         data-closing={closing || undefined}
+        data-handoff={settings.submenu ? true : undefined}
         onAnimationEnd={() => closing && gone()}
         style={{
           left: sheet.left,

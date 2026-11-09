@@ -97,3 +97,13 @@ button {
 .screen {
   touch-action: none;
 }
+
+.screen.ghost,
+.screen.ghost * {
+  animation: none !important;
+}
+
+.screen.ghost {
+  pointer-events: none;
+  background: none !important;
+}

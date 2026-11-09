@@ -26,6 +26,11 @@
   pointer-events: none;
 }
 
+.tray[data-closing][data-handoff] {
+  animation-duration: 0.342s;
+  animation-delay: 0.165s;
+}
+
 .tray-backdrop[data-closing] {
   pointer-events: none;
 }
