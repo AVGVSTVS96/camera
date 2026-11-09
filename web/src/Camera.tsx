@@ -34,7 +34,7 @@ import { TopBar } from "./components/top-bar/TopBar.tsx";
 import { Viewer } from "./components/viewer/Viewer.tsx";
 import { Zoom } from "./components/zoom/Zoom.tsx";
 import { useProfile } from "./profile.ts";
-import { movieModes, poseOf, type Settings, type Update } from "./state.ts";
+import { movieModes, poseOf, switchMode, type Settings, type Update } from "./state.ts";
 
 interface CameraProps {
   initial: Settings;
@@ -147,7 +147,7 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
           </div>
           {!settings.submenu && !settings.holding && !settings.recording && <Flip {...props} />}
           {!settings.holding && !settings.recording && !settings.submenu && (
-            <ModeDial selected={settings.mode} select={(mode) => update({ mode })} />
+            <ModeDial selected={settings.mode} select={(mode) => update(switchMode(profile, settings, mode))} />
           )}
         </>
       )}

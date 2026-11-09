@@ -179,6 +179,20 @@ export function defaultAperture({ mode, facing }: Pick<Settings, "mode" | "facin
 
 export const apertureOf = (settings: Settings) => settings.aperture ?? defaultAperture(settings);
 
+const startZoom = (profile: Profile, facing: Facing, mode: Mode) => profile.zoom[`${facing}-${mode}`]?.start ?? 1;
+
+const defaultFlash = (mode: Mode): Flash => (movieModes.has(mode) ? "off" : "auto");
+
+export const switchMode = (
+  profile: Profile,
+  { mode: from, facing, flash }: Settings,
+  mode: Mode,
+): Partial<Settings> => ({
+  mode,
+  zoom: startZoom(profile, facing, mode),
+  flash: movieModes.has(mode) === movieModes.has(from) ? flash : defaultFlash(mode),
+});
+
 export function initialSettings(profile: Profile, pose: Pose, mode: Mode = "photo", facing: Facing = "back"): Settings {
   const [, megapixels] = profile.photoFormat.split(" ");
   const resolution = profile.videoFormat.startsWith("4K") ? "4K" : "HD";
@@ -187,8 +201,8 @@ export function initialSettings(profile: Profile, pose: Pose, mode: Mode = "phot
     ...pose,
     mode,
     facing,
-    zoom: profile.zoom[`${facing}-${mode}`]?.start ?? 1,
-    flash: movieModes.has(mode) ? "off" : "auto",
+    zoom: startZoom(profile, facing, mode),
+    flash: defaultFlash(mode),
     live: "auto",
     night: facing === "front" ? "off" : "auto",
     macro: true,
@@ -354,7 +368,7 @@ export function reached(state: ParityState, profile = state.profile ?? duo): Set
     level: c.level === true || initial.level,
 
     tray: c.panel === "open" || c.panel === "expanded",
-    expanded: c.panel === "expanded" || c.control !== undefined,
+    expanded: c.panel === "expanded" || (c.panel === "open" && c.control !== undefined),
     submenu: submenuOf(c),
     customize: c.selected === "Customize" || c.panel === "styles customize",
     dial: c.zoomDial === "open",
