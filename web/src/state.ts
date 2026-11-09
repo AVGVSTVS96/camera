@@ -68,6 +68,15 @@ export interface VideoFormat {
   rate: number;
 }
 
+// Slo-mo films 240 fps only in HD: choosing 4K there drops to 120, and anything else at 240 keeps HD.
+export function changeFormat(format: VideoFormat, change: Partial<VideoFormat> = {}): VideoFormat {
+  const next = { ...format, ...change };
+
+  if (next.rate !== 240 || next.resolution === "HD") return next;
+
+  return change.resolution ? { ...next, rate: 120 } : { ...next, resolution: "HD" };
+}
+
 export interface CenterStage {
   zoom: boolean;
   rotate: boolean;
@@ -302,7 +311,7 @@ function formatOf(mode: Mode, c: Controls, current: VideoFormat): VideoFormat {
   const choice = [c.selected].flat();
   const rate = Number.parseInt(String(choice.find((s) => String(s).includes("frames")))) || defaultRate(mode);
 
-  return { resolution: choice.includes("4K") ? "4K" : current.resolution, rate };
+  return changeFormat(current, choice.includes("4K") ? { resolution: "4K", rate } : { rate });
 }
 
 function centerStageOf(c: Controls): CenterStage {
@@ -513,7 +522,7 @@ function rememberedFormats({ mode, formats, submenu }: Settings, c: Controls) {
 
   if (submenu !== "Video Format" || !format || Array.isArray(c.selected)) return formats;
 
-  return { ...formats, [mode]: { ...format, resolution: "4K" } };
+  return { ...formats, [mode]: changeFormat({ ...format, resolution: "4K" }) };
 }
 
 // A forced state: what tapping reaches, plus what Apple's simulator carried over from earlier captures.

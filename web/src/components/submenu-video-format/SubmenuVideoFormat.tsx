@@ -1,4 +1,4 @@
-import { back, defaultRate, type Facing, type Mode, type Props, type VideoFormat } from "../../state.ts";
+import { back, changeFormat, defaultRate, type Facing, type Mode, type Props, type VideoFormat } from "../../state.ts";
 import { Submenu } from "../submenu/Submenu.tsx";
 import "./submenu-video-format.css";
 
@@ -21,7 +21,7 @@ export function SubmenuVideoFormat({ settings, update }: Props) {
   if (!format) return null;
 
   const choose = (change: Partial<VideoFormat>) =>
-    update({ formats: { ...formats, [mode]: { ...format, ...change } } });
+    update({ formats: { ...formats, [mode]: changeFormat(format, change) } });
 
   const dot = defaultRate(mode);
   const all = rates(settings);
