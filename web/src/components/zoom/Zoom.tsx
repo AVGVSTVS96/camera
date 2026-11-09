@@ -43,6 +43,7 @@ export function Zoom({ settings, update }: Props) {
 
   const showDial =
     settings.dial &&
+    stops.length > 0 &&
     dialModes.includes(settings.mode) &&
     !(settings.mode === "slo-mo" && settings.display === "outer" && settings.orientation === "portrait");
 
@@ -63,7 +64,6 @@ export function Zoom({ settings, update }: Props) {
   const low = front ? 1 : settings.mode === "portrait" ? 0.5 : Math.min(...stops);
   const high = front ? 2 : Math.max(10, ...stops);
   const self = useRef<HTMLDivElement>(null);
-  const shown = stops.length > 0;
   const latest = useRef({ zoom: settings.zoom, low, high, update });
 
   useEffect(() => {
@@ -160,8 +160,6 @@ export function Zoom({ settings, update }: Props) {
 
     return `${along * ax + (place.vertical ? 0 : shift)}px ${along * ay + (place.vertical ? shift : 0)}px`;
   };
-
-  if (!shown) return null;
 
   return (
     <>
