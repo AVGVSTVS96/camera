@@ -240,7 +240,9 @@ function zoomTurnOf(state: ParityState, c: Controls) {
   const sideways = state.display === "inner" && (state.mode === "photo" || (state.mode === "cinematic" && !portrait));
 
   const resting =
-    c.panel !== undefined || (portrait && c.fold !== undefined) || (c.zoom !== undefined && c.zoomDial === undefined);
+    c.timer === undefined &&
+    c.smartTake === undefined &&
+    (c.panel !== undefined || (portrait && c.fold !== undefined) || (c.zoom !== undefined && c.zoomDial === undefined));
 
   return sideways && (resting || touched) ? 90 : 0;
 }

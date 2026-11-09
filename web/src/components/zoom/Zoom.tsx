@@ -10,10 +10,11 @@ function zoomLabel(value: number, active: boolean, bare: boolean) {
   return active ? `${text}×` : bare ? text.replace(/^0/, "") : text;
 }
 
-function stopsOf({ mode, format }: Settings, own: number[]) {
+function stopsOf({ mode, format, display, orientation }: Settings, own: number[]) {
   if (!format) return own;
 
-  if (mode === "video") return format.rate === 120 ? [1, 2] : own;
+  if (mode === "video")
+    return format.rate === 120 && !(display === "inner" && orientation === "portrait") ? [1, 2] : own;
 
   if (mode !== "slo-mo") return own;
 
