@@ -1,0 +1,29 @@
+.submenu.timer {
+  background: #1f1f1f;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.timer-value {
+  position: absolute;
+  inset: 56.33px 0 auto;
+  text-align: center;
+  font-size: 32px;
+  line-height: 36px;
+}
+
+.timer-option {
+  position: absolute;
+  top: 77.67px;
+  width: 56.33px;
+  height: 75px;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  padding-top: 25.33px;
+  color: #fff;
+}
+
+.timer-option[data-on] {
+  color: #ffd600;
+}

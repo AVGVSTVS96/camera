@@ -16,6 +16,7 @@ import { ModeDial } from "./components/mode-dial/ModeDial.tsx";
 import { Recording } from "./components/recording/Recording.tsx";
 import { Sheet } from "./components/sheets/Sheet.tsx";
 import { Shutter } from "./components/shutter/Shutter.tsx";
+import { SubmenuTimer } from "./components/submenu-timer/SubmenuTimer.tsx";
 import { SubmenuStyles } from "./components/submenu-styles/SubmenuStyles.tsx";
 import { SubmenuDepth } from "./components/submenu-depth/SubmenuDepth.tsx";
 import { SubmenuFlash } from "./components/submenu-flash/SubmenuFlash.tsx";
@@ -138,6 +139,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
         <Lighting settings={settings} />
       )}
       {styling && <SubmenuStyles {...props} />}
+      {settings.submenu && settings.timerMenu && <SubmenuTimer {...props} />}
       <AspectFlip {...props} />
       {settings.viewer && <Viewer shot={shot} close={() => update({ viewer: false })} />}
       {settings.viewer && settings.display === "inner" && <InnerViewer empty={!shot} />}
