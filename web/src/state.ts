@@ -149,6 +149,7 @@ export interface Settings extends Pose {
   on: Toggle[];
   grid: boolean;
   level: boolean;
+  lock: boolean;
 
   tray: boolean;
   expanded: boolean;
@@ -247,6 +248,7 @@ export function initialSettings(profile: Profile, pose: Pose, mode: Mode = "phot
     on: [],
     grid: profile.grid,
     level: profile.level,
+    lock: false,
 
     tray: false,
     expanded: false,
@@ -372,6 +374,10 @@ function choose(settings: Settings, c: Controls): Partial<Settings> {
   }
 }
 
+export const MAX_BIAS = 2;
+
+const lockActions = new Set(["long-press viewfinder (AE/AF lock)", "drag up beside focus box"]);
+
 export function reached(state: ParityState, profile = state.profile ?? duo): Settings {
   const c = state.controls ?? {};
   const mode = modeOf(state.mode);
@@ -393,6 +399,8 @@ export function reached(state: ParityState, profile = state.profile ?? duo): Set
     on: isToggle(toggled) && (c.to === "On" || c.to === "Adaptive") ? [toggled] : [],
     grid: c.grid === true || initial.grid,
     level: c.level === true || initial.level,
+    lock: lockActions.has(String(c.action)),
+    ...(c.action === "drag up beside focus box" && { exposure: MAX_BIAS }),
 
     tray: c.panel === "open" || c.panel === "expanded",
     expanded: c.panel === "expanded" || (c.panel === "open" && c.control !== undefined),

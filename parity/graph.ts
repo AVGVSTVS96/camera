@@ -10,7 +10,7 @@ export type Step =
   | { pinch: number }
   | { swipe: "zoom" }
   | { adjust: string | null; by: number }
-  | { press: string; hold: number; slide?: number; release: boolean }
+  | { press: string; hold: number; slide?: number; rise?: number; release: boolean }
   | { point: [number, number] }
   | { wait: number };
 
@@ -251,7 +251,7 @@ export class Graph {
     }
 
     if (action === "drag up beside focus box") {
-      return { parent: `${prefix}-ae-af-lock`, steps: [{ press: "Viewfinder", hold: 300, slide: -80, release: true }] };
+      return { parent: `${prefix}-ae-af-lock`, steps: [{ press: "Viewfinder", hold: 300, rise: -80, release: true }] };
     }
 
     return { outside: `no route for action "${action}"` };
@@ -320,7 +320,7 @@ export function describe(step: Step) {
     return `${step.by > 0 ? "raise" : "lower"} ${step.adjust ?? "slider"} ${Math.abs(step.by)} ticks`;
 
   if ("press" in step) {
-    return `hold ${step.press} ${step.hold} ms${step.slide ? `, slide ${step.slide}pt` : ""}${step.release ? "" : " (still held)"}`;
+    return `hold ${step.press} ${step.hold} ms${step.slide ? `, slide ${step.slide}pt` : ""}${step.rise ? `, rise ${step.rise}pt` : ""}${step.release ? "" : " (still held)"}`;
   }
 
   if ("point" in step) return `tap at ${step.point.join(",")}`;

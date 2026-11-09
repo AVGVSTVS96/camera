@@ -356,7 +356,9 @@ export async function perform(driver: Driver, step: Step): Promise<string | unde
   await touch(driver, "touchStart", [at]);
   await page.clock.runFor(step.hold);
 
-  if (step.slide) await gesture(driver, [at], [{ x: at.x + step.slide, y: at.y }], 600);
+  if (step.slide || step.rise) {
+    await gesture(driver, [at], [{ x: at.x + (step.slide ?? 0), y: at.y + (step.rise ?? 0) }], 600);
+  }
 
   if (step.release) await touch(driver, "touchEnd", []);
 }

@@ -55,6 +55,7 @@
 }
 
 .grid {
+  pointer-events: none;
   --line: #bcbcbf;
   --edge: #0000002b;
   position: absolute;

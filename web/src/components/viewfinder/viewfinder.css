@@ -1,0 +1,99 @@
+.viewfinder {
+  touch-action: none;
+}
+
+.viewfinder-focus {
+  position: absolute;
+  width: 0;
+  height: 0;
+  color: var(--yellow);
+  pointer-events: none;
+  animation: viewfinder-focus 3.5s linear forwards;
+}
+
+.viewfinder-focus[data-locked] {
+  animation: viewfinder-lock 0.35s ease-out forwards;
+}
+
+.viewfinder-box {
+  position: absolute;
+  inset: -37.5px;
+  box-shadow: inset 0 0 0 1px currentColor;
+  background:
+    linear-gradient(currentColor, currentColor) top center / 1px 6px no-repeat,
+    linear-gradient(currentColor, currentColor) bottom center / 1px 6px no-repeat,
+    linear-gradient(currentColor, currentColor) left center / 6px 1px no-repeat,
+    linear-gradient(currentColor, currentColor) right center / 6px 1px no-repeat;
+}
+
+.viewfinder-bias {
+  position: absolute;
+  left: 54.5px;
+  top: -71.5px;
+  width: 1px;
+  height: 143px;
+  background: currentColor;
+}
+
+.viewfinder-focus[data-flip] .viewfinder-bias {
+  left: -55.5px;
+}
+
+.viewfinder-bias b {
+  position: absolute;
+  left: -12.5px;
+  top: 59px;
+  width: 25px;
+  height: 25px;
+  rotate: var(--glyph-turn);
+  background: #0006;
+  border-radius: 50%;
+}
+
+.viewfinder-badge {
+  position: absolute;
+  left: 50%;
+  top: 8px;
+  translate: -50%;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: #0000004d;
+  color: var(--yellow);
+  font: 600 13px / 16px system-ui;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+}
+
+@keyframes viewfinder-focus {
+  0% {
+    scale: 1.4;
+    opacity: 0;
+  }
+  4% {
+    scale: 1;
+    opacity: 1;
+  }
+  45% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 0.36;
+  }
+  90% {
+    opacity: 0.36;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes viewfinder-lock {
+  from {
+    scale: 1.4;
+    opacity: 0;
+  }
+  to {
+    scale: 1;
+    opacity: 0.36;
+  }
+}

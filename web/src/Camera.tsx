@@ -32,6 +32,7 @@ import { SubmenuLivePhoto } from "./components/submenu-live-photo/SubmenuLivePho
 import { SubmenuNightMode } from "./components/submenu-night-mode/SubmenuNightMode.tsx";
 import { SubmenuWhiteBalance } from "./components/submenu-white-balance/SubmenuWhiteBalance.tsx";
 import { Thumbnail } from "./components/thumbnail/Thumbnail.tsx";
+import { Viewfinder } from "./components/viewfinder/Viewfinder.tsx";
 import { TopBar } from "./components/top-bar/TopBar.tsx";
 import { Viewer } from "./components/viewer/Viewer.tsx";
 import { Zoom } from "./components/zoom/Zoom.tsx";
@@ -193,10 +194,10 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
       data-recording={settings.recording || undefined}
       style={still ? { backgroundImage: `url(/plates/${still}.png)` } : undefined}
     >
-      <div className="viewfinder">
+      <Viewfinder {...props} still={!!still}>
         {!still && <video ref={video} autoPlay playsInline muted data-facing={settings.facing} />}
         {settings.level && !still && <Level />}
-      </div>
+      </Viewfinder>
       {still && settings.display === "inner" && <InnerPreview />}
       {settings.sheet && settings.sheet !== "choose" && <div className="sheet-scrim" />}
       {settings.grid && <Grid />}
