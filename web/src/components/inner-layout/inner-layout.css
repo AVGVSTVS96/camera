@@ -160,6 +160,7 @@
   display: none;
 }
 
-.screen[data-display="inner"][data-mode="time-lapse"][data-recording] :is(.zoom, .timer, .thumb, .flip, .controls-button) {
+.screen[data-display="inner"][data-mode="time-lapse"][data-recording]
+  :is(.zoom, .timer, .thumb, .flip, .controls-button) {
   display: none;
 }
