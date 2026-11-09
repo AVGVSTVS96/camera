@@ -1,0 +1,80 @@
+import type { Props } from "../../state.ts";
+import { Reset } from "../submenu-exposure/icons.tsx";
+import { Submenu } from "../submenu/Submenu.tsx";
+import "./submenu-depth.css";
+
+const stops = [
+  "1.4",
+  "1.6",
+  "1.8",
+  "2.0",
+  "2.2",
+  "2.5",
+  "2.8",
+  "3.2",
+  "3.5",
+  "4.0",
+  "4.5",
+  "5.0",
+  "5.6",
+  "6.3",
+  "7.1",
+  "8.0",
+  "9.0",
+  "10",
+  "11",
+  "13",
+  "14",
+  "16",
+  "18",
+  "20",
+];
+
+const REACH = 9;
+const STOPS_PER_MARK = 3;
+
+export function SubmenuDepth({ settings, update }: Props) {
+  const { aperture } = settings;
+
+  if (!aperture) return null;
+
+  const { at, first, last, off, reset, unavailable } = aperture;
+  const marks = Array.from({ length: last - first + 1 }, (_, i) => first + i).filter((i) => Math.abs(i - at) <= REACH);
+
+  return (
+    <Submenu title="Depth" className="depth" back={() => update({ submenu: false, aperture: null })}>
+      {reset && (
+        <button className="submenu-button depth-reset" aria-label="Reset">
+          <Reset />
+        </button>
+      )}
+      <output className="depth-value">
+        {off ? (
+          "Off"
+        ) : (
+          <>
+            <sup>ƒ</sup>
+            {stops[at]}
+          </>
+        )}
+      </output>
+      <div
+        className="depth-slider"
+        role="slider"
+        aria-label="Depth slider"
+        aria-valuetext={off ? "Off" : `ƒ${stops[at]}`}
+      >
+        {marks.map((i) => (
+          <i
+            key={i}
+            className="depth-tick"
+            data-selected={i === at || undefined}
+            data-major={i % STOPS_PER_MARK === 0 || undefined}
+            style={{ left: 189 + 15 * (i - at) }}
+          />
+        ))}
+      </div>
+      {unavailable && <p className="depth-caption">Depth is unavailable.</p>}
+    </Submenu>
+  );
+}

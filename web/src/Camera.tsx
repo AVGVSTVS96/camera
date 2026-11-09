@@ -17,6 +17,7 @@ import { Recording } from "./components/recording/Recording.tsx";
 import { Sheet } from "./components/sheets/Sheet.tsx";
 import { Shutter } from "./components/shutter/Shutter.tsx";
 import { SubmenuStyles } from "./components/submenu-styles/SubmenuStyles.tsx";
+import { SubmenuDepth } from "./components/submenu-depth/SubmenuDepth.tsx";
 import { SubmenuExposure } from "./components/submenu-exposure/SubmenuExposure.tsx";
 import { SmartTake } from "./components/smart-take/SmartTake.tsx";
 import { SubmenuVideoFormat } from "./components/submenu-video-format/SubmenuVideoFormat.tsx";
@@ -122,6 +123,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
         </>
       )}
       <SubmenuExposure settings={settings} />
+      <SubmenuDepth {...props} />
       {settings.focus && <SubmenuFocus {...props} />}
       {settings.format && <SubmenuVideoFormat {...props} />}
       {settings.livePhoto && <SubmenuLivePhoto {...props} />}

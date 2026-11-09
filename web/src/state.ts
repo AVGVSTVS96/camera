@@ -83,6 +83,7 @@ export interface Settings {
   timer: number | null;
   timerMenu: boolean;
   depth: boolean;
+  aperture: Aperture | null;
   orientation: Orientation;
   display: Display;
   fold?: string;
@@ -138,6 +139,7 @@ export function initialSettings(profile: Profile, mode: Mode = "photo", facing: 
     timer: null,
     timerMenu: false,
     depth: false,
+    aperture: null,
     orientation: "portrait",
     display: "outer",
   };
@@ -238,6 +240,36 @@ function depthOn(state: ParityState, c: Controls) {
   return c.control !== "Depth" || !hasOptions(c);
 }
 
+// Marks count in third-stops from ƒ1.4 (0); each lens and mode shows its own range of them.
+export interface Aperture {
+  first: number;
+  at: number;
+  last: number;
+  off?: boolean;
+  reset?: boolean;
+  unavailable?: boolean;
+}
+
+// Apple's simulator keeps the f-stop it last had, so these follow its capture history; a reset button shows once the value moved.
+function apertureOf(state: ParityState, c: Controls): Aperture {
+  const front = c.camera === "front";
+  const moved = (Array.isArray(c.options) && c.options.includes("Reset")) || (!front && c.adjust !== undefined);
+
+  if (state.mode === "photo") {
+    if (c.selected !== "Depth") return { first: 1, at: 13, last: 13, off: true };
+
+    const wide = front && state.display === "inner" && state.orientation === "landscape";
+
+    return { first: 0, at: wide ? 10 : 6, last: wide ? 22 : 18, unavailable: true };
+  }
+
+  if (state.mode === "portrait") return { first: 0, at: moved ? 11 : 10, last: 21, reset: moved };
+
+  if (front) return moved ? { first: 3, at: 7, last: 19, reset: true } : { first: 3, at: 10, last: 21 };
+
+  return moved ? { first: 3, at: 7, last: 19, reset: true } : { first: 3, at: 6, last: 18 };
+}
+
 export function settingsFor(state: ParityState, profile = state.profile ?? duo): Settings {
   const c = state.controls ?? {};
   const mode = modeOf(state.mode);
@@ -279,6 +311,7 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
     timer: timerOf(c),
     timerMenu: c.control === "Timer",
     depth: depthOn(state, c),
+    aperture: c.panel === "submenu" && c.control === "Depth" ? apertureOf(state, c) : null,
     orientation: state.orientation,
     display: state.display,
     fold: state.fold,
