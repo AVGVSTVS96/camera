@@ -28,19 +28,21 @@ export const Exposure = () => (
   </Icon>
 );
 
-const dots = [0, 1, 2, 3, 4].flatMap((i) => [0, 1, 2, 3, 4].map((j) => ({ x: 4 + i * 4, y: 4 + j * 4 })));
+const corner = (n: number) => n === 4 || n === 20;
+
+const dots = [4, 8, 12, 16, 20].flatMap((x) =>
+  [4, 8, 12, 16, 20].flatMap((y) => (corner(x) && corner(y) ? [] : [{ x, y, hub: x === 12 && y === 12 }])),
+);
 
 export const Styles = ({ off = false }: { off?: boolean }) => (
   <Icon size={34}>
-    {dots
-      .filter(({ x, y }) => (x === 12 && y === 12) || ![4, 20].includes(x) || ![4, 20].includes(y))
-      .map(({ x, y }) =>
-        x === 12 && y === 12 ? (
-          <circle key="c" cx={x} cy={y} r={1.4} />
-        ) : (
-          <circle key={`${x}${y}`} cx={x} cy={y} r={0.9} fill="currentColor" stroke="none" />
-        ),
-      )}
+    {dots.map(({ x, y, hub }) =>
+      hub ? (
+        <circle key="hub" cx={x} cy={y} r={1.4} />
+      ) : (
+        <circle key={`${x}${y}`} cx={x} cy={y} r={0.9} fill="currentColor" stroke="none" />
+      ),
+    )}
     {off && slash("M4 4 20 20")}
   </Icon>
 );
@@ -64,8 +66,11 @@ export const Focus = () => (
 
 export const WhiteBalance = () => (
   <Icon size={34}>
-    <path d="M6.5 19h8a3.2 3.2 0 0 0 .4-6.4A4.6 4.6 0 0 0 6 13.2 3 3 0 0 0 6.5 19Z" />
-    <path d="M11.4 9.2A4.4 4.4 0 0 1 18.6 12M15.5 3v1.7m4.6.3-1.2 1.2m3 3.3h-1.7M11 5l1.2 1.2" />
+    <path d="M5 20h8.6a3.6 3.6 0 0 0 .4-7.2 5.2 5.2 0 0 0-9.8 1.2A3.2 3.2 0 0 0 5 20Z" strokeWidth={1.8} />
+    <path
+      d="M11 9.4a4.7 4.7 0 0 1 8.6 2.6M15.6 2.4v2.2m5.6 1.4-1.6 1.6m3.2 4.2h-2.2M10.4 6l1.6 1.6"
+      strokeWidth={1.8}
+    />
   </Icon>
 );
 
@@ -119,8 +124,6 @@ export const Constant = () => (
   </Icon>
 );
 
-const moon = "M15.5 17.6A8 8 0 0 1 9.2 4.4a8.3 8.3 0 1 0 10.4 10.4 8 8 0 0 1-4.1 2.8Z";
-
 export const NightMode = ({ off = false }: { off?: boolean }) =>
   off ? (
     <Icon size={34}>
@@ -135,7 +138,7 @@ export const NightMode = ({ off = false }: { off?: boolean }) =>
         [17, 16.5],
         [19, 14],
       ].map(([x, y]) => (
-        <circle key={`${x}${y}`} cx={x} cy={y} r={0.8} fill="currentColor" stroke="none" />
+        <circle key={`${x}${y}`} cx={x} cy={y} r={1} fill="currentColor" stroke="none" />
       ))}
       {slash("M4 20 20 4")}
     </Icon>
