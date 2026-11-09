@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import type { Flash, Props } from "../../state.ts";
+import { back, type Flash, type Props } from "../../state.ts";
 import { Submenu } from "../submenu/Submenu.tsx";
 import { Automatic, Off, On } from "./icons.tsx";
 import "./submenu-flash.css";
@@ -11,10 +11,10 @@ const options: { id: Flash; label: string; name: string; glyph: ReactNode }[] = 
 ];
 
 export function SubmenuFlash({ settings, update }: Props) {
-  const current = options.find((o) => o.id === settings.flashMenu) ?? options[0];
+  const current = options.find((o) => o.id === settings.flash) ?? options[0];
 
   return (
-    <Submenu title="Flash" className="flash" back={() => update({ submenu: false, flashMenu: null })}>
+    <Submenu title="Flash" className="flash" back={() => update(back)}>
       <output className="flash-value" data-auto={current.id === "auto" || undefined}>
         {current.name}
       </output>
@@ -25,7 +25,7 @@ export function SubmenuFlash({ settings, update }: Props) {
           data-on={id === current.id || undefined}
           style={{ left: 112.5 + 75 * i }}
           aria-label={label}
-          onClick={() => update({ flashMenu: id })}
+          onClick={() => update({ flash: id })}
         >
           {glyph}
         </button>

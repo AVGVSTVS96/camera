@@ -23,8 +23,9 @@ export interface Layout {
 export function layout(s: Settings): Layout | undefined {
   const context = `${s.display}-${s.orientation}` as const;
   const d = depths[context];
-  const depth = s.square ? d.square : s.submenu ? d.submenu : d.closed;
-  const nudge = s.square ? 16 : 0;
+  const square = s.submenu !== null && s.aspect === "1:1";
+  const depth = square ? d.square : s.submenu ? d.submenu : d.closed;
+  const nudge = square ? 16 : 0;
 
   if (s.mode !== "photo" && s.mode !== "portrait") return undefined;
 

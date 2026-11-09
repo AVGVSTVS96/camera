@@ -34,7 +34,7 @@ import { TopBar } from "./components/top-bar/TopBar.tsx";
 import { Viewer } from "./components/viewer/Viewer.tsx";
 import { Zoom } from "./components/zoom/Zoom.tsx";
 import { useProfile } from "./profile.ts";
-import { movieModes, type Settings, type Update } from "./state.ts";
+import { movieModes, poseOf, type Settings, type Update } from "./state.ts";
 
 interface CameraProps {
   initial: Settings;
@@ -51,7 +51,17 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
   const update: Update = (change) => setSettings((s) => ({ ...s, ...change }));
   const movie = movieModes.has(settings.mode);
   const props = { settings, update };
-  const styling = settings.submenu && settings.styles;
+  const open = settings.submenu;
+  const styling = open === "Styles";
+
+  useEffect(() => {
+    if (still) return;
+
+    const follow = () => setSettings((s) => ({ ...s, ...poseOf(innerWidth, innerHeight) }));
+    addEventListener("resize", follow);
+
+    return () => removeEventListener("resize", follow);
+  }, [still]);
 
   useEffect(() => {
     onSettings?.(settings);
@@ -85,8 +95,8 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
       data-profile={profile.name}
       data-facing={settings.facing}
       data-sheet={settings.sheet}
-      data-submenu={settings.submenu || undefined}
-      data-styles={settings.styles || undefined}
+      data-submenu={open ?? undefined}
+      data-styles={styling || undefined}
       data-countdown={settings.countdown || undefined}
       data-holding={settings.holding || undefined}
       data-wide={settings.aspect === "16:9" || undefined}
@@ -131,7 +141,7 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
             )}
           </div>
           <div className="row modes">
-            {!settings.submenu && !settings.aspect && !settings.holding && !settings.recording && (
+            {!settings.submenu && !settings.holding && !settings.recording && (
               <Thumbnail shot={shot} open={() => update({ viewer: true })} />
             )}
           </div>
@@ -141,24 +151,24 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
           )}
         </>
       )}
-      <SubmenuExposure settings={settings} />
-      <SubmenuDepth {...props} />
-      {settings.focus && <SubmenuFocus {...props} />}
-      {settings.format && <SubmenuVideoFormat {...props} />}
-      {settings.videoResolution && <SubmenuVideoResolution {...props} />}
-      {settings.livePhoto && <SubmenuLivePhoto {...props} />}
-      {settings.aspect && <SubmenuAspectRatio {...props} />}
-      {settings.flashMenu && <SubmenuFlash {...props} />}
-      {settings.resolutionMenu && <SubmenuResolution {...props} />}
-      {settings.balance && <SubmenuWhiteBalance {...props} />}
-      {settings.nightMenu && <SubmenuNightMode {...props} />}
+      {open === "Exposure" && <SubmenuExposure {...props} />}
+      {open === "Depth" && <SubmenuDepth {...props} />}
+      {open === "Focus" && <SubmenuFocus {...props} />}
+      {open === "Video Format" && <SubmenuVideoFormat {...props} />}
+      {open === "Video Resolution" && <SubmenuVideoResolution {...props} />}
+      {open === "Live Photo" && <SubmenuLivePhoto {...props} />}
+      {open === "Aspect Ratio" && <SubmenuAspectRatio {...props} />}
+      {open === "Flash" && <SubmenuFlash {...props} />}
+      {open === "Resolution" && <SubmenuResolution {...props} />}
+      {open === "White Balance" && <SubmenuWhiteBalance {...props} />}
+      {open === "Night Mode" && <SubmenuNightMode {...props} />}
       <Countdown settings={settings} />
       {profile.lighting !== false && !settings.tray && !styling && !movie && !settings.holding && (
         <Lighting settings={settings} />
       )}
       {styling && <SubmenuStyles {...props} />}
-      {settings.submenu && settings.timerMenu && <SubmenuTimer {...props} />}
-      {settings.centerStage && <SubmenuCenterStage {...props} />}
+      {open === "Timer" && <SubmenuTimer {...props} />}
+      {open === "Center Stage" && <SubmenuCenterStage {...props} />}
       <AspectFlip {...props} />
       {settings.viewer && <Viewer shot={shot} close={() => update({ viewer: false })} />}
       {settings.sheet && <Sheet kind={settings.sheet} update={update} />}

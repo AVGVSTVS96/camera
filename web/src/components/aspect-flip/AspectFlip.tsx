@@ -13,7 +13,7 @@ export function AspectFlip({ settings, update }: Props) {
   return (
     <button
       className="aspect-flip"
-      data-open={submenu || undefined}
+      data-open={submenu !== null || undefined}
       aria-label={`Change Aspect Ratio to ${portraitGlyph ? "Portrait" : "Landscape"}`}
       onClick={() => update({ orientation: landscape ? "portrait" : "landscape" })}
     >

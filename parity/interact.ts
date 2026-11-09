@@ -4,7 +4,7 @@ import { parseArgs } from "node:util";
 import { $ } from "bun";
 import { chromium, type Browser } from "playwright";
 import { duo, type Profile } from "../web/src/profile.ts";
-import { settingsFor, type Settings } from "../web/src/state.ts";
+import { reached, type Settings } from "../web/src/state.ts";
 import { camera, film, open, phone, perform, settings, settle, snapshot, type Driver } from "./drive.ts";
 import { describe, Graph, type Step } from "./graph.ts";
 import { apple, fromState, judge, measure, transitions } from "./motion.ts";
@@ -26,9 +26,8 @@ export interface Reached {
   time: number;
 }
 
-// The forced renders take these from the simulator's capture history rather than from any tap (see state.ts), and fold
-// only repeats display, since half-open states are never driven.
-const ignored = new Set<keyof Settings>(["lighting", "depth", "zoomTurn", "aperture", "fold"]);
+// Half-open states are never driven, and the live app can't see the hinge.
+const ignored = new Set<keyof Settings>(["fold"]);
 const slack = 3;
 const workers = Number(process.env.BROWSERS ?? 4);
 const dir = join(out, "interact");
@@ -90,7 +89,7 @@ const chosen = flags.sample ? await sample(candidates, Number(flags.sample)) : c
 const moves = (step: Step) => !("wait" in step) && !("firstOf" in step) && !("tap" in step && step.optional);
 
 function expected(state: State) {
-  return settingsFor({ ...state, controls: state.controls ?? null }, state.profile === "simulator" ? simulator : duo);
+  return reached({ ...state, controls: state.controls ?? null }, state.profile === "simulator" ? simulator : duo);
 }
 
 function differences(want: Settings, got: Settings) {

@@ -1,4 +1,4 @@
-import type { Props } from "../../state.ts";
+import { back, type Props } from "../../state.ts";
 import { Chevron, Mountains, Person } from "./icons.tsx";
 import "./submenu-focus.css";
 
@@ -10,12 +10,12 @@ const dots = [
 const stopsPerUnit = 40;
 
 export function SubmenuFocus({ settings, update }: Props) {
-  const { value, auto } = settings.focus ?? { value: 0, auto: true };
+  const { value, auto } = settings.focus;
   const stop = Math.min(Math.round(value * stopsPerUnit), dots.length - 1);
 
   return (
     <section className="focus" aria-label="Focus">
-      <button className="focus-back" aria-label="Back" onClick={() => update({ submenu: false, focus: undefined })}>
+      <button className="focus-back" aria-label="Back" onClick={() => update(back)}>
         <Chevron />
       </button>
       <span className="focus-title">FOCUS</span>

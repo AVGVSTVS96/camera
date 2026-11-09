@@ -10,7 +10,9 @@ function zoomLabel(value: number, active: boolean, bare: boolean) {
   return active ? `${text}×` : bare ? text.replace(/^0/, "") : text;
 }
 
-function stopsOf({ mode, format, display, orientation }: Settings, own: number[]) {
+function stopsOf({ mode, formats, display, orientation }: Settings, own: number[]) {
+  const format = formats[mode];
+
   if (!format) return own;
 
   if (mode === "video")

@@ -3,7 +3,7 @@ import "./layout.css";
 import { createRoot } from "react-dom/client";
 import { Camera } from "./Camera.tsx";
 import { duo, ProfileContext } from "./profile.ts";
-import { initialSettings, loadState, settingsFor, type Settings } from "./state.ts";
+import { initialSettings, loadState, poseOf, settingsFor, type Settings } from "./state.ts";
 
 declare global {
   interface Window {
@@ -30,9 +30,12 @@ if (id) {
   const { profile = duo } = await loadState(live);
   root.render(
     <ProfileContext value={profile}>
-      <Camera initial={initialSettings(profile)} onSettings={(settings) => (window.camera = settings)} />
+      <Camera
+        initial={initialSettings(profile, poseOf(innerWidth, innerHeight))}
+        onSettings={(settings) => (window.camera = settings)}
+      />
     </ProfileContext>,
   );
 } else {
-  root.render(<Camera initial={initialSettings(duo)} />);
+  root.render(<Camera initial={initialSettings(duo, poseOf(innerWidth, innerHeight))} />);
 }

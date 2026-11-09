@@ -1,4 +1,4 @@
-import type { Props } from "../../state.ts";
+import { back, type Props } from "../../state.ts";
 import { Submenu } from "../submenu/Submenu.tsx";
 import "./submenu-center-stage.css";
 
@@ -10,10 +10,8 @@ const rows = [
 export function SubmenuCenterStage({ settings, update }: Props) {
   const current = settings.centerStage;
 
-  if (!current) return null;
-
   return (
-    <Submenu title="Center Stage" className="center-stage" back={() => update({ submenu: false, centerStage: null })}>
+    <Submenu title="Center Stage" className="center-stage" back={() => update(back)}>
       {rows.map(({ key, label }, row) => (
         <div key={key} className="center-stage-row" style={{ top: 61 + 44 * row }}>
           <span className="center-stage-label">{label.toUpperCase()}</span>

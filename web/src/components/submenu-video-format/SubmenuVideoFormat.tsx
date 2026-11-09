@@ -1,4 +1,4 @@
-import type { Facing, Mode, Props } from "../../state.ts";
+import { back, defaultRate, type Facing, type Mode, type Props, type VideoFormat } from "../../state.ts";
 import { Submenu } from "../submenu/Submenu.tsx";
 import "./submenu-video-format.css";
 
@@ -14,12 +14,14 @@ const rates = ({ mode, facing }: { mode: Mode; facing: Facing }) => {
   return facing === "front" ? all.slice(0, mode === "cinematic" ? 2 : 3) : all;
 };
 
-export const defaultRate = (mode: Mode) => (mode === "slo-mo" ? 120 : 30);
-
 export function SubmenuVideoFormat({ settings, update }: Props) {
-  const { mode, format } = settings;
+  const { mode, formats } = settings;
+  const format = formats[mode];
 
   if (!format) return null;
+
+  const choose = (change: Partial<VideoFormat>) =>
+    update({ formats: { ...formats, [mode]: { ...format, ...change } } });
 
   const dot = defaultRate(mode);
   const all = rates(settings);
@@ -28,7 +30,7 @@ export function SubmenuVideoFormat({ settings, update }: Props) {
   const place = (i: number, top: number) => ({ left: left + step * i, top, width: step - 8 });
 
   return (
-    <Submenu title="Format" className="vf" back={() => update({ submenu: false, format: null })}>
+    <Submenu title="Format" className="vf" back={() => update(back)}>
       <p className="vf-label" style={{ top: 77 }}>
         Resolution
       </p>
@@ -42,7 +44,7 @@ export function SubmenuVideoFormat({ settings, update }: Props) {
           data-on={r === format.resolution || undefined}
           data-dot={r === "HD" || undefined}
           style={place(i, 61)}
-          onClick={() => update({ format: { ...format, resolution: r } })}
+          onClick={() => choose({ resolution: r })}
         >
           {r}
         </button>
@@ -54,7 +56,7 @@ export function SubmenuVideoFormat({ settings, update }: Props) {
           data-on={rate === format.rate || undefined}
           data-dot={rate === dot || undefined}
           style={place(i, 105)}
-          onClick={() => update({ format: { ...format, rate } })}
+          onClick={() => choose({ rate })}
         >
           {rate}
         </button>

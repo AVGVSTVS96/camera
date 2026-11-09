@@ -47,15 +47,15 @@ export function TopBar({ settings, update }: Props) {
               </button>
               <button
                 aria-label="Live Photo"
-                data-on={settings.live || undefined}
-                onClick={() => update({ live: !settings.live })}
+                data-on={settings.live === "on" || undefined}
+                onClick={() => update({ live: settings.live === "on" ? "off" : "on" })}
               >
                 <LiveOff />
               </button>
               <button
                 aria-label="Night mode"
-                data-on={settings.night || undefined}
-                onClick={() => update({ night: !settings.night })}
+                data-on={settings.night !== "off" || undefined}
+                onClick={() => update({ night: settings.night === "off" ? "auto" : "off" })}
               >
                 <Moon />
               </button>

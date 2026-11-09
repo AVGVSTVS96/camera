@@ -56,7 +56,7 @@ export function layout(s: Settings, duo: boolean) {
   const p = places[`${s.display}-${s.orientation}`];
   const [dx, dy] = p.into;
   const closed = duo ? 432 : p.closed;
-  const depth = s.square ? p.square : s.submenu ? p.submenu : closed;
+  const depth = s.submenu ? (s.aspect === "1:1" ? p.square : p.submenu) : closed;
   const point = (along: number, out: number) => (p.vertical ? [out, along] : [along, out]);
   const edge = closed - 20 * (p.vertical ? dx : dy);
   const [ax, ay] = point(p.cross, edge + p.reach * (p.vertical ? dx : dy));

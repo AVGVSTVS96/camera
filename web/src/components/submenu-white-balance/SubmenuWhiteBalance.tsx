@@ -1,10 +1,10 @@
 import type { ReactNode } from "react";
-import type { Props } from "../../state.ts";
+import { back, type Props, type WhiteBalance } from "../../state.ts";
 import { Submenu } from "../submenu/Submenu.tsx";
 import { Awb, Bulb, Cloud, Shade, Sun, Tube } from "./icons.tsx";
 import "./submenu-white-balance.css";
 
-const options: { id: string; label: string; kelvin?: number; glyph: ReactNode }[] = [
+const options: { id: WhiteBalance; label: string; kelvin?: number; glyph: ReactNode }[] = [
   { id: "auto", label: "Auto White Balance", glyph: <Awb /> },
   { id: "tungsten", label: "Tungsten", kelvin: 3200, glyph: <Bulb /> },
   { id: "fluorescent", label: "Fluorescent", kelvin: 4000, glyph: <Tube /> },
@@ -20,7 +20,7 @@ export function SubmenuWhiteBalance({ settings, update }: Props) {
     <Submenu
       title="White Balance"
       className="wb"
-      back={() => update({ submenu: false, balance: null })}
+      back={() => update(back)}
       auto={{ on: current === options[0], select: () => update({ balance: "auto" }) }}
     >
       <p className="wb-readout" data-auto={!current.kelvin || undefined}>

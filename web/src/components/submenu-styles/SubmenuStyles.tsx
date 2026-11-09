@@ -1,4 +1,4 @@
-import type { Props } from "../../state.ts";
+import { back, type Props } from "../../state.ts";
 import { Chevron } from "./icons.tsx";
 import { place } from "./styles.ts";
 import { Swatch } from "./Swatch.tsx";
@@ -41,7 +41,7 @@ export function SubmenuStyles({ settings, update }: Props) {
   return (
     <section className="styles" aria-label="Photographic Styles">
       <div className="styles-header">{!customize && style.toUpperCase()}</div>
-      <button className="styles-back" aria-label="Back" onClick={() => update({ submenu: false, styles: false })}>
+      <button className="styles-back" aria-label="Back" onClick={() => update({ ...back, customize: false })}>
         <Chevron />
       </button>
       {customize ? (

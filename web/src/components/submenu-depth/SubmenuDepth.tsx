@@ -1,4 +1,4 @@
-import type { Props } from "../../state.ts";
+import { apertureOf, back, type Props } from "../../state.ts";
 import { Reset } from "../submenu-exposure/icons.tsx";
 import { Submenu } from "../submenu/Submenu.tsx";
 import "./submenu-depth.css";
@@ -34,15 +34,12 @@ const REACH = 9;
 const STOPS_PER_MARK = 3;
 
 export function SubmenuDepth({ settings, update }: Props) {
-  const { aperture } = settings;
-
-  if (!aperture) return null;
-
+  const aperture = apertureOf(settings);
   const { at, home, first, last, off, unavailable } = aperture;
   const marks = Array.from({ length: last - first + 1 }, (_, i) => first + i).filter((i) => Math.abs(i - at) <= REACH);
 
   return (
-    <Submenu title="Depth" className="depth" back={() => update({ submenu: false, aperture: null })}>
+    <Submenu title="Depth" className="depth" back={() => update(back)}>
       {at !== home && (
         <button
           className="submenu-button depth-reset"
