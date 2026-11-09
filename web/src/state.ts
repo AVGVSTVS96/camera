@@ -257,7 +257,8 @@ export function initialSettings(profile: Profile, pose: Pose, mode: Mode = "phot
     },
     videoResolution: resolution,
     focus: { value: 0, auto: true },
-    centerStage: { zoom: true, rotate: false },
+    // Camera opens with Auto Zoom on only while the phone is held upright, as every pose in Apple's captures starts.
+    centerStage: { zoom: (pose.display === "outer") === (pose.orientation === "portrait"), rotate: false },
     stops: {},
     depth: false,
     lighting: "natural",
