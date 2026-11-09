@@ -8,6 +8,7 @@
   position: absolute;
   inset: 56.33px 0 auto;
   text-align: center;
+  font-family: ui-rounded, system-ui;
   font-size: 28px;
   line-height: 36px;
 }
