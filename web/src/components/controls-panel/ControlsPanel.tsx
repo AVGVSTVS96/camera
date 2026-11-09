@@ -146,7 +146,7 @@ export function ControlsPanel({ settings, update, from, closing, gone }: PanelPr
 
   const open = (name: Submenu | Toggle) =>
     isToggle(name)
-      ? update({ on: toggle(settings.on, name) })
+      ? update({ on: toggle(settings.on, name), expanded: true })
       : update({ submenu: name, tray: false, expanded: false });
 
   return (
