@@ -119,16 +119,23 @@ function controlsFor(settings: Settings, photoFormat: string): Control[] {
   }
 }
 
-export function ControlsPanel({ settings, update }: Props) {
+interface PanelProps extends Props {
+  from?: { x: number; y: number };
+  closing: boolean;
+  gone: () => void;
+}
+
+export function ControlsPanel({ settings, update, from, closing, gone }: PanelProps) {
   const profile = useProfile();
   const controls = controlsFor(settings, profile.photoFormat);
   const { display, orientation, mode, expanded } = settings;
+  const compact = mode === "photo" && !expanded;
 
   const sheet = arrange(controls.length, {
     display,
     orientation,
     photo: mode === "photo",
-    compact: !expanded,
+    compact,
     turned:
       display === "inner" &&
       (settings.fold !== "half-open" || orientation === "portrait") &&
@@ -144,17 +151,26 @@ export function ControlsPanel({ settings, update }: Props) {
 
   return (
     <>
-      <div className="tray-backdrop" onClick={() => update({ tray: false })} />
+      <div className="tray-backdrop" data-closing={closing || undefined} onClick={() => update({ tray: false })} />
       <section
         className="tray"
         aria-label="Camera controls"
-        style={{ left: sheet.left, top: sheet.top, width: sheet.width, height: sheet.height }}
+        data-closing={closing || undefined}
+        onAnimationEnd={() => closing && gone()}
+        style={{
+          left: sheet.left,
+          top: sheet.top,
+          width: sheet.width,
+          height: sheet.height,
+          transformOrigin: from && `calc(${from.x}px - ${sheet.left}) calc(${from.y}px - ${sheet.top})`,
+        }}
       >
         <div className="tray-stage" style={{ left: `calc(0px - ${sheet.left})`, top: `calc(0px - ${sheet.top})` }}>
           {controls.map(({ name, label, short, glyph, on }, i) => (
             <button
               key={label}
               className="tray-cell"
+              aria-label={name}
               data-on={on || undefined}
               data-turned={sheet.turned || undefined}
               style={{ left: sheet.cells[i]?.x, top: sheet.cells[i]?.y }}
@@ -166,10 +182,10 @@ export function ControlsPanel({ settings, update }: Props) {
           ))}
           <button
             className="tray-handle"
-            aria-label={expanded ? "Dismiss Camera Controls" : "Expand"}
+            aria-label={compact ? "Expand" : "Dismiss Camera Controls"}
             data-vertical={sheet.handle.vertical || undefined}
             style={{ left: sheet.handle.x, top: sheet.handle.y }}
-            onClick={() => update(expanded ? { tray: false } : { expanded: true })}
+            onClick={() => update(compact ? { expanded: true } : { tray: false })}
           />
         </div>
       </section>

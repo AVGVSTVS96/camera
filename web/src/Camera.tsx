@@ -46,6 +46,12 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
   const profile = useProfile();
   const [settings, setSettings] = useState(initial);
   const [shot, setShot] = useState<Shot>();
+  const [shown, setShown] = useState(settings.tray);
+  const [from, setFrom] = useState<{ x: number; y: number }>();
+  const closing = shown && !settings.tray;
+
+  if (settings.tray && !shown) setShown(true);
+
   const stop = useRef<() => Promise<File>>(undefined);
   const { video, stream, error } = useCamera(settings, !still);
   const update: Update = (change) => setSettings((s) => ({ ...s, ...change }));
@@ -161,9 +167,8 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
           </div>
         )
       )}
-      {settings.tray ? (
-        <ControlsPanel {...props} />
-      ) : styling ? (
+      {shown && <ControlsPanel {...props} from={from} closing={closing} gone={() => setShown(false)} />}
+      {settings.tray ? null : styling ? (
         <div className="row shutter">
           <Shutter {...quicktake} />
         </div>
@@ -174,7 +179,14 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
             {movie ? profile.macro && <Macro {...props} /> : !busy && <DepthButton on={settings.depth} />}
             <Shutter {...quicktake} />
             {profile.smartTake && !movie && !busy && !settings.submenu && <SmartTake />}
-            {!settings.submenu && !busy && <ControlsButton open={() => update({ tray: true })} />}
+            {!settings.submenu && !busy && (
+              <ControlsButton
+                open={(at) => {
+                  setFrom(at);
+                  update({ tray: true });
+                }}
+              />
+            )}
           </div>
           <div className="row modes">
             {!settings.submenu && !busy && <Thumbnail shot={shot} open={() => update({ viewer: true })} />}
