@@ -14,19 +14,27 @@
   backdrop-filter: blur(24px);
   overflow: hidden;
   --glyph-turn: 0deg;
-  --ease: cubic-bezier(0, 0, 0.58, 1);
+  --ease: cubic-bezier(0, 0, 0.25, 1);
   animation: tray-in 0.532s var(--ease);
   transition-property: left, top, width, height;
-  transition-duration: 0.325s;
-  transition-timing-function: var(--ease);
+  transition-duration: 0.36s;
+  transition-timing-function: cubic-bezier(0.1, 0, 0.1, 1);
 }
 
 .tray[data-closing] {
-  animation: tray-in 0.16s var(--ease) reverse forwards;
+  animation: tray-out 0.24s cubic-bezier(0, 0, 0.58, 1) forwards;
 }
 
 .tray-backdrop[data-closing] {
   pointer-events: none;
+}
+
+@keyframes tray-out {
+  to {
+    opacity: 0;
+    scale: 0.4;
+    filter: blur(12px);
+  }
 }
 
 @keyframes tray-in {
