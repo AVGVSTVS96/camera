@@ -24,3 +24,26 @@
 .top-items > .badge b {
   font-weight: 500;
 }
+
+.top-items > .badge {
+  rotate: var(--glyph-turn);
+  transition: rotate 0.4s;
+}
+
+.screen[data-display="outer"][data-orientation="landscape"] .top-items {
+  flex-direction: column;
+}
+
+.screen[data-display="outer"][data-orientation="landscape"] .top-items > button {
+  width: 44px;
+  height: 30px;
+}
+
+.screen[data-display="inner"][data-orientation="portrait"] .row.top {
+  top: auto;
+  bottom: 50px;
+}
+
+.screen[data-display="outer"][data-orientation="landscape"] .top-items > .badge {
+  height: 44px;
+}
