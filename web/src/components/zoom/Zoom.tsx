@@ -2,7 +2,6 @@ import { useEffect, useRef } from "react";
 import { useProfile } from "../../profile.ts";
 import type { Props, Settings } from "../../state.ts";
 import { layout, slot } from "./layout.ts";
-import { useRamp } from "./ramp.ts";
 import "./zoom.css";
 
 function zoomLabel(value: number, active: boolean, bare: boolean) {
@@ -38,7 +37,6 @@ export function Zoom({ settings, update }: Props) {
   const stops = settings.lenses ? [0.5, 1, 2, settings.zoom === 0.5 ? 1 : settings.zoom] : stopsOf(settings, own);
   const self = useRef<HTMLDivElement>(null);
   const zoom = Math.max(settings.zoom, Math.min(...stops));
-  const shown = useRamp(zoom, `${settings.mode}${settings.facing}`, self);
   const bare = settings.mode === "time-lapse" || settings.mode === "portrait" || profile.name === "duo";
   const hide = useRef<number>(undefined);
 
@@ -89,7 +87,9 @@ export function Zoom({ settings, update }: Props) {
       clearTimeout(hide.current);
       update({
         dial: true,
-        zoom: tenth(clamp(from.zoom * 2 ** (along / (cinematic ? place.perDoubling : 25)), low, high)),
+        ...(settings.mode !== "time-lapse" && {
+          zoom: tenth(clamp(from.zoom * 2 ** (along / (cinematic ? place.perDoubling : 25)), low, high)),
+        }),
         ...(settings.mode === "portrait" && { lenses: true }),
       });
     };
@@ -178,8 +178,8 @@ export function Zoom({ settings, update }: Props) {
             className="readout"
             transform={`translate(${place.apex.x - place.into[0] * 37} ${place.apex.y - place.into[1] * 37}) rotate(${place.turn ? 90 : 0})`}
           >
-            <text y="5">{zoomLabel(shown, true, bare)}</text>
-            <text y="21">{Math.round(shown * 26)}MM</text>
+            <text y="5">{zoomLabel(zoom, true, bare)}</text>
+            <text y="21">{Math.round(zoom * 26)}MM</text>
           </g>
         </svg>
       )}
@@ -197,7 +197,7 @@ export function Zoom({ settings, update }: Props) {
             style={{ translate: offset(i), rotate: `${settings.zoomTurn}deg` }}
             onClick={() => (anchored && stops.length === 1 ? update({ lenses: true }) : update({ zoom: stop }))}
           >
-            {zoomLabel(i === active ? shown : stop, i === active, bare)}
+            {zoomLabel(i === active ? zoom : stop, i === active, bare)}
           </button>
         ))}
       </div>
