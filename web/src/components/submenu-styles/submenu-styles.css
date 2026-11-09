@@ -64,6 +64,11 @@
   mask-image: linear-gradient(to right, transparent 23px, #000 50px, #000 402px, transparent 430px);
 }
 
+.styles-scrubber > *,
+.styles-pad > * {
+  pointer-events: none;
+}
+
 .styles-cell,
 .styles-divider {
   position: absolute;
