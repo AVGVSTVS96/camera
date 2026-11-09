@@ -1,0 +1,298 @@
+.sheet {
+  position: absolute;
+  inset: 0;
+  font-variation-settings: "opsz" 17;
+  --x: 50px;
+  --w: 366px;
+  --t: 170.33px;
+  --b: 208px;
+  --c: 361px;
+  --nx: 194.83px;
+  --ny: 422.67px;
+}
+
+.sheet-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgb(28 28 28 / 0.73);
+  -webkit-backdrop-filter: blur(30px);
+  backdrop-filter: blur(30px);
+}
+
+[data-sheet] .zoom,
+[data-sheet] .lighting {
+  display: none;
+}
+
+.sheet > * {
+  position: absolute;
+}
+
+.sheet h2 {
+  left: var(--x);
+  top: var(--t);
+  width: var(--w);
+  font: 700 28px/33.67px system-ui, -apple-system, sans-serif;
+  color: #fff;
+}
+
+.sheet p {
+  left: var(--x);
+  top: var(--b);
+  width: var(--w);
+  font: 400 20px/24.6px system-ui, -apple-system, sans-serif;
+  color: rgb(255 255 255 / 0.46);
+}
+
+.sheet p + p {
+  top: calc(var(--b) + 50px);
+}
+
+.sheet-action {
+  left: var(--x);
+  top: var(--c);
+  width: var(--w);
+  height: 45px;
+  border-radius: 22.5px;
+  background: rgb(251 221 57 / 0.5);
+  box-shadow: inset 0 0 0 0.5px rgb(255 214 0 / 0.45);
+  font: 600 17px system-ui, -apple-system, sans-serif;
+  color: #fefb4d;
+}
+
+.sheet-later {
+  left: var(--nx);
+  top: var(--ny);
+  width: 76.33px;
+  height: 28.33px;
+  font: 600 17px system-ui, -apple-system, sans-serif;
+  color: #ffd600;
+}
+
+[data-display="outer"][data-orientation="landscape"] .sheet[data-sheet="styles"] {
+  --x: 114.72px;
+  --w: 448.57px;
+  --t: 85.33px;
+  --b: 123px;
+  --c: 251px;
+}
+
+[data-display="inner"][data-orientation="portrait"] .sheet[data-sheet="styles"] {
+  --x: 50px;
+  --w: 569px;
+  --t: 389.67px;
+  --b: 427.33px;
+  --c: 530.33px;
+  --nx: 296.33px;
+  --ny: 592px;
+}
+
+[data-display="inner"][data-orientation="landscape"] .sheet[data-sheet="styles"] {
+  --x: 109px;
+  --w: 792px;
+  --t: 219.33px;
+  --b: 257px;
+  --c: 360px;
+  --nx: 466.83px;
+  --ny: 421.67px;
+}
+
+[data-display="outer"][data-orientation="portrait"] .sheet[data-sheet="intro"] {
+  --x: 30px;
+  --w: 321.43px;
+  --t: 208.67px;
+  --b: 246.33px;
+  --c: 424.33px;
+}
+
+[data-display="outer"][data-orientation="landscape"] .sheet[data-sheet="intro"] {
+  --x: 114.72px;
+  --w: 448.57px;
+  --t: 85.33px;
+  --b: 123px;
+  --c: 251px;
+}
+
+[data-display="inner"][data-orientation="portrait"] .sheet[data-sheet="intro"] {
+  --x: 184.06px;
+  --w: 434.94px;
+  --t: 370.33px;
+  --b: 408px;
+  --c: 536px;
+}
+
+[data-display="inner"][data-orientation="landscape"] .sheet[data-sheet="intro"] {
+  --x: 168.88px;
+  --w: 613.25px;
+  --t: 162px;
+  --b: 199.67px;
+  --c: 327.67px;
+}
+
+.sheet.choose {
+  background: #000;
+  --cx: 191px;
+  --gs: 350px;
+  --gy: 123px;
+  --ty: 36px;
+  --close-x: 418px;
+  --close-y: 194px;
+  --set-y: 600px;
+  --set-x: 38px;
+  --set-w: 306px;
+  --tile: calc((var(--gs) - 8px) / 2);
+  --label: calc(var(--gy) + var(--gs) + 24px);
+  --strip: calc(var(--label) + 26px);
+}
+
+[data-display="inner"] .sheet.choose,
+[data-orientation="landscape"] .sheet.choose {
+  --cx: 433.67px;
+  --gs: 468px;
+  --close-x: 903px;
+  --close-y: 144px;
+}
+
+[data-display="inner"][data-orientation="portrait"] .sheet.choose {
+  --cx: 334.5px;
+  --gy: 181px;
+  --ty: 94px;
+  --close-x: 44px;
+  --close-y: 48px;
+  --set-x: 122.67px;
+  --set-w: 424px;
+  --set-y: 776px;
+}
+
+.choose h2,
+.choose p {
+  left: calc(var(--cx) - var(--gs) / 2);
+  width: var(--gs);
+  text-align: center;
+  font: 600 20px/25px system-ui, -apple-system, sans-serif;
+  color: #fff;
+}
+
+.choose h2 {
+  top: calc(var(--ty) - 12.5px);
+}
+
+.choose p {
+  top: calc(var(--ty) + 12px);
+  font-weight: 400;
+  color: #8d8d93;
+}
+
+.sheet-grid {
+  left: calc(var(--cx) - var(--gs) / 2);
+  top: var(--gy);
+  width: var(--gs);
+  height: var(--gs);
+  display: grid;
+  grid-template: repeat(2, var(--tile)) / repeat(2, var(--tile));
+  gap: 8px;
+}
+
+.sheet-grid i {
+  border-radius: 12px;
+  background: #2c2c2e;
+}
+
+.sheet-name {
+  left: calc(var(--cx) - 60px);
+  top: calc(var(--label) - 9px);
+  width: 120px;
+  text-align: center;
+  font: 500 14px/18px system-ui, -apple-system, sans-serif;
+  letter-spacing: 2px;
+  text-indent: 2px;
+  color: #fff;
+}
+
+.sheet-dot {
+  left: calc(var(--cx) - 2.5px);
+  top: calc(var(--label) + 12px);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.sheet-strip {
+  left: calc(var(--cx) - 27px);
+  top: var(--strip);
+  width: calc(var(--gs) / 2 + 22px);
+  height: 54px;
+  mask-image: linear-gradient(90deg, #000 calc(100% - 14px), transparent);
+}
+
+.sheet-strip i {
+  position: absolute;
+  top: 0;
+  width: 54px;
+  height: 54px;
+  border-radius: 9px;
+}
+
+.sheet-strip i:nth-child(1) {
+  left: 0;
+  background: linear-gradient(170deg, #cfd8e0, #8c97a3 50%, #36424f);
+}
+
+.sheet-strip i:nth-child(2) {
+  left: 88px;
+  background: linear-gradient(160deg, #d9c9c4, #f1b58c 45%, #4a2f26);
+}
+
+.sheet-strip i:nth-child(3) {
+  left: 146px;
+  background: linear-gradient(110deg, #c7b79f, #f3b73f 60%, #181004);
+}
+
+.sheet-strip i:nth-child(4) {
+  left: 204px;
+  background: linear-gradient(110deg, #e3d6c4, #8b7357 60%, #120c06);
+}
+
+.sheet-strip s {
+  position: absolute;
+  left: 69px;
+  top: 8px;
+  width: 4px;
+  height: 38px;
+  border-radius: 2px;
+  background: #3a3a3c;
+}
+
+.sheet-set,
+.sheet-custom {
+  left: var(--set-x);
+  width: var(--set-w);
+  height: 66px;
+  border-radius: 33px;
+  font: 600 20px system-ui, -apple-system, sans-serif;
+  color: #fff;
+}
+
+.sheet-set {
+  top: var(--set-y);
+  background: #0091ff;
+}
+
+.sheet-custom {
+  top: calc(var(--set-y) + 76px);
+  background: rgb(0 145 255 / 0.16);
+  box-shadow: inset 0 0 0 1px rgb(0 145 255 / 0.7);
+  color: #0091ff;
+}
+
+.sheet-close {
+  left: calc(var(--close-x) - 24px);
+  top: calc(var(--close-y) - 24px);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #2c2c2e;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.1);
+  color: #fff;
+}

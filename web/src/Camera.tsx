@@ -13,6 +13,7 @@ import { Macro } from "./components/macro/Macro.tsx";
 import { SubmenuFocus } from "./components/submenu-focus/SubmenuFocus.tsx";
 import { ModeDial } from "./components/mode-dial/ModeDial.tsx";
 import { Recording } from "./components/recording/Recording.tsx";
+import { Sheet } from "./components/sheets/Sheet.tsx";
 import { Shutter } from "./components/shutter/Shutter.tsx";
 import { SubmenuStyles } from "./components/submenu-styles/SubmenuStyles.tsx";
 import { SubmenuExposure } from "./components/submenu-exposure/SubmenuExposure.tsx";
@@ -64,6 +65,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
       data-orientation={settings.orientation}
       data-fold={settings.fold}
       data-profile={profile.name}
+      data-sheet={settings.sheet}
       data-submenu={settings.submenu || undefined}
       data-styles={settings.styles || undefined}
       data-countdown={settings.countdown || undefined}
@@ -75,6 +77,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
         {!still && <video ref={video} autoPlay playsInline muted data-facing={settings.facing} />}
         {settings.level && !still && <Level />}
       </div>
+      {settings.sheet && settings.sheet !== "choose" && <div className="sheet-scrim" />}
       {settings.grid && <Grid />}
       {settings.recording || settings.holding ? (
         <Recording settings={settings} />
@@ -130,6 +133,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
       <AspectFlip {...props} />
       {settings.viewer && <Viewer shot={shot} close={() => update({ viewer: false })} />}
       {settings.viewer && settings.display === "inner" && <InnerViewer empty={!shot} />}
+      {settings.sheet && <Sheet kind={settings.sheet} update={update} />}
       {still && settings.display === "outer" && !settings.holding && !settings.recording && <div className="system" />}
       {error && <p className="error">{error}</p>}
     </main>

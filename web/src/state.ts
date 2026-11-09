@@ -78,6 +78,7 @@ export interface Settings {
   picked: boolean;
   viewer: boolean;
   recording: boolean;
+  sheet?: Sheet;
   timer: number | null;
   timerMenu: boolean;
   depth: boolean;
@@ -85,6 +86,14 @@ export interface Settings {
   display: Display;
   fold?: string;
 }
+
+export type Sheet = "intro" | "styles" | "choose";
+
+const sheets = new Map<string, Sheet>([
+  ["first-run-intro", "intro"],
+  ["photographic-styles-onboarding", "styles"],
+  ["photographic-styles-choose", "choose"],
+]);
 
 export type Update = (change: Partial<Settings>) => void;
 
@@ -253,6 +262,7 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
     picked: c.portraitLighting !== undefined,
     viewer: state.mode === "viewer",
     recording: c.action === "recording",
+    sheet: sheets.get(String(c.sheet)),
     timer: timerOf(c),
     timerMenu: c.control === "Timer",
     depth: depthOn(state, c),
