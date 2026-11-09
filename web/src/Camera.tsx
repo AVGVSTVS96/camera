@@ -131,7 +131,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
       <SubmenuDepth {...props} />
       {settings.focus && <SubmenuFocus {...props} />}
       {settings.format && <SubmenuVideoFormat {...props} />}
-      {settings.resolution && <SubmenuVideoResolution {...props} />}
+      {settings.videoResolution && <SubmenuVideoResolution {...props} />}
       {settings.livePhoto && <SubmenuLivePhoto {...props} />}
       {settings.aspect && <SubmenuAspectRatio {...props} />}
       {settings.flashMenu && <SubmenuFlash {...props} />}
