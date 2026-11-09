@@ -39,12 +39,12 @@ function Stack({ top, bottom, turn = 0 }: { top: string; bottom?: string; turn?:
 }
 
 function controlsFor(settings: Settings, photoFormat: string): Control[] {
-  const { mode, facing, flash, on, display, orientation, centerStage } = settings;
+  const { mode, facing, flash, on, display, orientation, centerStage, formats } = settings;
   const front = facing === "front";
   const movie = mode !== "photo" && mode !== "portrait";
   const turn = orientation === "landscape" ? 90 : display === "inner" ? 180 : 0;
   const [photoName = "", photoDetail = ""] = photoFormat.split(" ");
-  const fps = mode === "slo-mo" ? "120" : "30";
+  const format = formats[mode] ?? { resolution: "HD", rate: 30 };
 
   const control = {
     flash: { name: "Flash", label: "Flash", glyph: <Bolt flash={flash} /> },
@@ -60,7 +60,11 @@ function controlsFor(settings: Settings, photoFormat: string): Control[] {
     focus: { name: "Focus", label: "Focus", glyph: <Focus /> },
     balance: { name: "White Balance", label: "White Balance", short: "AWB", glyph: <WhiteBalance /> },
     smart: { name: "Smart Take", label: "Smart Take", glyph: <SmartTake />, on: on.includes("Smart Take") },
-    format: { name: "Video Format", label: "Format", glyph: <Stack top="HD" bottom={fps} /> },
+    format: {
+      name: "Video Format",
+      label: "Format",
+      glyph: <Stack top={format.resolution} bottom={String(format.rate)} />,
+    },
     action: {
       name: "Action Mode",
       label: "Action",
