@@ -32,9 +32,9 @@
   opacity: 0.1;
 }
 
-html:not([data-still]) .zoom[data-dial],
-html:not([data-still]) .zoom[data-dial] [data-on] {
-  animation: zoom-dim 0.18s cubic-bezier(0.42, 0, 0.58, 1) 0.31s both;
+.zoom[data-dial],
+.zoom[data-dial] [data-on] {
+  animation: zoom-dim 0.18s cubic-bezier(0.42, 0, 0.58, 1) both;
 }
 
 @keyframes zoom-dim {
@@ -58,8 +58,8 @@ html:not([data-still]) .zoom[data-dial] [data-on] {
   pointer-events: none;
 }
 
-html:not([data-still]) .zoom-dial {
-  animation: zoom-dial-in 0.18s cubic-bezier(0.42, 0, 0.58, 1) 0.31s both;
+.zoom-dial {
+  animation: zoom-dial-in 0.18s cubic-bezier(0.42, 0, 0.58, 1) both;
 }
 
 @keyframes zoom-dial-in {

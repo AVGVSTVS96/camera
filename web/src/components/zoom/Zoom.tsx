@@ -62,17 +62,12 @@ export function Zoom({ settings, update }: Props) {
   const low = settings.mode === "portrait" ? 0.5 : Math.min(...stops);
   const high = Math.max(10, ...stops);
   const self = useRef<HTMLDivElement>(null);
+  const shown = stops.length > 0;
   const latest = useRef({ zoom: settings.zoom, low, high, update });
 
   useEffect(() => {
     latest.current = { zoom: settings.zoom, low, high, update };
   });
-
-  function open() {
-    clearTimeout(hide.current);
-    update({ dial: true });
-    hide.current = window.setTimeout(() => update({ dial: false }), 2600);
-  }
 
   function drag(e: React.PointerEvent<HTMLDivElement>) {
     const grab = e.currentTarget;
@@ -87,14 +82,17 @@ export function Zoom({ settings, update }: Props) {
       if (!turning) grab.setPointerCapture(e.pointerId);
 
       turning = true;
-      open();
+      clearTimeout(hide.current);
       update({
+        dial: true,
         zoom: round(clamp(from.zoom * 2 ** (along / perDoubling), low, high)),
         ...(settings.mode === "portrait" && { lenses: true }),
       });
     };
 
     const end = () => {
+      if (turning) hide.current = window.setTimeout(() => update({ dial: false }), 1750);
+
       grab.removeEventListener("pointermove", move);
       grab.removeEventListener("pointerup", end);
       grab.removeEventListener("pointercancel", end);
@@ -108,7 +106,7 @@ export function Zoom({ settings, update }: Props) {
   useEffect(() => {
     const screen = self.current?.closest<HTMLElement>(".screen");
 
-    if (!screen) return;
+    if (!screen || !shown) return;
 
     const touches = new Map<number, { x: number; y: number }>();
     let pinch: { span: number; zoom: number } | undefined;
@@ -153,7 +151,7 @@ export function Zoom({ settings, update }: Props) {
       screen.removeEventListener("pointerup", up);
       screen.removeEventListener("pointercancel", up);
     };
-  }, []);
+  }, [shown]);
 
   const offset = (i: number) => {
     const k = anchored ? i : i - active;
@@ -162,7 +160,7 @@ export function Zoom({ settings, update }: Props) {
     return `${along * ax + (place.vertical ? 0 : shift)}px ${along * ay + (place.vertical ? shift : 0)}px`;
   };
 
-  if (!stops.length) return null;
+  if (!shown) return null;
 
   return (
     <>
