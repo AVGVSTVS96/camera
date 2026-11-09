@@ -109,6 +109,7 @@ async function forced(browser: Browser, url: URL, state: State) {
   const page = await context.newPage();
   await page.goto(new URL(`/?state=${state.id}&reached`, url).href);
   await page.waitForSelector("html[data-ready]");
+  await page.addStyleTag({ content: ".inner-edge, .inner-preview, .inner-home { visibility: hidden }" });
   const path = join(dir, "forced", `${state.id}.png`);
   await page.screenshot({ path });
   await context.close();
@@ -164,7 +165,12 @@ async function check(browser: Browser, url: URL, state: State): Promise<Reached>
 
     const shot = join(dir, "live", `${state.id}.png`);
 
-    const hidden = [".thumb img", ...(state.controls?.permission === "camera denied" ? [".error"] : [])];
+    const hidden = [
+      ".thumb img",
+      ".inner-edge, .inner-preview, .inner-home",
+      ...(state.controls?.permission === "camera denied" ? [".error"] : []),
+    ];
+
     await page.addStyleTag({ content: `${hidden.join(", ")} { visibility: hidden }` });
     await page.screenshot({ path: shot });
 
