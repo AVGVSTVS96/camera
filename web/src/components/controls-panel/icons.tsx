@@ -123,20 +123,24 @@ export const Constant = () => (
 export const NightMode = ({ off = false }: { off?: boolean }) =>
   off ? (
     <Icon size={34}>
-      <path
-        d="M5.5 8.8a8.4 8.4 0 0 0 13.8 8.4M9.6 4.2a6 6 0 0 0 .6 7.2M19.3 17.2a6.4 6.4 0 0 1-4.2.8"
-        strokeWidth={1.7}
-      />
+      <mask id="night-off">
+        <rect width="24" height="24" fill="#fff" />
+        <path d="M2.6 3.8 19.4 20.6" stroke="#000" strokeWidth={2.6} />
+      </mask>
+      <path d="M9.45 3.17A9 9 0 1 0 20.72 14.03 8.4 8.4 0 0 1 9.45 3.17Z" strokeWidth={0.8} mask="url(#night-off)" />
       {[
-        [14.5, 13],
-        [18, 10.5],
-        [12.5, 17],
-        [17, 16.5],
-        [19, 14],
+        [12.7, 2.3],
+        [16.8, 3.5],
+        [12.5, 6.1],
+        [16.4, 6.8],
+        [19.7, 6.4],
+        [13.9, 9.4],
+        [17.1, 10.8],
+        [20.9, 10.5],
       ].map(([x, y]) => (
-        <circle key={`${x}${y}`} cx={x} cy={y} r={1} fill="currentColor" stroke="none" />
+        <circle key={`${x}${y}`} cx={x} cy={y} r={0.65} fill="currentColor" stroke="none" />
       ))}
-      {slash("M4 20 20 4")}
+      <path d="M2.6 3.8 19.4 20.6" strokeWidth={0.8} />
     </Icon>
   ) : (
     <Icon size={34}>
