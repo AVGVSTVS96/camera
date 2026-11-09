@@ -238,6 +238,19 @@ function zoomTurnOf(state: ParityState, c: Controls) {
   return sideways && (resting || touched) ? 90 : 0;
 }
 
+// Apple's simulator leaves Time-lapse on the ultra wide lens after some captures, so this follows its capture history rather than any control.
+function wideTimeLapse(state: ParityState, c: Controls) {
+  const portrait = state.orientation === "portrait";
+  const control = String(c.control);
+
+  return (
+    state.mode === "time-lapse" &&
+    c.panel === "submenu" &&
+    (c.selected === "4K" ||
+      (portrait && (state.display === "inner" ? control === "Exposure" : ["Focus", "White Balance"].includes(control))))
+  );
+}
+
 const focusOf = (c: Controls) =>
   c.panel === "submenu" && c.control === "Focus"
     ? { value: Number.parseFloat(String(c.value)) || 0, auto: c.value === "Auto" }
@@ -326,7 +339,9 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
 
   return {
     ...initial,
-    zoom: Number.parseFloat(String(c.zoom)) || (c.zoomDial === "open" ? lowest : initial.zoom),
+    zoom:
+      Number.parseFloat(String(c.zoom)) ||
+      (c.zoomDial === "open" ? lowest : wideTimeLapse(state, c) ? 0.5 : initial.zoom),
     dial: c.zoomDial === "open",
     zoomTurn: zoomTurnOf(state, c),
     lenses: mode === "portrait" && ("zoomButton" in c || c.zoomDial === "open"),
