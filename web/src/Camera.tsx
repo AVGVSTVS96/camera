@@ -181,8 +181,9 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
             {profile.smartTake && !movie && !busy && !settings.submenu && <SmartTake />}
             {!settings.submenu && !busy && (
               <ControlsButton
-                open={(at) => {
-                  setFrom(at);
+                open={() => {
+                  const { x, y, width, height } = document.querySelector(".shutter-button")!.getBoundingClientRect();
+                  setFrom({ x: x + width / 2, y: y + height / 2 });
                   update({ tray: true });
                 }}
               />

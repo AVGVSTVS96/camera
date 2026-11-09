@@ -23,6 +23,7 @@
 
 .tray[data-closing] {
   animation: tray-out 0.24s cubic-bezier(0, 0, 0.58, 1) forwards;
+  pointer-events: none;
 }
 
 .tray-backdrop[data-closing] {
