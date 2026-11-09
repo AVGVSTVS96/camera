@@ -66,7 +66,7 @@ export async function open(browser: Browser, url: URL, state: State, launch: Lau
   if (!launch.firstRun) {
     await page.addInitScript(([key, seen]) => localStorage.setItem(key, seen), [
       storageKey,
-      '{"seen":["styles"]}',
+      JSON.stringify({ seen: ["styles", "intro"] }),
     ] as const);
   }
 
@@ -88,10 +88,12 @@ export async function open(browser: Browser, url: URL, state: State, launch: Lau
 
 export async function settle(page: Page) {
   await page.waitForTimeout(40);
-  await page.evaluate(() => {
+  await page.evaluate(async () => {
     for (const a of document.getAnimations()) {
       if (Number.isFinite(a.effect?.getComputedTiming().endTime)) a.finish();
     }
+
+    await document.activeViewTransition?.finished;
   });
 }
 

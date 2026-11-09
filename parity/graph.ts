@@ -140,7 +140,9 @@ export class Graph {
       };
     }
 
-    if (c.sheet === "first-run-intro") return { parent: `${photo}-default`, steps: [{ mode: dialLabel(state.mode) }] };
+    if (c.sheet === "first-run-intro") {
+      return { steps: [{ tap: "Not Now" }, { mode: dialLabel(state.mode) }], launch: { firstRun: true } };
+    }
 
     if (c.panel === "open" && c.control) return { parent: panel(prefix), steps: [{ tap: control }] };
 

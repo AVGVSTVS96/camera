@@ -2,11 +2,9 @@ import type { Settings, Sheet } from "./state.ts";
 
 export const storageKey = "camera";
 
-type Kept = Pick<Settings, "live" | "night" | "on">;
-
 interface Memory {
   seen: Sheet[];
-  kept?: Kept;
+  live?: Settings["live"];
 }
 
 function read(): Memory {
@@ -28,15 +26,11 @@ export function remember(sheet: Sheet) {
   if (!seen.includes(sheet)) write({ seen: [...seen, sheet] });
 }
 
-/** Settings > Camera > Preserve Settings with Apple's defaults: Night Mode, Live Photo and Action Mode stay; mode, styles, lighting and exposure reset. */
-export function preserve({ live, night, on }: Settings) {
-  write({ kept: { live, night, on: on.filter((t) => t !== "Time-Lapse Mode") } });
-}
+/** Settings > Camera > Preserve Settings as it ships: only Live Photo is on, so everything else resets on launch. */
+export const preserve = ({ live }: Settings) => write({ live });
 
 export function restore(settings: Settings): Settings {
-  const { kept } = read();
+  const { live } = read();
 
-  if (!kept) return settings;
-
-  return { ...settings, live: kept.live, night: settings.facing === "front" ? "off" : kept.night, on: kept.on };
+  return live ? { ...settings, live } : settings;
 }
