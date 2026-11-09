@@ -2,7 +2,7 @@
   background: #1f1f1f;
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
-  border-radius: 46px;
+  border-radius: 66px;
   box-shadow: none;
 }
 
@@ -12,10 +12,10 @@
   inset: 0 auto auto 0;
   width: 371.3px;
   height: 93.3px;
-  border-top-left-radius: 46px;
+  border-top-left-radius: 66px;
   background: #575759;
   box-shadow:
-    inset -2px -2px 2px rgb(255 255 255 / 0.08),
+    inset -1px -1px 2px rgb(255 255 255 / 0.2),
     0 2px 8px rgb(0 0 0 / 0.5);
 }
 
@@ -58,8 +58,9 @@
   height: 75px;
   display: grid;
   place-items: center;
-  font-size: 15px;
-  letter-spacing: 1px;
+  font-size: 14.5px;
+  font-weight: 500;
+  letter-spacing: 1.3px;
   color: #fff;
 }
 
