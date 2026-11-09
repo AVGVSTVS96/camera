@@ -53,6 +53,7 @@ export function SubmenuVideoFormat({ settings, update }: Props) {
         <button
           key={rate}
           className="vf-option vf-rate"
+          aria-label={`${rate} frames per second`}
           data-on={rate === format.rate || undefined}
           data-dot={rate === dot || undefined}
           style={place(i, 105)}
