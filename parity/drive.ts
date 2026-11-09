@@ -139,7 +139,12 @@ async function find(page: Page, name: string) {
 }
 
 async function tap(page: Page, target: Locator) {
-  const at = await aim(target);
+  let at = await aim(target);
+
+  for (let retry = 0; "miss" in at && retry < 4; retry++) {
+    await settle(page);
+    at = await aim(target);
+  }
 
   if ("miss" in at) return at.miss;
 
