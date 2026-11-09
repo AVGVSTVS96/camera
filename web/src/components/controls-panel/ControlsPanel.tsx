@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { useProfile } from "../../profile.ts";
 import { isToggle, toggle, type Props, type Settings, type Submenu, type Toggle } from "../../state.ts";
 import { arrange } from "./layout.ts";
@@ -129,7 +129,11 @@ export function ControlsPanel({ settings, update, from, closing, gone }: PanelPr
   const profile = useProfile();
   const controls = controlsFor(settings, profile.photoFormat);
   const { display, orientation, mode, expanded } = settings;
-  const compact = mode === "photo" && !expanded;
+  const [compact, setCompact] = useState(mode === "photo" && !expanded);
+
+  if (!closing && compact !== (mode === "photo" && !expanded)) setCompact(!compact);
+
+  const dismiss = () => update({ tray: false, expanded: false });
 
   const sheet = arrange(controls.length, {
     display,
@@ -151,7 +155,7 @@ export function ControlsPanel({ settings, update, from, closing, gone }: PanelPr
 
   return (
     <>
-      <div className="tray-backdrop" data-closing={closing || undefined} onClick={() => update({ tray: false })} />
+      <div className="tray-backdrop" data-closing={closing || undefined} onClick={dismiss} />
       <section
         className="tray"
         aria-label="Camera controls"
@@ -185,7 +189,7 @@ export function ControlsPanel({ settings, update, from, closing, gone }: PanelPr
             aria-label={compact ? "Expand" : "Dismiss Camera Controls"}
             data-vertical={sheet.handle.vertical || undefined}
             style={{ left: sheet.handle.x, top: sheet.handle.y }}
-            onClick={() => update(compact ? { expanded: true } : { tray: false })}
+            onClick={() => (compact ? update({ expanded: true }) : dismiss())}
           />
         </div>
       </section>

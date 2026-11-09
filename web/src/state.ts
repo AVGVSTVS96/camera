@@ -163,7 +163,7 @@ export interface Props {
   update: Update;
 }
 
-export const back: Partial<Settings> = { submenu: null, tray: true };
+export const back: Partial<Settings> = { submenu: null, tray: true, expanded: true };
 
 export const toggle = (on: Toggle[], name: Toggle) =>
   on.includes(name) ? on.filter((t) => t !== name) : [...on, name];

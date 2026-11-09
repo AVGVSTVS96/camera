@@ -9,7 +9,7 @@ const nameOf = (seconds: number | null) => (seconds ? `${seconds}s` : "Off");
 
 export function SubmenuTimer({ settings, update }: Props) {
   return (
-    <Submenu title="Timer" className="timer" back={() => update({ ...back, tray: !settings.timer })}>
+    <Submenu title="Timer" className="timer" back={() => update(back)}>
       <output className="timer-value">{nameOf(settings.timer)}</output>
       {options.map((seconds, i) => (
         <button
