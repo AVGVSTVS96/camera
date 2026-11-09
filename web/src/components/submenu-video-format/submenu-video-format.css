@@ -4,7 +4,7 @@
   height: 12px;
   font-size: 10px;
   line-height: 12px;
-  letter-spacing: 0.2px;
+  letter-spacing: 0;
   text-transform: uppercase;
   color: #f7f7f7;
   white-space: nowrap;
@@ -17,14 +17,15 @@
   display: flex;
   align-items: center;
   padding-left: 9.5px;
-  font-size: 14.5px;
+  font-size: 14.2px;
   font-weight: 500;
   color: #f7f7f7;
 }
 
 .vf-rate {
   font-family: ui-monospace, monospace;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .vf-option[data-on] {
