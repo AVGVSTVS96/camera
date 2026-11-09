@@ -214,7 +214,7 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
         !styling &&
         !movie &&
         !settings.holding &&
-        !settings.countdown && <Lighting settings={settings} />}
+        !settings.countdown && <Lighting {...props} />}
       {styling && <SubmenuStyles {...props} />}
       {open === "Timer" && <SubmenuTimer {...props} />}
       {open === "Center Stage" && <SubmenuCenterStage {...props} />}

@@ -284,7 +284,7 @@ export async function perform(driver: Driver, step: Step): Promise<string | unde
 
   if ("adjust" in step) {
     const sliders = page
-      .getByRole("slider", step.adjust ? { name: exactly(step.adjust) } : {})
+      .getByRole("slider", { name: step.adjust ? exactly(step.adjust) : /^(?!Lighting$)/ })
       .filter({ visible: true });
 
     if (!(await sliders.count())) return `no slider${step.adjust ? ` named "${step.adjust}"` : ""}`;

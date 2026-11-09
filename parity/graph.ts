@@ -129,7 +129,15 @@ export class Graph {
     if (c.portraitLighting) {
       const by = lightings.indexOf(String(c.portraitLighting));
 
-      return { parent: `${prefix}-default`, steps: by ? [{ adjust: "Lighting", by }] : [] };
+      return {
+        parent: `${prefix}-default`,
+        steps: by
+          ? [{ adjust: "Lighting", by }]
+          : [
+              { adjust: "Lighting", by: 1 },
+              { adjust: "Lighting", by: -1 },
+            ],
+      };
     }
 
     if (c.sheet === "first-run-intro") return { parent: `${photo}-default`, steps: [{ mode: dialLabel(state.mode) }] };
