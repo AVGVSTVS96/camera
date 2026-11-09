@@ -67,9 +67,11 @@ export function Sheet({ kind, update }: { kind: Kind; update: Update }) {
   return (
     <div className="sheet" data-sheet={kind}>
       <h2>{title}</h2>
-      {body.map((line) => (
-        <p key={line}>{line}</p>
-      ))}
+      <div className="sheet-body">
+        {body.map((line) => (
+          <p key={line}>{line}</p>
+        ))}
+      </div>
       <button className="sheet-action" onClick={kind === "styles" ? () => update({ sheet: "choose" }) : close}>
         {action}
       </button>

@@ -40,19 +40,18 @@
   color: #fff;
 }
 
-.sheet p {
+.sheet-body {
   left: var(--x);
   top: var(--b);
   width: var(--w);
+}
+
+.sheet-body p {
   font:
     400 20px/24.6px system-ui,
     -apple-system,
     sans-serif;
   color: rgb(255 255 255 / 0.46);
-}
-
-.sheet p + p {
-  top: calc(var(--b) + 50px);
 }
 
 .sheet-action {
