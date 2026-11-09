@@ -2,7 +2,8 @@
   position: absolute;
   inset: 56.3px 0 auto;
   text-align: center;
-  font-size: 26px;
+  font-family: ".SF Compact Rounded", ui-rounded, sans-serif;
+  font-size: 30px;
   line-height: 36px;
 }
 
