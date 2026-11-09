@@ -39,6 +39,7 @@ export function Zoom({ settings, update }: Props) {
   const zoom = Math.max(settings.zoom, Math.min(...stops));
   const bare = settings.mode === "time-lapse" || settings.mode === "portrait" || profile.name === "duo";
   const hide = useRef<number>(undefined);
+  const held = useRef(false);
 
   const dialModes = ["photo", "video", "cinematic", "slo-mo"];
 
@@ -75,11 +76,20 @@ export function Zoom({ settings, update }: Props) {
     const grab = e.currentTarget;
     const from = { x: e.clientX, y: e.clientY, zoom: settings.zoom };
     let turning = false;
+    held.current = false;
+
+    const press = window.setTimeout(() => {
+      held.current = true;
+      clearTimeout(hide.current);
+      update({ dial: true, ...(settings.mode === "portrait" && { lenses: true }) });
+    }, 500);
 
     const move = (m: PointerEvent) => {
       const along = ((m.clientX - from.x) * Math.abs(ax) + (m.clientY - from.y) * Math.abs(ay)) * (cinematic ? -1 : 1);
 
       if (!turning && Math.hypot(m.clientX - from.x, m.clientY - from.y) < 8) return;
+
+      clearTimeout(press);
 
       if (!turning) grab.setPointerCapture(e.pointerId);
 
@@ -95,7 +105,9 @@ export function Zoom({ settings, update }: Props) {
     };
 
     const end = () => {
-      if (turning) hide.current = window.setTimeout(() => update({ dial: false }), 1750);
+      clearTimeout(press);
+
+      if (turning || held.current) hide.current = window.setTimeout(() => update({ dial: false }), 1750);
 
       grab.removeEventListener("pointermove", move);
       grab.removeEventListener("pointerup", end);
@@ -189,6 +201,7 @@ export function Zoom({ settings, update }: Props) {
         data-dial={showDial || undefined}
         style={{ left: place.x, top: place.y }}
         onPointerDown={drag}
+        onClickCapture={(e) => held.current && e.stopPropagation()}
       >
         {stops.map((stop, i) => (
           <button

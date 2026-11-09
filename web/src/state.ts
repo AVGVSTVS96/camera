@@ -419,7 +419,7 @@ export function reached(state: ParityState, profile = state.profile ?? duo): Set
     zoom:
       Number.parseFloat(String(c.zoom)) ||
       Number.parseFloat(String(c.via).replace(/^\D+/, "")) ||
-      (c.zoomDial === "open" ? lowest : initial.zoom),
+      (c.zoomDial === "open" && c.zoom ? lowest : initial.zoom),
     timer: timerOf(c),
     lighting: appleLightings.get(String(c.portraitLighting)) ?? initial.lighting,
     on: c.smartTake ? ["Smart Take"] : isToggle(toggled) && (c.to === "On" || c.to === "Adaptive") ? [toggled] : [],
@@ -554,6 +554,10 @@ function rememberedAperture(state: ParityState, c: Controls): Aperture {
   return moved ? { first: 3, at: 7, home: 6, last: 19 } : { first: 3, at: 6, home: 6, last: 18 };
 }
 
+// Apple's simulator long-pressed the zoom stops right after the pose's zoom-stop capture, so the dial shows the zoom that tap left.
+const heldZoom = (state: ParityState, c: Controls, zoom: number) =>
+  c.zoomDial === "open" && !c.zoom ? (state.mode === "cinematic" ? 2 : 0.5) : zoom;
+
 // Apple's simulator keeps 4K once chosen, so every Video Format choice after the first shows it.
 function rememberedFormats({ mode, formats, submenu }: Settings, c: Controls) {
   const format = formats[mode];
@@ -570,7 +574,7 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
 
   return {
     ...settings,
-    zoom: wideTimeLapse(state, c) ? 0.5 : settings.zoom,
+    zoom: wideTimeLapse(state, c) ? 0.5 : heldZoom(state, c, settings.zoom),
     zoomTurn: zoomTurnOf(state, c),
     depth: depthOn(state, c),
     night: settings.submenu === "Night Mode" && hasOptions(c) ? nightOf(c.selected) : settings.night,
