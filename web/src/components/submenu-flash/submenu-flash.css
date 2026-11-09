@@ -3,6 +3,7 @@
   inset: 56px 0 auto;
   height: 36px;
   text-align: center;
+  font-family: ui-rounded, system-ui;
   font-size: 28px;
   line-height: 36px;
 }
