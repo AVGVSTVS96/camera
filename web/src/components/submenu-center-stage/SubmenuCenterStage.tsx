@@ -26,7 +26,7 @@ export function SubmenuCenterStage({ settings, update }: Props) {
               aria-label={value ? "On" : "Off"}
               onClick={() => update({ centerStage: { ...current, [key]: value } })}
             >
-              {value && <i />}
+              {(key === "zoom" ? value : current[key] === value) && <i />}
               {value ? "On" : "Off"}
             </button>
           ))}

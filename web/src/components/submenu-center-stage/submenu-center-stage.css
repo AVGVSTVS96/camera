@@ -2,7 +2,8 @@
   background: #1f1f1f;
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
-  border-radius: 46px;
+  border-radius: 54px;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08);
 }
 
 .center-stage-row {
@@ -16,8 +17,8 @@
   position: absolute;
   left: 87.5px;
   top: 16px;
-  font-size: 11px;
-  letter-spacing: 0.9px;
+  font-size: 9px;
+  letter-spacing: 0.55px;
   line-height: 12px;
 }
 
@@ -28,8 +29,9 @@
   height: 44px;
   display: flex;
   align-items: center;
-  padding: 0 0 2.67px 9.7px;
-  font-size: 20px;
+  padding: 0 0 2.67px 8.4px;
+  font-size: 15.5px;
+  font-weight: 500;
   color: #fff;
 }
 
@@ -39,6 +41,7 @@
 
 .center-stage-option[data-value="on"] {
   left: 279px;
+  padding-left: 7.7px;
 }
 
 .center-stage-option[data-on] {
