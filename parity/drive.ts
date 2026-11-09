@@ -165,7 +165,7 @@ async function swipeDial(driver: Driver, toward: number) {
   const { page } = driver;
 
   const wheel = await page.evaluate(() => {
-    const el = document.querySelector(".dial");
+    const el = document.querySelector('[aria-label="Camera Mode"]');
     const box = el?.getBoundingClientRect();
 
     return (

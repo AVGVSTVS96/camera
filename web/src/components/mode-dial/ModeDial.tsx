@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useEffectEvent, useLayoutEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { useProfile } from "../../profile.ts";
 import { movieModes, type Mode } from "../../state.ts";
@@ -42,7 +42,8 @@ export function ModeDial({ selected, select: apply }: { selected: Mode; select: 
     if (!label) return;
 
     setOffset(-(label.offsetLeft + label.offsetWidth / 2));
-    setPill(label.offsetWidth);
+    const { width, paddingLeft, paddingRight } = getComputedStyle(label);
+    setPill([width, paddingLeft, paddingRight].reduce((sum, px) => sum + Number.parseFloat(px), 0));
   }, [selected]);
 
   useLayoutEffect(measure, [measure]);
@@ -63,6 +64,8 @@ export function ModeDial({ selected, select: apply }: { selected: Mode; select: 
     [modes, selected, select],
   );
 
+  const swiped = useEffectEvent(step);
+
   useEffect(() => {
     const screen = dial.current?.closest<HTMLElement>(".screen");
 
@@ -75,7 +78,7 @@ export function ModeDial({ selected, select: apply }: { selected: Mode; select: 
       const target = e.target as Element;
 
       start =
-        e.isPrimary && !screen.dataset.sheet && !target.closest("button, input, .dial, .zoom")
+        e.isPrimary && !screen.dataset.sheet && !target.closest('button, input, [role="slider"], .dial, .zoom')
           ? { x: e.clientX, y: e.clientY, id: e.pointerId }
           : undefined;
     };
@@ -86,7 +89,7 @@ export function ModeDial({ selected, select: apply }: { selected: Mode; select: 
       const { along: a, across } = along(dial.current, e.clientX - start.x, e.clientY - start.y);
       start = undefined;
 
-      if (Math.abs(a) >= reach && Math.abs(a) > Math.abs(across)) step(a > 0 ? -1 : 1);
+      if (Math.abs(a) >= reach && Math.abs(a) > Math.abs(across)) swiped(a > 0 ? -1 : 1);
     };
 
     screen.addEventListener("pointerdown", down);
@@ -96,7 +99,7 @@ export function ModeDial({ selected, select: apply }: { selected: Mode; select: 
       screen.removeEventListener("pointerdown", down);
       screen.removeEventListener("pointerup", up);
     };
-  }, [step]);
+  }, []);
 
   function press(e: React.PointerEvent<HTMLDivElement>) {
     if (!e.isPrimary) return;
