@@ -28,7 +28,7 @@
 .dial .window {
   position: absolute;
   inset: 0;
-  mask: linear-gradient(to right, rgb(0 0 0 / 0.3), #000 26%, #000 76%, rgb(0 0 0 / 0.25));
+  mask: linear-gradient(to right, rgb(0 0 0 / 0.1), #000 23%, #000 76%, rgb(0 0 0 / 0.25));
 }
 
 .dial .labels {
@@ -44,8 +44,8 @@
 
 .dial .labels button {
   height: 41px;
-  margin-inline: -4px;
-  padding-inline: 20.5px;
+  margin-inline: -5.3px;
+  padding-inline: 21.4px;
   border-radius: 20.5px;
   font-size: 14px;
   font-weight: 400;
@@ -55,16 +55,22 @@
 
 .dial .labels [data-on] {
   color: #ffe300;
-  background: rgb(255 255 255 / 0.045);
+  background: linear-gradient(rgb(255 255 255 / 0.06), rgb(255 255 255 / 0.03));
   box-shadow:
-    inset 0 0 0 1px rgb(255 255 255 / 0.1),
-    inset 0 1px 0 rgb(255 255 255 / 0.25);
+    0 0 0 1px rgb(0 0 0 / 0.6),
+    inset 0 0 0 0.5px rgb(255 255 255 / 0.16),
+    inset 0 1px 1px rgb(255 255 255 / 0.18),
+    inset 0 -1px 0.5px rgb(255 255 255 / 0.4);
 }
 
 .dial[data-profile="duo"] {
   background: rgb(255 255 255 / 0.1);
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
+}
+
+.dial[data-profile="duo"] .window {
+  mask: none;
 }
 
 .dial[data-profile="duo"] .labels [data-on] {
