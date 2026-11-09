@@ -14,6 +14,21 @@ function along(dial: HTMLElement, dx: number, dy: number) {
   return { along: dx * Math.cos(turn) + dy * Math.sin(turn), across: dy * Math.cos(turn) - dx * Math.sin(turn) };
 }
 
+const blur = [
+  { filter: "blur(0)" },
+  { filter: "blur(6px)", offset: 0.5 },
+  { filter: "blur(3px)", offset: 0.8 },
+  { filter: "blur(0)" },
+];
+
+/** The viewfinder blurs while it resizes between 4:3 and 16:9 inside a frame that shows its edge. */
+function resize({ delay, duration, easing }: KeyframeAnimationOptions) {
+  const timing = { delay, duration, easing, fill: "backwards" } as const;
+  const viewfinder = document.querySelector(".viewfinder");
+
+  for (const child of viewfinder?.children ?? []) child.animate(blur, timing);
+}
+
 function switchTiming() {
   const root = getComputedStyle(document.documentElement);
 
@@ -40,7 +55,13 @@ export function ModeDial({ selected, select: apply }: { selected: Mode; select: 
 
       document.documentElement.dataset.switch = movieModes.has(mode) ? "movie" : "still";
 
-      crossfade(() => apply(mode), switchTiming());
+      const timing = switchTiming();
+
+      if (movieModes.has(mode) !== movieModes.has(selected)) {
+        resize(timing);
+      }
+
+      crossfade(() => apply(mode), timing);
     },
     [apply, selected],
   );
