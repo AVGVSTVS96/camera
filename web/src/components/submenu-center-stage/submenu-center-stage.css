@@ -1,0 +1,55 @@
+.submenu.center-stage {
+  background: #1f1f1f;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border-radius: 46px;
+}
+
+.center-stage-row {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 44px;
+}
+
+.center-stage-label {
+  position: absolute;
+  left: 87.5px;
+  top: 16px;
+  font-size: 11px;
+  letter-spacing: 0.9px;
+  line-height: 12px;
+}
+
+.center-stage-option {
+  position: absolute;
+  top: 0;
+  width: 83.67px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 0 0 2.67px 9.7px;
+  font-size: 20px;
+  color: #fff;
+}
+
+.center-stage-option[data-value="off"] {
+  left: 187.33px;
+}
+
+.center-stage-option[data-value="on"] {
+  left: 279px;
+}
+
+.center-stage-option[data-on] {
+  color: #ffd600;
+}
+
+.center-stage-option i {
+  position: absolute;
+  left: 0.5px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}

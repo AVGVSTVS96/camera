@@ -17,6 +17,7 @@ import { Recording } from "./components/recording/Recording.tsx";
 import { Sheet } from "./components/sheets/Sheet.tsx";
 import { Shutter } from "./components/shutter/Shutter.tsx";
 import { SubmenuResolution } from "./components/submenu-resolution/SubmenuResolution.tsx";
+import { SubmenuCenterStage } from "./components/submenu-center-stage/SubmenuCenterStage.tsx";
 import { SubmenuTimer } from "./components/submenu-timer/SubmenuTimer.tsx";
 import { SubmenuStyles } from "./components/submenu-styles/SubmenuStyles.tsx";
 import { SubmenuDepth } from "./components/submenu-depth/SubmenuDepth.tsx";
@@ -145,6 +146,7 @@ export function Camera({ initial, still }: { initial: Settings; still?: string }
       )}
       {styling && <SubmenuStyles {...props} />}
       {settings.submenu && settings.timerMenu && <SubmenuTimer {...props} />}
+      {settings.centerStage && <SubmenuCenterStage {...props} />}
       <AspectFlip {...props} />
       {settings.viewer && <Viewer shot={shot} close={() => update({ viewer: false })} />}
       {settings.viewer && settings.display === "inner" && <InnerViewer empty={!shot} />}

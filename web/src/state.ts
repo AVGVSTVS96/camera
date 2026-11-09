@@ -87,11 +87,17 @@ export interface Settings {
   timer: number | null;
   timerMenu: boolean;
   resolutionMenu: 24 | 48 | null;
+  centerStage: CenterStage | null;
   depth: boolean;
   aperture: Aperture | null;
   orientation: Orientation;
   display: Display;
   fold?: string;
+}
+
+export interface CenterStage {
+  zoom: boolean;
+  rotate: boolean;
 }
 
 export type Sheet = "intro" | "styles" | "choose";
@@ -150,6 +156,7 @@ export function initialSettings(profile: Profile, mode: Mode = "photo", facing: 
     timer: null,
     timerMenu: false,
     resolutionMenu: null,
+    centerStage: null,
     depth: false,
     aperture: null,
     orientation: "portrait",
@@ -257,6 +264,14 @@ const focusOf = (c: Controls) =>
     : undefined;
 
 const megapixelsOf = (selected: Controls["selected"]) => ([selected].flat().join().startsWith("48") ? 48 : 24);
+
+function centerStageOf(c: Controls): CenterStage | null {
+  if (c.panel !== "submenu" || c.control !== "Center Stage") return null;
+
+  const [zoom, rotate] = Array.isArray(c.selected) ? c.selected : ["Off", c.selected];
+
+  return { zoom: zoom === "On", rotate: rotate === "On" };
+}
 
 const timerOf = (c: Controls) => Number.parseInt(String(c.control === "Timer" ? c.selected : c.timer)) || null;
 
@@ -376,6 +391,7 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
     timer: timerOf(c),
     timerMenu: c.control === "Timer",
     resolutionMenu: c.panel === "submenu" && c.control === "Resolution" ? megapixelsOf(c.selected) : null,
+    centerStage: centerStageOf(c),
     depth: depthOn(state, c),
     aperture: c.panel === "submenu" && c.control === "Depth" ? apertureOf(state, c) : null,
     orientation: state.orientation,
