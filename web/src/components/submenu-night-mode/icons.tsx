@@ -1,35 +1,38 @@
 import type { ReactNode } from "react";
 
-const moon = "M20.76 16.06A9 9 0 1 1 9.94 5.24A8 8 0 0 0 20.76 16.06Z";
+const moon = "M45 21.7A34 34 0 1 0 86.7 64A31 31 0 0 1 45 21.7Z";
 
 const dots = [
-  [16.5, 4.5, 1.1],
-  [20, 6, 1.1],
-  [22.5, 9.5, 1.1],
-  [18.5, 8.5, 1],
-  [21.5, 13, 1],
-  [14.5, 7.5, 0.9],
-  [17.5, 12, 0.9],
+  [57.8, 22.5],
+  [71.3, 26.7],
+  [56, 35.8],
+  [70, 39],
+  [82, 37],
+  [61, 48],
+  [73.7, 53],
+  [86.2, 50.5],
 ] as const;
 
-function Glyph({ children, box = "2 2.5 22 22" }: { children: ReactNode; box?: string }) {
+function Glyph({ children }: { children: ReactNode }) {
   return (
-    <svg width="26" height="26" viewBox={box} fill="currentColor" aria-hidden>
+    <svg width="30" height="30" viewBox="10.5 9.5 90 90" fill="currentColor" aria-hidden>
       {children}
     </svg>
   );
 }
 
-const Dots = () => dots.map(([cx, cy, r]) => <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r={r} />);
+const Dots = () => dots.map(([cx, cy]) => <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="3" />);
 
 export const NightAuto = () => (
   <Glyph>
-    <path d={moon} />
+    <g transform="translate(-0.8 -0.8)">
+      <path d={moon} />
+    </g>
     <path
-      d="M15.5 11.5 18.2 4.5 20.9 11.5M16.5 9.2h3.4"
+      d="M58.2 50.3 68.7 24.5 79.9 50.3M62.3 40h12.8"
       fill="none"
       stroke="currentColor"
-      strokeWidth="1.7"
+      strokeWidth="4.3"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
@@ -44,15 +47,22 @@ export const NightMax = () => (
 );
 
 export const NightOff = () => (
-  <Glyph box="0 0.5 26 26">
+  <Glyph>
     <path
-      d="M20.76 16.06A9 9 0 1 1 9.94 5.24"
+      d="M25.6 38.1A35 35 0 0 0 66.3 79"
       fill="none"
       stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
+      strokeWidth="4.6"
     />
-    <Dots />
-    <path d="M3.5 3.5 23 23" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    <path
+      d="M45.3 18.4 32.3 26.3 37.9 29.1 43.4 37.8ZM86.5 61 68.1 62.1 75.6 67.3 79.4 73.5Z"
+      stroke="currentColor"
+      strokeWidth="1.2"
+      strokeLinejoin="round"
+    />
+    <g transform="translate(0 -3.7)">
+      <Dots />
+    </g>
+    <path d="M21.9 24.4 81.3 84" stroke="currentColor" strokeWidth="4.6" strokeLinecap="round" />
   </Glyph>
 );
