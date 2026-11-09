@@ -227,9 +227,11 @@ function zoomTurnOf(state: ParityState, c: Controls) {
   const portrait = state.orientation === "portrait";
 
   const touched = touches.test(String(c.action));
+
   if (state.mode === "photo" && portrait && touched) return 180;
 
   const sideways = state.display === "inner" && (state.mode === "photo" || (state.mode === "cinematic" && !portrait));
+
   const resting =
     c.panel !== undefined || (portrait && c.fold !== undefined) || (c.zoom !== undefined && c.zoomDial === undefined);
 
