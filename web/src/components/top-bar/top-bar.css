@@ -25,11 +25,6 @@
   font-weight: 500;
 }
 
-.top-items > .badge {
-  rotate: var(--glyph-turn);
-  transition: rotate 0.4s;
-}
-
 .screen[data-display="outer"][data-orientation="landscape"] .top-items {
   flex-direction: column;
 }

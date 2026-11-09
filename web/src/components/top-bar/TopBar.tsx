@@ -16,6 +16,8 @@ export function TopBar({ settings, update }: Props) {
   const profile = useProfile();
   const { flash, live, night, resolution, mode, videoResolution } = settings;
   const movie = movieModes.has(mode);
+  const front = settings.facing === "front";
+  const flashes = mode === "photo" || mode === "portrait" || (movie && !front && mode !== "time-lapse");
   const format = settings.formats[mode] ?? { resolution: videoResolution, rate: 30 };
   const action = settings.on.includes("Action Mode");
   const open = (submenu: Submenu) => update({ submenu, tray: false, expanded: false });
@@ -29,27 +31,30 @@ export function TopBar({ settings, update }: Props) {
       )}
       {profile.badges && (
         <div className="top-items">
-          <button aria-label="Flash" data-on={flash === "on" || undefined} onClick={() => open("Flash")}>
-            <Bolt mode={flash} />
-          </button>
-          {movie ? (
-            <>
-              <button
-                aria-label="Action mode"
-                data-on={action || undefined}
-                onClick={() =>
-                  update({
-                    on: action ? settings.on.filter((t) => t !== "Action Mode") : [...settings.on, "Action Mode"],
-                  })
-                }
-              >
-                <Run off={!action} />
-              </button>
-              <button className="badge" aria-label="Video format" onClick={() => open("Video Format")}>
-                <Format name={format.resolution} detail={format.rate} />
-              </button>
-            </>
-          ) : (
+          {flashes && (
+            <button aria-label="Flash" data-on={flash === "on" || undefined} onClick={() => open("Flash")}>
+              <Bolt mode={flash} />
+            </button>
+          )}
+          {mode === "video" && !front && (
+            <button
+              aria-label="Action mode"
+              data-on={action || undefined}
+              onClick={() =>
+                update({
+                  on: action ? settings.on.filter((t) => t !== "Action Mode") : [...settings.on, "Action Mode"],
+                })
+              }
+            >
+              <Run off={!action} />
+            </button>
+          )}
+          {movie && (
+            <button className="badge glyph" aria-label="Video format" onClick={() => open("Video Format")}>
+              <Format name={format.resolution} detail={format.rate} />
+            </button>
+          )}
+          {mode === "photo" && (
             <>
               <button aria-label="Live Photo" data-on={live === "on" || undefined} onClick={() => open("Live Photo")}>
                 <Live off={live !== "on"} />
@@ -57,7 +62,7 @@ export function TopBar({ settings, update }: Props) {
               <button aria-label="Night mode" data-on={night !== "off" || undefined} onClick={() => open("Night Mode")}>
                 <Moon off={night === "off"} />
               </button>
-              <button className="badge" aria-label="Photo format" onClick={() => open("Resolution")}>
+              <button className="badge glyph" aria-label="Photo format" onClick={() => open("Resolution")}>
                 <Format name="HEIF" detail={resolution} />
               </button>
             </>

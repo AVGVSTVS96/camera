@@ -7,11 +7,11 @@ const Cut = ({ off, children }: { off: boolean; children: ReactNode }) => (
   <Icon>
     {off ? (
       <>
-        <mask id="cut">
+        <mask id="top-bar-cut">
           <rect width="24" height="24" fill="#fff" stroke="none" />
           <path d={slash} stroke="#000" strokeWidth={4.4} />
         </mask>
-        <g mask="url(#cut)">{children}</g>
+        <g mask="url(#top-bar-cut)">{children}</g>
         <path d={slash} strokeWidth={1.8} />
       </>
     ) : (
@@ -50,11 +50,11 @@ export const Live = ({ off }: { off: boolean }) => (
 export const Moon = ({ off }: { off: boolean }) => (
   <Cut off={off}>
     <g transform="translate(2.6 -.3)">
-      <mask id="bite">
+      <mask id="top-bar-bite">
         <rect width="24" height="24" fill="#fff" stroke="none" />
         <circle cx="14.2" cy="9.6" r="6.2" fill="#000" stroke="none" />
       </mask>
-      <circle cx="10.6" cy="13.4" r="7" fill="currentColor" stroke="none" mask="url(#bite)" />
+      <circle cx="10.6" cy="13.4" r="7" fill="currentColor" stroke="none" mask="url(#top-bar-bite)" />
       {!off && (
         <text x="18.4" y="9" fontSize="9" fontWeight="700" fill="currentColor" stroke="none" textAnchor="middle">
           2
