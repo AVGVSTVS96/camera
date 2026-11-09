@@ -2,7 +2,7 @@ import type { Props } from "../../state.ts";
 import { Submenu } from "../submenu/Submenu.tsx";
 import "./submenu-resolution.css";
 
-const options = [24, 48];
+const options = [24, 48] as const;
 
 export function SubmenuResolution({ settings, update }: Props) {
   const current = settings.resolutionMenu;

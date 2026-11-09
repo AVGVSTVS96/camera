@@ -9,7 +9,9 @@
   position: absolute;
   inset: 56.67px 0 auto;
   text-align: center;
-  font-size: 30px;
+  font-family: ui-rounded, system-ui;
+  font-size: 28px;
+  font-weight: 300;
   line-height: 36px;
 }
 
@@ -18,7 +20,10 @@
   top: 78px;
   height: 75px;
   padding-bottom: 12px;
-  font-size: 17px;
+  font-family: ui-rounded, system-ui;
+  font-size: 16.5px;
+  font-weight: 300;
+  letter-spacing: -0.6px;
   color: #fff;
 }
 
