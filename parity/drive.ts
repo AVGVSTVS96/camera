@@ -286,10 +286,7 @@ export async function perform(driver: Driver, step: Step): Promise<string | unde
 
     if (!stop) return `no zoom stop ${step.zoom}`;
 
-    const missed = await tap(page, stop.stop);
-    await page.clock.runFor(600);
-
-    return missed;
+    return tap(page, stop.stop);
   }
 
   if ("swipe" in step) {

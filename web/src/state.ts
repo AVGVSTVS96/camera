@@ -180,8 +180,12 @@ export const toggle = (on: Toggle[], name: Toggle) =>
 
 export const defaultRate = (mode: Mode) => (mode === "slo-mo" ? 120 : 30);
 
-export function defaultAperture({ mode, facing }: Pick<Settings, "mode" | "facing">): Aperture {
-  if (mode === "photo") return { first: 1, at: 13, home: 13, last: 13, off: true };
+export function defaultAperture({ mode, facing, depth }: Pick<Settings, "mode" | "facing" | "depth">): Aperture {
+  if (mode === "photo") {
+    return depth
+      ? { first: 0, at: 6, home: 6, last: 18, unavailable: true }
+      : { first: 1, at: 13, home: 13, last: 13, off: true };
+  }
 
   if (mode === "portrait") return { first: 0, at: 10, home: 10, last: 21 };
 
@@ -502,7 +506,7 @@ function rememberedAperture(state: ParityState, c: Controls): Aperture {
   const moved = (Array.isArray(c.options) && c.options.includes("Reset")) || (!front && c.adjust !== undefined);
 
   if (state.mode === "photo") {
-    if (c.selected !== "Depth") return defaultAperture({ mode: "photo", facing: "back" });
+    if (c.selected !== "Depth") return defaultAperture({ mode: "photo", facing: "back", depth: false });
 
     const at = front && state.display === "inner" && state.orientation === "landscape" ? 10 : 6;
 
@@ -535,6 +539,7 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
     zoom: wideTimeLapse(state, c) ? 0.5 : settings.zoom,
     zoomTurn: zoomTurnOf(state, c),
     depth: depthOn(state, c),
+    night: settings.submenu === "Night Mode" && hasOptions(c) ? nightOf(c.selected) : settings.night,
     lighting: settings.picked ? settings.lighting : rememberedLighting(state),
     aperture: settings.submenu === "Depth" ? rememberedAperture(state, c) : undefined,
     formats: rememberedFormats(settings, c),

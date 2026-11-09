@@ -72,6 +72,7 @@ TURN_POOL=parity TURN_SLOTS=4 BROWSERS=8 turn bun run interact
 - `depth`: tapping Depth turns it on, and `reached()` and the Depth button do that. What is left over is the oracle not turning it off after `*-depth-depth`, so every later control state in that pose (Flash, Timer, White Balance, Night Mode, ...) shows it on.
 - `lighting`: the `*-lighting-inc/dec` states move the Portrait Lighting cube, and the states after them keep where it stopped.
 - `zoomTurn`: the stops' glyph turn follows the Device Hub orientation the last touch left behind (a viewfinder tap flips it 180 in portrait Photo), not any control.
+- `night`: most Night Mode submenus open on Off, which earlier captures in the pose left, though a launch opens it on Auto.
 - `wideTimeLapse`, `apertureOf`, sticky 4K: Time-lapse left on the ultra wide lens, the f-stop and the 4K choice from earlier states in the pose.
 
 Camera does keep Portrait Lighting and Depth while the app stays open, and the live model does too: `switchMode` and every submenu leave `lighting` and `depth` alone, so a route that sets them keeps them. A turn of the stops with the device (Apple rotates glyphs, not the window) is real, but it follows the pose and belongs to posture, not to these leftovers. A difference that isn't one of these fields is a real difference: it stays "wrong".
