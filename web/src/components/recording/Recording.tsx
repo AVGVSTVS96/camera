@@ -60,6 +60,7 @@ export function Recording({ settings, lockRef, still, onPause, onStill }: Record
 
   return (
     <>
+      <span className="recording-home" />
       {mode !== "time-lapse" && <time className="recording-timer">{elapsed}</time>}
       {recording && mode === "video" && (
         <button

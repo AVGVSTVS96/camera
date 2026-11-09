@@ -101,3 +101,20 @@
   width: 1px;
   height: 114.5px;
 }
+
+.recording-home {
+  display: none;
+}
+
+.screen[data-profile="simulator"][data-display="outer"][data-orientation="portrait"] .recording-home {
+  display: block;
+  position: absolute;
+  left: 149.7px;
+  top: 664.7px;
+  width: 170.7px;
+  height: 5.6px;
+  border-radius: 2.8px;
+  background: linear-gradient(#262626, #1d1d1d);
+  -webkit-mask-image: linear-gradient(to right, #000 88%, transparent);
+  mask-image: linear-gradient(to right, #000 88%, transparent);
+}
