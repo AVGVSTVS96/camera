@@ -7,16 +7,42 @@ const dots = Array.from({ length: 15 }, (_, i) => {
   return [50 + 50 * Math.cos(turn), 50 + 50 * Math.sin(turn)] as const;
 });
 
-const looks: Record<Lighting, string> = {
-  natural: "radial-gradient(circle at 50% 40%, #fff 15%, #f2f2f2 35%, #dcdcdc 51%, #969696 64%, #606060 77%)",
-  studio:
-    "linear-gradient(#dbdbdb, #cdcdcd 20%, #c4c4c4 40%, #b4b4b4 50%, #a0a0a0 60%, #7e7e7e 75%, #6a6a6a 90%, #888)",
-  contour:
-    "linear-gradient(#f2f2f2 3%, #fff 10%, #e2e2e2 20%, #c9c9c9 30%, #b1b1b1 40%, #909090 50%, #6a6a6a 60%, #4e4e4e 70%, #4f4f4f 80%, #616161 90%, #adadad)",
-  stage: "linear-gradient(#808080, #d0d0d0 12%, #7d7d7d 25%, #555 38%, #444 50%, #3a3a3a 62%, #4d4d4d 85%, #606060)",
-  "stage-mono": "linear-gradient(#8a8a8a, #e0e0e0 12%, #8c8c8c 25%, #666 40%, #555 55%, #5a5a5a 75%, #707070)",
-  "high-key-mono":
-    "linear-gradient(#dbdbdb, #cdcdcd 20%, #c4c4c4 40%, #b4b4b4 50%, #a0a0a0 60%, #7e7e7e 75%, #6a6a6a 90%, #888)",
+interface Look {
+  body: string;
+  gloss: string;
+  mask?: string;
+}
+
+const studio: Look = {
+  body: "linear-gradient(#dbdbdb, #cdcdcd 20%, #c4c4c4 40%, #b4b4b4 50%, #a0a0a0 60%, #7e7e7e 75%, #6a6a6a 90%, #888)",
+  gloss:
+    "radial-gradient(55% 16% at 50% 99%, rgb(255 255 255 / 0.4), transparent), radial-gradient(circle, transparent 52%, rgb(0 0 0 / 0.3) 94%, rgb(0 0 0 / 0.1))",
+};
+
+const looks: Record<Lighting, Look> = {
+  natural: {
+    body: "radial-gradient(50% 60% at 50% 36%, #fefefe, #fbfbfb 30%, #f7f7f7 42%, #f0f0f0 53%, #e2e2e2 64%, #cbcbcb 75%, #a7a7a7 87%, #8d8d8d 98%)",
+    gloss:
+      "radial-gradient(40% 25% at 50% 88%, rgb(200 200 200 / 0.35), transparent), radial-gradient(closest-side, transparent 94%, rgb(60 60 60 / 0.5))",
+  },
+  studio,
+  contour: {
+    body: "linear-gradient(90deg, rgb(30 30 30 / 0.75), rgb(30 30 30 / 0.84) 8%, rgb(30 30 30 / 0.56) 18%, rgb(30 30 30 / 0.31) 27%, transparent 40% 60%, rgb(30 30 30 / 0.31) 73%, rgb(30 30 30 / 0.56) 82%, rgb(30 30 30 / 0.84) 92%, rgb(30 30 30 / 0.75)), linear-gradient(#fff 13%, #f3f3f3 17%, #ddd 26%, #c7c7c7 36%, #a9a9a9 45%, #7c7c7c 55%, #333 64%, #222 74%, #2d2d2d 83%, #686868 92%, #999 96%)",
+    mask: "linear-gradient(#000 13%, rgb(0 0 0 / 0.97) 17%, rgb(0 0 0 / 0.91) 26%, rgb(0 0 0 / 0.86) 36%, rgb(0 0 0 / 0.8) 45%, rgb(0 0 0 / 0.73) 55%, rgb(0 0 0 / 0.63) 64%, rgb(0 0 0 / 0.61) 74%, rgb(0 0 0 / 0.63) 83%, rgb(0 0 0 / 0.69) 92%, rgb(0 0 0 / 0.84) 96%)",
+    gloss:
+      "radial-gradient(closest-side, transparent 93%, rgb(40 40 40 / 0.6)), radial-gradient(65% 30% at 50% 0%, #fff 50%, rgb(255 255 255 / 0.6) 75%, transparent), radial-gradient(30% 8% at 50% 100%, rgb(200 200 200 / 0.95), transparent)",
+  },
+  stage: {
+    body: "radial-gradient(closest-side, #323232, #353535 42%, #414141 53%, #4f4f4f 64%, #525252 75%, #2c2c2c 87%, #5a5a5a 96%, #707070)",
+    gloss:
+      "radial-gradient(70% 50% at 50% 0%, rgb(255 255 255 / 0.5), rgb(255 255 255 / 0.95) 13%, rgb(255 255 255 / 0.64) 25%, rgb(255 255 255 / 0.39) 36%, rgb(255 255 255 / 0.23) 47%, rgb(255 255 255 / 0.17) 58%, rgb(255 255 255 / 0.13) 70%, rgb(255 255 255 / 0.1) 81%, transparent), radial-gradient(45% 20% at 50% 100%, rgb(200 200 200 / 0.7) 15%, rgb(200 200 200 / 0.24) 42%, transparent 70%)",
+  },
+  "stage-mono": {
+    body: "radial-gradient(closest-side, #484848, #4c4c4c 30%, #525252 42%, #5a5a5a 53%, #626262 64%, #5b5b5b 75%, #3e3e3e 87%, #505050)",
+    gloss:
+      "radial-gradient(closest-side, transparent 90%, rgb(25 25 25 / 0.4) 97%, rgb(25 25 25 / 0.2)), radial-gradient(70% 26% at 50% 0%, #fff 25%, rgb(255 255 255 / 0.9) 45%, rgb(255 255 255 / 0.35) 70%, transparent 95%), radial-gradient(40% 20% at 50% 100%, rgb(200 200 200 / 0.9) 20%, rgb(150 150 150 / 0.3) 60%, transparent)",
+  },
+  "high-key-mono": studio,
 };
 
 export function Dots({ radius }: { radius: number }) {
@@ -45,7 +71,8 @@ export function Ball({
   return (
     <span className="lighting-ball" style={style}>
       {effect === "natural" && <Dots radius={ring / size} />}
-      <i style={{ background: looks[effect] }} />
+      <i style={{ background: looks[effect].body, maskImage: looks[effect].mask }} />
+      <b style={{ background: looks[effect].gloss }} />
     </span>
   );
 }
@@ -148,9 +175,9 @@ export function CubeFaces({ turn, scale, effect }: { turn: number; scale: number
             <polygon points={pts([0, 0], upperLeft, lowerLeft)} fill={veil(wedgeLeft, wedgeAlpha)} />
             <polygon points={pts([0, 0], upperRight, lowerRight)} fill={veil(wedgeRight, wedgeAlpha)} />
             <polygon points={pts([0, 0], lowerLeft, bottom, lowerRight)} fill={veil(lower, 0.874)} />
-            <g fill="none" stroke="#ffe27a" strokeOpacity="0.55" strokeWidth="1.6" filter="url(#lighting-soft)">
-              {effect === "contour" && <polyline points={pts(upperLeft, [0, 0], upperRight)} />}
-              <polyline points={pts(lowerLeft, [0, 0], lowerRight)} />
+            <g fill="none" stroke="#ffe27a" strokeWidth="1.6" filter="url(#lighting-soft)">
+              {effect === "contour" && <polyline points={pts(upperLeft, [0, 0], upperRight)} strokeOpacity="0.27" />}
+              <polyline points={pts(lowerLeft, [0, 0], lowerRight)} strokeOpacity="0.38" />
             </g>
             <rect x="-8" y="0" width="16" height="12" fill="url(#lighting-cloud)" />
           </>
