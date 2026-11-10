@@ -24,7 +24,7 @@ export function TopBar({ settings, update }: Props) {
 
   return (
     <>
-      {settings.tray && settings.display !== "inner" && (
+      {profile.badges && settings.tray && settings.display !== "inner" && (
         <button className="glass round small plus" aria-label="Add control">
           <Plus />
         </button>

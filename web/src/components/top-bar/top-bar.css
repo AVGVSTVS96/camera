@@ -19,6 +19,16 @@
 
 .top-items > .badge {
   justify-content: center;
+  translate: 2px 0.9px;
+}
+
+.top-items > .badge small {
+  font-weight: 500;
+  letter-spacing: -0.4px;
+}
+
+.top-items > [aria-label="Photo format"] {
+  translate: 3.3px 0.7px;
 }
 
 .top-items > .badge b {

@@ -1,15 +1,13 @@
 import type { ReactNode } from "react";
 import { bolt, Icon } from "../../icons.tsx";
 
-const slash = "M4 3.5 20 20.5";
-
-const Cut = ({ off, children }: { off: boolean; children: ReactNode }) => (
+const Cut = ({ off, slash, width = 4.4, children }: { off: boolean; slash: string; width?: number; children: ReactNode }) => (
   <Icon>
     {off ? (
       <>
         <mask id="top-bar-cut">
           <rect width="24" height="24" fill="#fff" stroke="none" />
-          <path d={slash} stroke="#000" strokeWidth={4.4} />
+          <path d={slash} stroke="#000" strokeWidth={width} />
         </mask>
         <g mask="url(#top-bar-cut)">{children}</g>
         <path d={slash} strokeWidth={1.8} />
@@ -20,43 +18,44 @@ const Cut = ({ off, children }: { off: boolean; children: ReactNode }) => (
   </Icon>
 );
 
+const wide = "M4 3.5 20 20.5";
+
 export const Bolt = ({ mode }: { mode: "auto" | "on" | "off" }) => (
-  <Cut off={mode === "off"}>
-    <g transform={mode === "auto" ? "translate(-2 .3)" : undefined}>
-      <path
-        d={bolt}
-        fill="currentColor"
-        stroke="none"
-        transform={mode === "auto" ? "translate(-2 0) scale(.92)" : "translate(1.2 1) scale(.9)"}
-      />
-      {mode === "auto" && (
-        <>
-          <circle cx="17.5" cy="17.5" r="5" fill="currentColor" stroke="none" />
-          <path d="m15.6 19.8 1.9-5 1.9 5m-3.2-1.6h2.6" stroke="#000" strokeWidth={1.2} />
-        </>
-      )}
-    </g>
+  <Cut off={mode === "off"} slash="M4.2 5 15.8 19.2" width={4.2}>
+    {mode === "off" ? (
+      <path d={bolt} fill="currentColor" stroke="currentColor" strokeWidth={1.5} transform="translate(-.4 .6) scale(.93)" />
+    ) : mode === "auto" ? (
+      <>
+        <path d={bolt} fill="currentColor" stroke="currentColor" strokeWidth={2.2} transform="translate(-.94 .78) scale(.88)" />
+        <circle cx="15.4" cy="17.4" r="4.7" fill="currentColor" stroke="none" />
+        <path d="m13.6 19.5 1.8-4.7 1.8 4.7m-3-1.5h2.4" stroke="#5d5d55" strokeWidth={1.2} />
+      </>
+    ) : (
+      <path d={bolt} fill="currentColor" stroke="none" transform="translate(1.2 1) scale(.9)" />
+    )}
   </Cut>
 );
 
 export const Live = ({ off }: { off: boolean }) => (
-  <Cut off={off}>
-    <circle cx="12" cy="12" r="10" strokeDasharray="0.1 2.05" strokeWidth={1.4} />
-    <circle cx="12" cy="12" r="6.6" strokeWidth={2} />
-    <circle cx="12" cy="12" r="2.8" strokeWidth={2} />
+  <Cut off={off} slash={wide}>
+    <g transform="translate(-.7 .3)">
+      <circle cx="12" cy="12" r="9.3" strokeDasharray="0.1 1.45" strokeWidth={1.1} />
+      <circle cx="12" cy="12" r="6.6" strokeWidth={2} />
+      <circle cx="12" cy="12" r="2.8" strokeWidth={2} />
+    </g>
   </Cut>
 );
 
 export const Moon = ({ off }: { off: boolean }) => (
-  <Cut off={off}>
+  <Cut off={off} slash={wide}>
     <g transform="translate(2.6 -.3)">
       <mask id="top-bar-bite">
         <rect width="24" height="24" fill="#fff" stroke="none" />
-        <circle cx="14.2" cy="9.6" r="6.2" fill="#000" stroke="none" />
+        <circle cx="14.65" cy="8.85" r="6.6" fill="#000" stroke="none" />
       </mask>
-      <circle cx="10.6" cy="13.4" r="7" fill="currentColor" stroke="none" mask="url(#top-bar-bite)" />
+      <circle cx="10.8" cy="12.9" r="7.5" fill="currentColor" stroke="none" mask="url(#top-bar-bite)" />
       {!off && (
-        <text x="18.4" y="9" fontSize="9" fontWeight="700" fill="currentColor" stroke="none" textAnchor="middle">
+        <text x="13.8" y="10.4" fontSize="7" fontWeight="700" fill="currentColor" stroke="none" textAnchor="middle">
           2
         </text>
       )}
@@ -65,17 +64,17 @@ export const Moon = ({ off }: { off: boolean }) => (
 );
 
 export const Run = ({ off }: { off: boolean }) => (
-  <Cut off={off}>
-    <circle cx="16" cy="4.6" r="2.1" fill="currentColor" stroke="none" />
-    <path
-      d="M14.4 8.6 11.2 13.6M11.8 9.6 8.4 11.2M14.2 9.6l3.4 1.6M11.2 13.6l-3.8 4M11.2 13.6l3.6 3.2-1.6 4.4M2.6 8.6h4M1.6 12.2h3.4M3.2 15.6h2.6"
-      strokeWidth={2}
-    />
+  <Cut off={off} slash="M2.8 4.4 18.6 20" width={3.2}>
+    <g transform="translate(1 0)">
+      <circle cx="17.05" cy="5.35" r="1.85" fill="currentColor" stroke="none" />
+      <path d="M16.2 9.4 14.4 14.6M16 10.2l5 .6M15 10.4l-3.6 1.4M14.4 14.6l-3.4 4M14.4 14.6l3 2.8-1 4" strokeWidth={2.3} />
+      <path d="M2.6 5.1h5.4M2.4 9.1h4.6M2.6 13.1h5.4M3.6 17.1h4" strokeWidth={1.5} />
+    </g>
   </Cut>
 );
 
 export const Plus = () => (
-  <Icon size={20}>
+  <Icon size={18}>
     <path d="M12 5v14M5 12h14" strokeWidth={1.8} />
   </Icon>
 );
