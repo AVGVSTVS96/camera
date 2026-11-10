@@ -223,13 +223,20 @@ export const switchMode = (
   mode,
   zoom: startZoom(profile, facing, mode),
   flash: movieModes.has(mode) === movieModes.has(from) ? flash : defaultFlash(mode),
+  lenses: false,
   lock: false,
 });
 
 export const flipCamera = (profile: Profile, { mode, facing }: Settings): Partial<Settings> => {
   const to = facing === "front" ? "back" : "front";
 
-  return { facing: to, zoom: startZoom(profile, to, mode), night: to === "front" ? "off" : "auto", lock: false };
+  return {
+    facing: to,
+    zoom: startZoom(profile, to, mode),
+    night: to === "front" ? "off" : "auto",
+    lenses: false,
+    lock: false,
+  };
 };
 
 export function initialSettings(profile: Profile, pose: Pose, mode: Mode = "photo", facing: Facing = "back"): Settings {
