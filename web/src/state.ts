@@ -580,24 +580,24 @@ function rememberedAperture(state: ParityState, c: Controls): Aperture {
 const heldZoom = (state: ParityState, c: Controls, zoom: number) =>
   c.zoomDial === "open" && !c.zoom ? (state.mode === "cinematic" ? 2 : 0.5) : zoom;
 
-// Apple's simulator keeps 4K once chosen, so every Video Format choice after the first shows it.
-function rememberedFormats({ mode, formats, submenu }: Settings, c: Controls) {
+// Apple's simulator keeps 4K once chosen, so every Video Format choice after the first shows it; it captured 4K right
+// after 24 fps in every pose but outer portrait, so 4K still shows 24; and its inner-portrait taps on 60 and 120 missed,
+// so those still show HD, 30 frames per second.
+function rememberedFormats(state: ParityState, { mode, formats, submenu }: Settings, c: Controls) {
   const format = formats[mode];
 
   if (submenu !== "Video Format" || !format || Array.isArray(c.selected)) return formats;
 
-  return { ...formats, [mode]: changeFormat({ ...format, resolution: "4K" }) };
-}
-
-// Apple's inner-portrait captures of 60 and 120 fps still show HD, 30 frames per second, though every other pose shows the choice.
-function staleInnerFormats(state: ParityState, { mode, formats, submenu }: Settings, c: Controls) {
+  const pose = `${state.display}-${state.orientation}`;
   const rate = Number.parseInt(String(c.selected));
 
-  if (submenu !== "Video Format" || state.display !== "inner" || state.orientation !== "portrait") return formats;
+  if (pose === "inner-portrait" && (rate === 60 || rate === 120)) {
+    return { ...formats, [mode]: changeFormat({ ...format, resolution: "HD" }, { rate: 30 }) };
+  }
 
-  if (Array.isArray(c.selected) || (rate !== 60 && rate !== 120)) return formats;
+  const after24 = c.selected === "4K" && mode !== "slo-mo" && pose !== "outer-portrait";
 
-  return { ...formats, [mode]: changeFormat({ ...formats[mode]!, resolution: "HD" }, { rate: 30 }) };
+  return { ...formats, [mode]: changeFormat({ ...format, resolution: "4K" }, after24 ? { rate: 24 } : {}) };
 }
 
 // A forced state: what tapping reaches, plus what Apple's simulator carried over from earlier captures.
@@ -619,7 +619,7 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
           : settings.night,
     lighting: settings.picked ? settings.lighting : rememberedLighting(state),
     aperture: settings.submenu === "Depth" ? rememberedAperture(state, c) : undefined,
-    formats: staleInnerFormats(state, { ...settings, formats: rememberedFormats(settings, c) }, c),
+    formats: rememberedFormats(state, settings, c),
     stopped: c.action === "stopped",
   };
 }

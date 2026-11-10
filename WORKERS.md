@@ -76,7 +76,7 @@ TURN_POOL=parity TURN_SLOTS=4 BROWSERS=8 turn bun run interact
 - `zoomTurn`: the stops' glyph turn follows the Device Hub orientation the last touch left behind (a viewfinder tap flips it 180 in portrait Photo), not any control.
 - `night`: most Night Mode submenus open on Off, which earlier captures in the pose left, though a launch opens it on Auto.
 - `heldZoom`: the long-press zoom dial states were captured right after a zoom stop tap in the same pose, so their dial shows that tap's zoom, while a long-press itself keeps the zoom.
-- `wideTimeLapse`, `apertureOf`, sticky 4K: Time-lapse left on the ultra wide lens, the f-stop and the 4K choice from earlier states in the pose.
+- `wideTimeLapse`, `apertureOf`, sticky 4K: Time-lapse left on the ultra wide lens, the f-stop and the 4K choice from earlier states in the pose. In Video Format, 4K was captured right after 24 fps everywhere but outer portrait, so it still shows 24, and the inner-portrait taps on 60 and 120 missed, so those still show HD 30.
 - `stopped`: Apple's `*-recording-stopped` captures still show Video's shutter as a bare ring 2.5 s after the stop. The live app returns to the ring with its band, taking the bare ring, like the thumbnail's empty circle, for the simulator never finishing the recording.
 
 Camera does keep Portrait Lighting and Depth while the app stays open, and the live model does too: `switchMode` and every submenu leave `lighting` and `depth` alone, so a route that sets them keeps them. A turn of the stops with the device (Apple rotates glyphs, not the window) is real, but it follows the pose and belongs to posture, not to these leftovers. A difference that isn't one of these fields is a real difference: it stays "wrong".
