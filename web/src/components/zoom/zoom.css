@@ -101,7 +101,8 @@
   stroke: #fff;
 }
 
-.zoom-dial text {
+.zoom-dial .ticks text,
+.zoom-dial .now {
   text-anchor: middle;
   dominant-baseline: central;
   fill: #fff;
@@ -110,11 +111,11 @@
     system-ui;
 }
 
-.zoom-dial text.focal {
+.zoom-dial .ticks .focal {
   fill: rgb(255 255 255 / 0.3);
   font-size: 9px;
 }
 
-.zoom-dial text.now {
+.zoom-dial .now {
   fill: var(--yellow);
 }
