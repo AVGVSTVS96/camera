@@ -99,10 +99,16 @@ export const SmartTake = () => (
 
 export const Depth = ({ off = false }: { off?: boolean }) => (
   <Icon size={34}>
-    <g transform="translate(12 12) scale(.86) translate(-12 -12)" strokeWidth={1.35}>
-      <path d="M15.5 4.5c-2.6-.6-3.9.6-4.5 3.4l-2.3 10c-.5 2.2-1.6 2.9-3.7 2.6M8 10h7" />
-    </g>
-    {off && slash("M5 5.5 19 19.5")}
+    <mask id="depth-cut">
+      <rect width="24" height="24" fill="#fff" stroke="none" />
+      {off && <path d="M6 5 19.5 19" stroke="#000" strokeWidth={2.8} />}
+    </mask>
+    <path
+      d="M18.3 4.6C16.2 4.1 13.1 4.2 13 7.6L12.8 13.4C12.7 17.5 12 19.8 6.9 20M7.6 12.2H18.3"
+      strokeWidth={1.1}
+      mask="url(#depth-cut)"
+    />
+    {off && <path d="M6 5 19.5 19" strokeWidth={1} />}
   </Icon>
 );
 
