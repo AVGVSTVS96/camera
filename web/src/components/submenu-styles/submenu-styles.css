@@ -36,13 +36,12 @@
   left: 14px;
   top: 1px;
   width: 422px;
-  height: 35px;
+  height: 34px;
   border-radius: 24px;
-  background: #585858;
+  background: linear-gradient(rgb(88 88 90) 60%, rgb(110 110 113));
   box-shadow:
-    0 0 0 1.5px rgb(0 0 0 / 0.4),
-    inset 0 0 0 1px rgb(255 255 255 / 0.14),
-    inset 0 -2px 1.5px rgb(255 255 255 / 0.3);
+    0 1px 4px rgb(255 255 255 / 0.16),
+    inset 0 1.5px 1.5px rgb(255 255 255 / 0.3);
   text-align: center;
   line-height: 54px;
 }
@@ -125,14 +124,16 @@
 
 .styles-tabs {
   position: absolute;
-  left: 132px;
-  top: 12.67px;
+  left: 130.33px;
+  top: 10.67px;
   display: flex;
-  height: 31px;
-  border-radius: 16px;
-  background: rgb(255 255 255 / 0.06);
-  font-size: 13px;
-  letter-spacing: 2px;
+  height: 35px;
+  padding: 2px 1.67px;
+  box-sizing: border-box;
+  border-radius: 18px;
+  background: rgb(111 111 115 / 0.26);
+  font-size: 13.5px;
+  letter-spacing: 1.4px;
 }
 
 .styles-tabs button {
@@ -148,7 +149,7 @@
 }
 
 .styles-tabs button[data-on] {
-  background: rgb(255 255 255 / 0.09);
+  background: rgb(119 119 127 / 0.36);
   color: #ffd60a;
 }
 
@@ -158,8 +159,8 @@
   top: 58.67px;
   width: 100px;
   height: 100px;
-  border-radius: 22px;
-  background: linear-gradient(to right, transparent 40%, rgb(70 130 170 / 0.22)), linear-gradient(#80888d, #13171c);
+  border-radius: 19px;
+  background: linear-gradient(to right, transparent, rgb(0 45 80 / 0.2)), linear-gradient(#85878b, #131415);
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.13);
 }
 
@@ -173,9 +174,9 @@
 
 .styles-pad::before {
   background: var(--dot) 0 0 / 8.17px 8.17px;
-  opacity: 0.6;
-  -webkit-mask-image: linear-gradient(#000, transparent);
-  mask-image: linear-gradient(#000, transparent);
+  opacity: 0.4;
+  -webkit-mask-image: linear-gradient(#000, rgb(0 0 0 / 0.08));
+  mask-image: linear-gradient(#000, rgb(0 0 0 / 0.08));
 }
 
 .styles-pad::after {
