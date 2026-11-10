@@ -251,9 +251,10 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
                   <DepthButton on={settings.depth} toggle={() => update({ depth: !settings.depth })} />
                 )}
             <Shutter {...quicktake} />
-            {(profile.smartTake || settings.on.includes("Smart Take")) && !movie && !busy && !settings.submenu && (
-              <SmartTake />
-            )}
+            {((profile.smartTake && settings.facing === "back") || settings.on.includes("Smart Take")) &&
+              !movie &&
+              !busy &&
+              !settings.submenu && <SmartTake />}
             {!settings.submenu && !busy && (
               <ControlsButton
                 open={() => {
@@ -293,12 +294,7 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
       {open === "White Balance" && <SubmenuWhiteBalance {...props} />}
       {open === "Night Mode" && <SubmenuNightMode {...props} />}
       <Countdown settings={settings} />
-      {profile.lighting !== false &&
-        !settings.tray &&
-        !styling &&
-        !movie &&
-        !settings.holding &&
-        !settings.countdown && <Lighting {...props} />}
+      {!settings.tray && !styling && !movie && !settings.holding && !settings.countdown && <Lighting {...props} />}
       {!settings.tray && !styling && !settings.countdown && <Zoom {...props} />}
       {styling && <SubmenuStyles {...props} />}
       {open === "Timer" && <SubmenuTimer {...props} />}

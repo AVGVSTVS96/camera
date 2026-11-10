@@ -18,11 +18,11 @@ export interface Profile {
   photoFormat: string;
   videoFormat: string;
   library: boolean;
-  lighting?: boolean;
   depthSlash?: boolean;
 }
 
 const lenses: Zoom = { stops: [0.5, 1, 2], start: 1 };
+const fixed: Zoom = { stops: [1, 2], start: 1 };
 
 export const duo: Profile = {
   name: "duo",
@@ -30,10 +30,10 @@ export const duo: Profile = {
   zoom: {
     "back-time-lapse": lenses,
     "back-slo-mo": lenses,
-    "back-cinematic": lenses,
+    "back-cinematic": fixed,
     "back-video": lenses,
     "back-photo": lenses,
-    "back-portrait": lenses,
+    "back-portrait": { stops: [2], start: 2 },
     "back-pano": lenses,
   },
   badges: true,
@@ -44,7 +44,6 @@ export const duo: Profile = {
   photoFormat: "HEIF 48",
   videoFormat: "4K 30",
   library: true,
-  lighting: false,
   depthSlash: true,
 };
 
