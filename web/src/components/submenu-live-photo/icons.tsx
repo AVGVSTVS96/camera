@@ -2,7 +2,15 @@ import type { ReactNode } from "react";
 
 function Glyph({ children }: { children: ReactNode }) {
   return (
-    <svg width="30" height="30" viewBox="-15 -15 30 30" fill="none" stroke="currentColor" aria-hidden>
+    <svg
+      width="30"
+      height="30"
+      viewBox="-15 -15 30 30"
+      fill="none"
+      stroke="currentColor"
+      overflow="visible"
+      aria-hidden
+    >
       <circle r="11.5" strokeWidth="1.2" strokeDasharray="0.1 1.95" strokeLinecap="round" />
       {children}
     </svg>
@@ -28,14 +36,14 @@ export const Auto = () => (
   <Glyph>
     <circle r="8" strokeWidth="1.6" strokeDasharray="38 12.3" transform="rotate(89)" />
     <circle r="3.2" strokeWidth="2" />
-    <circle cx="9.5" cy="5.4" r="5.5" fill="currentColor" stroke="#1f1f1f" strokeWidth="1" />
+    <circle cx="9.6" cy="6" r="6" fill="currentColor" stroke="#1f1f1f" strokeWidth="1" />
     <text
-      y="9.7"
-      x="9.5"
+      y="8.95"
+      x="9.6"
       textAnchor="middle"
-      fontSize="12"
+      fontSize="8.4"
       fontWeight="800"
-      fontFamily='".SF Compact Rounded", sans-serif'
+      fontFamily='".SF Compact Rounded", ui-rounded, sans-serif'
       fill="#1f1f1f"
       stroke="none"
     >
