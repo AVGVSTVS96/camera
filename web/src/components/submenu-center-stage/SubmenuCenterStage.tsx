@@ -12,6 +12,15 @@ export function SubmenuCenterStage({ settings, update }: Props) {
 
   return (
     <Submenu title="Center Stage" className="center-stage" back={() => update(back)}>
+      <svg className="center-stage-defs" width="0" height="0" aria-hidden>
+        <linearGradient id="center-stage-rim" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#fff" stopOpacity="1" />
+          <stop offset="0.05" stopColor="#fff" stopOpacity="0.45" />
+          <stop offset="0.2" stopColor="#fff" stopOpacity="0.28" />
+          <stop offset="0.85" stopColor="#fff" stopOpacity="0.3" />
+          <stop offset="1" stopColor="#fff" stopOpacity="0.6" />
+        </linearGradient>
+      </svg>
       {rows.map(({ key, label }, row) => (
         <div key={key} className="center-stage-row" style={{ top: 61 + 44 * row }}>
           <span className="center-stage-label">{label.toUpperCase()}</span>

@@ -4,6 +4,18 @@
   backdrop-filter: none;
 }
 
+.center-stage-defs {
+  position: absolute;
+}
+
+.submenu.center-stage .submenu-rim path {
+  stroke: url(#center-stage-rim);
+}
+
+.submenu.center-stage .submenu-rim path:nth-of-type(1) {
+  display: none;
+}
+
 .center-stage-row {
   position: absolute;
   left: 0;
@@ -15,8 +27,8 @@
   position: absolute;
   left: 87.5px;
   top: 16px;
-  font-size: 9px;
-  letter-spacing: 0.55px;
+  font-size: 9.6px;
+  letter-spacing: 0.25px;
   line-height: 12px;
 }
 
@@ -27,7 +39,7 @@
   height: 44px;
   display: flex;
   align-items: center;
-  padding: 0 0 2.67px 8.4px;
+  padding: 0 0 3.5px 8.4px;
   font-size: 15.5px;
   font-weight: 500;
   color: #fff;
