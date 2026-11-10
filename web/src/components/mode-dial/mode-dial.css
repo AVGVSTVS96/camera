@@ -147,7 +147,7 @@
 }
 
 .dial[data-profile="duo"] {
-  background: rgb(255 255 255 / 0.1);
+  background: rgb(255 255 255 / 0.06);
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
 }
@@ -164,11 +164,18 @@
   background: rgb(255 255 255 / 0.14);
   box-shadow:
     inset 0 0 0 1px rgb(0 0 0 / 0.55),
-    inset 0 2px 1px rgb(255 255 255 / 0.18);
+    inset 0 1.5px 0.5px rgb(255 255 255 / 0.4);
+}
+
+.screen[data-mode="video"] .dial[data-profile="duo"] {
+  background: rgb(255 255 255 / 0.1);
 }
 
 .screen[data-mode="video"] .dial[data-profile="duo"] .pill {
   background: rgb(255 250 185 / 0.49);
+  box-shadow:
+    inset 0 0 0 1px rgb(0 0 0 / 0.55),
+    inset 0 2px 1px rgb(255 255 255 / 0.18);
 }
 
 .screen[data-sheet] .dial {
