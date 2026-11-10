@@ -1,4 +1,6 @@
-import { bolt, Icon } from "../../icons.tsx";
+import { Icon } from "../../icons.tsx";
+
+const bolt = "M14.8 2 5.5 13.2h5.6L8.5 22l9.3-11.6h-5.7L14.8 2Z";
 
 const centered = "translate(12 11.7) scale(.9) translate(-11.75 -12)";
 
@@ -10,7 +12,7 @@ export const Automatic = () => (
       <Bolt />
     </g>
     <g transform="translate(-.1 -.5)">
-      <circle cx="17.2" cy="16.6" r="4.7" fill="currentColor" stroke="#1f1f1f" strokeWidth={1.6} paintOrder="stroke" />
+      <circle cx="16.9" cy="16.9" r="4.5" fill="currentColor" stroke="#1f1f1f" strokeWidth={1.6} paintOrder="stroke" />
       <path d="m15.4 19 1.8-4.6 1.8 4.6m-3-1.5h2.4" stroke="#1f1f1f" strokeWidth={1.1} />
     </g>
   </Icon>
