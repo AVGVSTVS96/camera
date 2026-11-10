@@ -58,6 +58,14 @@ const squircle = () => {
 
 const PANEL = squircle();
 
+const RIM = [
+  [3.34, 0.04],
+  [2.66, 0.05],
+  [2, 0.16],
+  [1.34, 0.14],
+  [0.66, 0.17],
+];
+
 export function Submenu({
   title,
   className,
@@ -74,15 +82,9 @@ export function Submenu({
   return (
     <section className={`submenu ${className}`} style={{ clipPath: `path("${PANEL}")` }}>
       <svg className="submenu-rim" viewBox={`0 0 ${WIDTH} ${HEIGHT}`} aria-hidden>
-        <defs>
-          <linearGradient id="submenu-rim" x1="0" y1="0.3" x2="0" y2="1">
-            <stop offset="0" stopColor="#fff" stopOpacity="0.1" />
-            <stop offset="1" stopColor="#fff" stopOpacity="0.55" />
-          </linearGradient>
-        </defs>
-        <path d={PANEL} fill="none" stroke="url(#submenu-rim)" strokeWidth="10" opacity="0.07" />
-        <path d={PANEL} fill="none" stroke="url(#submenu-rim)" strokeWidth="4" opacity="0.15" />
-        <path d={PANEL} fill="none" stroke="url(#submenu-rim)" strokeWidth="2" opacity="0.5" />
+        {RIM.map(([width, opacity]) => (
+          <path key={width} d={PANEL} fill="none" stroke="#fff" strokeWidth={width} opacity={opacity} />
+        ))}
       </svg>
       <button
         className="submenu-button submenu-back"

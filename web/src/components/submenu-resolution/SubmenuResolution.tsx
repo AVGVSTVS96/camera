@@ -9,13 +9,15 @@ export function SubmenuResolution({ settings, update }: Props) {
 
   return (
     <Submenu title="Resolution" className="resolution" back={() => update(back)}>
-      <output className="resolution-value">{current} MP</output>
+      <output className="resolution-value" data-mp={current}>
+        {current} MP
+      </output>
       {options.map((mp, i) => (
         <button
           key={mp}
           className="resolution-option"
           data-on={mp === current || undefined}
-          style={{ left: i ? 225 : 112.67, width: i ? 112.67 : 112.33 }}
+          style={{ left: i ? 224.67 : 112.67, top: i ? 77.67 : 77.33, width: i ? 112.67 : 112.33 }}
           aria-label={`${mp} megapixels`}
           onClick={() => update({ resolution: mp })}
         >
