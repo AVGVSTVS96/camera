@@ -87,3 +87,34 @@
 .zoom-dial .marker {
   fill: var(--yellow);
 }
+
+.zoom-dial {
+  z-index: -1;
+}
+
+.zoom-dial line {
+  stroke: rgb(255 255 255 / 0.25);
+  stroke-width: 1;
+}
+
+.zoom-dial line.major {
+  stroke: #fff;
+}
+
+.zoom-dial text {
+  text-anchor: middle;
+  dominant-baseline: central;
+  fill: #fff;
+  font:
+    15px ui-rounded,
+    system-ui;
+}
+
+.zoom-dial text.focal {
+  fill: rgb(255 255 255 / 0.3);
+  font-size: 9px;
+}
+
+.zoom-dial text.now {
+  fill: var(--yellow);
+}

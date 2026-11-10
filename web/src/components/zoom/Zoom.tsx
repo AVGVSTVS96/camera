@@ -10,6 +10,58 @@ function zoomLabel(value: number, active: boolean, bare: boolean) {
   return active ? `${text}×` : bare ? text.replace(/^0/, "") : text;
 }
 
+const degrees = 55.9;
+const labelled = new Set([1, 2, 5, 10]);
+const ticks = Array.from({ length: 46 }, (_, i) => Math.round((0.5 + i * 0.1) * 10) / 10);
+
+/** Apple's dial scale: every tenth of a zoom factor, angle proportional to its logarithm. */
+function Ticks({ place, zoom }: { place: ReturnType<typeof layout>; zoom: number }) {
+  const [ux, uy] = place.along;
+  const [nx, ny] = place.into;
+  const { centre, radius } = place;
+  // Apple's portrait dial rests 1.55 degrees short of its marker
+  const bias = place.vertical ? 0 : 1.55;
+  const at = (angle: number, r: number) => [
+    centre.x + nx * r * Math.cos(angle) + ux * r * Math.sin(angle),
+    centre.y + ny * r * Math.cos(angle) + uy * r * Math.sin(angle),
+  ];
+
+  return (
+    <g className="ticks">
+      {ticks.map((z) => {
+        const angle = ((degrees * Math.log(z / zoom) - bias) * Math.PI) / 180;
+
+        if (Math.abs(angle) > 1.22) return null;
+
+        const major = Number.isInteger(z);
+        const away = Math.abs((angle * 180) / Math.PI);
+        const fade = Math.min(1, Math.max(0, major ? (58 - away) / 10 : (42 - away) / 12));
+        const [x1, y1] = at(angle, radius - 20.5);
+        const [x2, y2] = at(angle, radius - 4);
+        const [lx, ly] = at(angle, radius - 36);
+        const [mx, my] = at(angle, radius - 51);
+        const up = (Math.atan2(centre.x - lx, ly - centre.y) * 180) / Math.PI;
+
+        return (
+          <g key={z}>
+            <line className={major ? "major" : undefined} opacity={fade} x1={x1} y1={y1} x2={x2} y2={y2} />
+            {labelled.has(z) && (
+              <g opacity={fade}>
+                <text className="stop" transform={`translate(${lx} ${ly}) rotate(${place.vertical ? up + 180 : up})`}>
+                  {z}
+                </text>
+                <text className="focal" transform={`translate(${mx} ${my}) rotate(${place.vertical ? up : up + 180})`}>
+                  {Math.round(z * 26)}MM
+                </text>
+              </g>
+            )}
+          </g>
+        );
+      })}
+    </g>
+  );
+}
+
 function stopsOf({ mode, formats, display, orientation }: Settings, own: number[]) {
   const format = formats[mode];
 
@@ -200,13 +252,25 @@ export function Zoom({ settings, update }: Props) {
             points="-3 0 3 0 0 12"
             transform={`translate(${place.apex.x - place.into[0] * 10} ${place.apex.y - place.into[1] * 10}) rotate(${marker})`}
           />
-          <g
-            className="readout"
-            transform={`translate(${place.apex.x - place.into[0] * 37} ${place.apex.y - place.into[1] * 37}) rotate(${place.turn ? 90 : 0})`}
-          >
-            <text y="5">{zoomLabel(zoom, true, bare)}</text>
-            <text y="21">{Math.round(zoom * 26)}MM</text>
-          </g>
+          {place.inner && zoom > low + 0.001 ? (
+            <>
+              <Ticks place={place} zoom={zoom} />
+              <text
+                className="now"
+                transform={`translate(${place.centre.x + place.into[0] * (place.radius - 35)} ${place.centre.y + place.into[1] * (place.radius - 35)}) rotate(${place.vertical ? 90 : 0})`}
+              >
+                {zoomLabel(zoom, true, bare)}
+              </text>
+            </>
+          ) : (
+            <g
+              className="readout"
+              transform={`translate(${place.apex.x - place.into[0] * 37} ${place.apex.y - place.into[1] * 37}) rotate(${place.turn ? 90 : 0})`}
+            >
+              <text y="5">{zoomLabel(zoom, true, bare)}</text>
+              <text y="21">{Math.round(zoom * 26)}MM</text>
+            </g>
+          )}
         </svg>
       )}
       <div

@@ -1,7 +1,7 @@
 import type { Settings } from "../../state.ts";
 
 const outer = { reach: 132, radius: 258, perDoubling: 34 };
-const inner = { reach: 195, radius: 383 };
+const inner = { reach: 192.67, radius: 365.33 };
 
 const places = {
   "outer-portrait": {
@@ -65,6 +65,9 @@ export function layout(s: Settings, duo: boolean) {
   const [cx, cy] = [ax - dx * p.radius, ay - dy * p.radius];
 
   return {
+    inner: s.display === "inner",
+    radius: p.radius,
+    centre: { x: ax - dx * p.radius, y: ay - dy * p.radius },
     x: p.vertical ? depth : p.cross,
     y: p.vertical ? p.cross : depth,
     lone: p.lone,

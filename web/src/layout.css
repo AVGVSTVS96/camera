@@ -2,6 +2,7 @@
   position: fixed;
   inset: 0;
   overflow: hidden;
+  isolation: isolate;
   background: #000;
   --w: 100vw;
   --h: 100dvh;
@@ -32,6 +33,7 @@
   height: var(--chrome-h);
   translate: -50% -50%;
   overflow: hidden;
+  z-index: -2;
   background: #1c1c1e;
   transition-property: width, height;
   transition-duration: var(--switch-time, 0.35s);

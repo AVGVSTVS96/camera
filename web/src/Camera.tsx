@@ -220,7 +220,7 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
           <div className="row shutter">
             {movie
               ? profile.macro && <Macro {...props} />
-              : !busy && <DepthButton on={settings.depth} toggle={() => update({ depth: !settings.depth })} />}
+              : !busy && settings.mode !== "portrait" && <DepthButton on={settings.depth} toggle={() => update({ depth: !settings.depth })} />}
             <Shutter {...quicktake} />
             {(profile.smartTake || settings.on.includes("Smart Take")) && !movie && !busy && !settings.submenu && (
               <SmartTake />

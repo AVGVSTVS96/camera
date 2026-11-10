@@ -30,6 +30,8 @@ export function layout(s: Settings): Layout | undefined {
   if (s.mode !== "photo" && s.mode !== "portrait") return undefined;
 
   if (s.mode === "photo") {
+    if (!s.depth) return undefined;
+
     if (context === "inner-portrait") return { x: 44, y: depth, along: [0, 0] };
 
     if (!s.submenu) return undefined;
