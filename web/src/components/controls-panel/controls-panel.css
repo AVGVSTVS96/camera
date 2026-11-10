@@ -98,14 +98,14 @@
 }
 
 .tray-stack b {
-  font-size: 20px;
-  font-weight: 350;
+  font-size: 20.5px;
+  font-weight: 400;
 }
 
 .tray-stack b + b {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 300;
-  margin-top: 2px;
+  margin-top: 0;
 }
 
 .tray-handle {

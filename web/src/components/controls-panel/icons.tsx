@@ -5,8 +5,8 @@ const slash = (d = "M4 3.5 20 20.5") => <path d={d} />;
 
 export const Aspect = () => (
   <Icon size={34}>
-    <path d="M3 8V4.5A1.5 1.5 0 0 1 4.5 3H8m8 0h3.5A1.5 1.5 0 0 1 21 4.5V8m0 8v3.5a1.5 1.5 0 0 1-1.5 1.5H16m-8 0H4.5A1.5 1.5 0 0 1 3 19.5V16" />
-    <text x="12" y="15" fontSize="9" fontWeight="400" fill="currentColor" stroke="none" textAnchor="middle">
+    <path d="M3 7.8V6a3 3 0 0 1 3-3h1.8M16.2 3H18a3 3 0 0 1 3 3v1.8M21 16.2V18a3 3 0 0 1-3 3h-1.8M7.8 21H6a3 3 0 0 1-3-3v-1.8" />
+    <text x="12" y="15.4" fontSize="10.5" fontWeight="300" fill="currentColor" stroke="none" textAnchor="middle">
       4:3
     </text>
   </Icon>
@@ -14,13 +14,16 @@ export const Aspect = () => (
 
 export const TimerOff = () => (
   <Icon size={34}>
-    <path d="M17.4 5.2A8.8 8.8 0 1 0 20.8 12M4.5 4.5l15 15" />
+    <path
+      d="M12 2.8V5.4M12 2.8A9.2 9.2 0 0 1 19.6 17.2M17.5 19.4A9.2 9.2 0 0 1 4.5 6.7M3 3 21.5 21.3"
+      strokeWidth={1.1}
+    />
   </Icon>
 );
 
 export const Exposure = () => (
   <Icon size={34}>
-    <path d="M12 3.8v9.2M7 8.4h10M7 19h10" strokeWidth={1.1} />
+    <path d="M12 4.6v10.8M6.1 10h11.8M6.1 19.3h11.8" strokeWidth={1.1} />
   </Icon>
 );
 
@@ -34,7 +37,7 @@ export const Styles = () => (
   <Icon size={34}>
     {dots.map(({ x, y, hub }) =>
       hub ? (
-        <circle key="hub" cx={x} cy={y} r={1.4} strokeWidth={0.8} />
+        <circle key="hub" cx={x} cy={y} r={1.5} strokeWidth={0.75} />
       ) : (
         <circle
           key={`${x}${y}`}
@@ -106,9 +109,9 @@ export const Depth = ({ off = false }: { off?: boolean }) => (
 export const Bolt = ({ flash }: { flash: Flash }) =>
   flash === "auto" ? (
     <Icon size={34}>
-      <path d={bolt} fill="currentColor" stroke="none" transform="translate(-3 -.8) scale(1.1)" />
-      <circle cx="17.8" cy="17.8" r="5.4" fill="currentColor" stroke="none" />
-      <path d="m15.6 19.8 1.9-5 1.9 5m-3.2-1.6h2.6" stroke="#000" strokeWidth={0.9} />
+      <path d={bolt} fill="currentColor" stroke="none" transform="translate(.55 -1) scale(.92 1)" />
+      <circle cx="18.3" cy="17.6" r="4.9" fill="currentColor" stroke="none" />
+      <path d="m16.2 19.6 2.1-4.8 2.1 4.8m-3.4-1.5h2.7" stroke="#000" strokeWidth={0.9} />
     </Icon>
   ) : (
     <Icon size={34}>
@@ -135,7 +138,7 @@ const ticks = (cx: number, cy: number, skip?: { x: number; y: number; r: number 
   Array.from({ length: 24 }, (_, i) => {
     const a = (i / 24) * Math.PI * 2;
     const [c, s] = [Math.cos(a), Math.sin(a)];
-    const [r1, r2] = i % 2 ? [7.2, 9.2] : [6.4, 9.4];
+    const [r1, r2] = i % 2 ? [7.8, 10.2] : [7, 10.4];
     const [x1, y1, x2, y2] = [cx + c * r1, cy + s * r1, cx + c * r2, cy + s * r2];
 
     if (skip && Math.hypot((x1 + x2) / 2 - skip.x, (y1 + y2) / 2 - skip.y) < skip.r) return "";
@@ -145,9 +148,9 @@ const ticks = (cx: number, cy: number, skip?: { x: number; y: number; r: number 
 
 export const Adaptive = () => (
   <Icon size={34}>
-    <path d={ticks(11, 11.5, { x: 18, y: 17.5, r: 6 })} strokeWidth={0.9} />
-    <circle cx="18" cy="17.5" r="4.6" fill="currentColor" stroke="none" />
-    <path d="m16.1 19.7 1.9-4.7 1.9 4.7m-3.1-1.5h2.4" stroke="#000" strokeWidth={1.2} />
+    <path d={ticks(11.9, 12.3, { x: 20.2, y: 18.1, r: 6.4 })} strokeWidth={0.9} />
+    <circle cx="20.2" cy="18.1" r="4.8" fill="currentColor" stroke="none" />
+    <path d="m18.2 20.3 2-4.7 2 4.7m-3.2-1.5h2.5" stroke="#000" strokeWidth={1.2} />
   </Icon>
 );
 
@@ -183,10 +186,10 @@ export const NightMode = ({ off = false, exposure }: { off?: boolean; exposure?:
     <Icon size={34}>
       <mask id="crescent">
         <circle cx="11.6" cy="12" r="9.8" fill="#fff" />
-        <circle cx="17.6" cy="6.4" r="7.6" fill="#000" />
+        <circle cx="15.2" cy="8.4" r="8.2" fill="#000" />
       </mask>
       <circle cx="11.6" cy="12" r="9.8" fill="currentColor" stroke="none" mask="url(#crescent)" />
-      <text x="17.8" y="9.8" fontSize="12.5" fontWeight="300" fill="currentColor" stroke="none" textAnchor="middle">
+      <text x="16.6" y="10.8" fontSize="13.5" fontWeight="300" fill="currentColor" stroke="none" textAnchor="middle">
         {exposure ?? "A"}
       </text>
     </Icon>
