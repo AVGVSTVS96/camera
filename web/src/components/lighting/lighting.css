@@ -73,12 +73,12 @@
   align-items: center;
   justify-content: center;
   height: 24px;
-  padding-inline: 8.5px;
+  padding-inline: 7.04px;
   border-radius: 4px;
   background: rgb(0 0 0 / 0.3);
   color: rgb(235 235 245 / 0.5);
   font:
-    400 14.3px ".SF Compact",
+    400 14.48px ".SF Compact",
     system-ui,
     sans-serif;
   letter-spacing: 0.3px;

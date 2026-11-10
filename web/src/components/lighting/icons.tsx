@@ -194,7 +194,7 @@ export function CubeLines({ turn, scale }: { turn: number; scale: number }) {
 
   return (
     <Glyph turn={turn} scale={scale}>
-      <g fill="none" stroke="#fff" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+      <g fill="none" stroke="#fff" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round">
         <path d={outline} />
         <path d={spokes} />
       </g>
