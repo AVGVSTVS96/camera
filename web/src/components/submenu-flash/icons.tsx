@@ -10,8 +10,8 @@ export const Automatic = () => (
       <Bolt />
     </g>
     <g transform="translate(-.1 -.5)">
-    <circle cx="17.2" cy="16.6" r="4.7" fill="currentColor" stroke="#1f1f1f" strokeWidth={1.6} paintOrder="stroke" />
-    <path d="m15.4 19 1.8-4.6 1.8 4.6m-3-1.5h2.4" stroke="#1f1f1f" strokeWidth={1.1} />
+      <circle cx="17.2" cy="16.6" r="4.7" fill="currentColor" stroke="#1f1f1f" strokeWidth={1.6} paintOrder="stroke" />
+      <path d="m15.4 19 1.8-4.6 1.8 4.6m-3-1.5h2.4" stroke="#1f1f1f" strokeWidth={1.1} />
     </g>
   </Icon>
 );
