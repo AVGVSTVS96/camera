@@ -106,12 +106,12 @@
 
 .dial .labels button {
   height: 41.6px;
-  margin-inline: -4.5px;
-  padding-inline: 20.6px;
+  margin-inline: -5px;
+  padding-inline: 21.1px;
   border-radius: 20.8px;
   font-size: 14px;
   font-weight: 400;
-  letter-spacing: 0.6px;
+  letter-spacing: 0.65px;
   white-space: nowrap;
 }
 
