@@ -162,8 +162,7 @@
   border-radius: 19px;
   background: linear-gradient(to right, transparent, rgb(0 45 80 / 0.2)), linear-gradient(#85878b, #131415);
   box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.22),
-    inset 0 0 0 1px rgb(255 255 255 / 0.07),
+    inset 0 0 0 1px rgb(255 255 255 / 0.2),
     0 0 0 1px rgb(0 0 0 / 0.3);
 }
 
@@ -177,9 +176,9 @@
 
 .styles-pad::before {
   background: var(--dot) 0 0 / 8.17px 8.17px;
-  opacity: 0.32;
-  -webkit-mask-image: linear-gradient(#000, rgb(0 0 0 / 0.08));
-  mask-image: linear-gradient(#000, rgb(0 0 0 / 0.08));
+  opacity: 0.42;
+  -webkit-mask-image: linear-gradient(#000, transparent 95%);
+  mask-image: linear-gradient(#000, transparent 95%);
 }
 
 .styles-pad::after {
