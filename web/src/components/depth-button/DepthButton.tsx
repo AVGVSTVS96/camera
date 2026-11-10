@@ -1,7 +1,11 @@
+import { useProfile } from "../../profile.ts";
 import { DepthOff, DepthOn } from "./icons.tsx";
 import "./depth-button.css";
 
 export function DepthButton({ on, toggle }: { on: boolean; toggle: () => void }) {
+  const { depthSlash } = useProfile();
+  const slash = on || depthSlash;
+
   return (
     <button
       className="depth-button round lead"
@@ -10,7 +14,7 @@ export function DepthButton({ on, toggle }: { on: boolean; toggle: () => void })
       data-on={on || undefined}
       onClick={toggle}
     >
-      {on ? <DepthOn /> : <DepthOff />}
+      {slash ? <DepthOn /> : <DepthOff />}
     </button>
   );
 }

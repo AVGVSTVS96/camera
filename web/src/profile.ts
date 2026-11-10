@@ -19,6 +19,7 @@ export interface Profile {
   videoFormat: string;
   library: boolean;
   lighting?: boolean;
+  depthSlash?: boolean;
 }
 
 const lenses: Zoom = { stops: [0.5, 1, 2], start: 1 };
@@ -44,6 +45,7 @@ export const duo: Profile = {
   videoFormat: "4K 30",
   library: true,
   lighting: false,
+  depthSlash: true,
 };
 
 export const ProfileContext = createContext(duo);
