@@ -66,7 +66,7 @@ function controlsFor(settings: Settings, photoFormat: string, duo: boolean): Con
     framing: { name: "Center Stage", label: "Center Stage", glyph: <Framing on={centerStage.zoom} /> },
     focus: { name: "Focus", label: "Focus", glyph: <Focus /> },
     balance: { name: "White Balance", label: "White Balance", short: "AWB", glyph: <WhiteBalance /> },
-    smart: { name: "Smart Take", label: "Smart Take", glyph: <SmartTake />, on: on.includes("Smart Take") },
+    smart: { name: "Smart Take", label: "Smart Take", glyph: <SmartTake />, on: duo || on.includes("Smart Take") },
     format: {
       name: "Video Format",
       label: "Format",

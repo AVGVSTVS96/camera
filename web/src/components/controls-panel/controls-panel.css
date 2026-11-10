@@ -143,5 +143,17 @@
 }
 
 .screen[data-profile="duo"] .tray-cell {
-  background: rgb(30 28 26 / 0.55);
+  background: rgb(30 28 26 / 0.66);
+}
+
+.screen[data-profile="duo"] .tray-cell[data-on] {
+  color: #f8d849;
+}
+
+.screen[data-profile="duo"]:has(.tray) .grid {
+  --gx: 0px;
+  --gy: 0px;
+  --gw: 100%;
+  --gh: 100%;
+  opacity: 0.1;
 }
