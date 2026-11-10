@@ -199,7 +199,6 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
         {settings.level && !still && <Level />}
       </Viewfinder>
       {still && settings.display === "inner" && <InnerPreview />}
-      {!settings.tray && !styling && !settings.submenu && !busy && <Flip {...props} />}
       {settings.sheet && settings.sheet !== "choose" && <div className="sheet-scrim" />}
       {settings.grid && <Grid />}
       {settings.recording || settings.holding ? (
@@ -242,6 +241,7 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
           <div className="row modes">
             {!settings.submenu && !busy && <Thumbnail shot={shots.at(-1)} open={() => update({ viewer: true })} />}
           </div>
+          {!settings.submenu && !busy && <Flip {...props} />}
           {!busy && !settings.submenu && (
             <ModeDial
               selected={settings.mode}

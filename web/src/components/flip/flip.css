@@ -38,3 +38,11 @@
 .screen[data-display="inner"] .flip .glyph {
   translate: 0 -0.33px;
 }
+
+.screen[data-sheet]:not([data-sheet="choose"]) .flip {
+  background: rgb(255 255 255 / 0.081);
+}
+
+.screen[data-sheet]:not([data-sheet="choose"]) .flip .glyph {
+  opacity: 0.41;
+}
