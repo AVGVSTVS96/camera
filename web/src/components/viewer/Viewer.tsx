@@ -1,11 +1,13 @@
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { save, type Shot } from "../../capture.ts";
 import { Status } from "./Status.tsx";
+import { VideoPage } from "./VideoPage.tsx";
 import "./viewer.css";
 
 export function Viewer({ shots, close }: { shots: Shot[]; close: () => void }) {
   const strip = useRef<HTMLDivElement>(null);
   const empty = !shots.length;
+  const [bare, setBare] = useState(false);
 
   useLayoutEffect(() => {
     strip.current?.scrollTo({ left: strip.current.scrollWidth });
@@ -19,16 +21,18 @@ export function Viewer({ shots, close }: { shots: Shot[]; close: () => void }) {
   }
 
   return (
-    <section className="viewer" aria-label="Photo">
+    <section className="viewer" aria-label="Photo" data-bare={!empty && bare ? "" : undefined}>
       {empty ? (
         <p className="empty">No Photos or Videos</p>
       ) : (
-        <div className="viewer-strip" ref={strip}>
+        <div className="viewer-strip" ref={strip} onClick={() => setBare((b) => !b)}>
           {shots.map((shot) =>
             shot.file.type.startsWith("video/") ? (
-              <video key={shot.url} src={shot.url} poster={shot.poster} controls playsInline />
+              <VideoPage key={shot.url} shot={shot} />
             ) : (
-              <img key={shot.url} src={shot.url} alt="" />
+              <div className="viewer-page" key={shot.url}>
+                <img src={shot.url} alt="" />
+              </div>
             ),
           )}
         </div>

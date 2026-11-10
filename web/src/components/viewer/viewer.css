@@ -143,12 +143,65 @@
   display: none;
 }
 
-.viewer-strip :is(img, video) {
+.viewer-page {
+  position: relative;
   flex: 0 0 100%;
+  height: 100%;
+  scroll-snap-align: center;
+}
+
+.viewer-page :is(img, video) {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  scroll-snap-align: center;
+}
+
+.viewer[data-bare] {
+  background: #000;
+}
+
+.viewer[data-bare] :is(.back, .viewer-share, .viewer-scrub) {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.viewer,
+.viewer :is(.back, .viewer-share, .viewer-scrub) {
+  transition:
+    background-color 0.25s ease,
+    opacity 0.25s ease;
+}
+
+.viewer-scrub {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 104px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px;
+  border-radius: 22px;
+  background: #f9f9f9;
+  box-shadow: 0 0 0 0.5px #c7c7c7;
+  font:
+    600 13px system-ui,
+    sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
+.viewer-play {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+}
+
+.viewer-scrub input {
+  flex: 1;
+  min-width: 0;
+  accent-color: #000;
 }
 
 .viewer .viewer-share {
