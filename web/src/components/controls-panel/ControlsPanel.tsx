@@ -197,6 +197,8 @@ export function ControlsPanel({ settings, update, from, closing, gone }: PanelPr
     return () => shrink.cancel();
   }, [closing, orientation]);
 
+  const swipe = useRef<{ x: number; y: number } | null>(null);
+
   const open = (name: Submenu | Toggle) => {
     if (!isToggle(name)) return update({ submenu: name, tray: false, expanded: false });
 
@@ -247,6 +249,19 @@ export function ControlsPanel({ settings, update, from, closing, gone }: PanelPr
             data-vertical={sheet.handle.vertical || undefined}
             style={{ left: sheet.handle.x, top: sheet.handle.y }}
             onClick={() => (compact ? update({ expanded: true }) : dismiss())}
+            onPointerDown={(e) => {
+              swipe.current = { x: e.clientX, y: e.clientY };
+              e.currentTarget.setPointerCapture(e.pointerId);
+            }}
+            onPointerMove={(e) => {
+              const from = swipe.current;
+
+              if (from && Math.hypot(e.clientX - from.x, e.clientY - from.y) > 20) {
+                swipe.current = null;
+                dismiss();
+              }
+            }}
+            onPointerUp={() => (swipe.current = null)}
           />
         </div>
       </section>
