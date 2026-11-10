@@ -59,7 +59,7 @@ export function Pano({ settings, update, pan }: Props & { pan?: Panorama }) {
         onClick={() => update({ reverse: !reverse })}
       >
         <svg viewBox="0 0 41 50" aria-hidden>
-          <path d="M3 3 L38 25 L3 47 L12 25 Z" />
+          <path d="M0 16h13V4l22.7 21L13 46V34H0z" />
         </svg>
       </button>
     </div>

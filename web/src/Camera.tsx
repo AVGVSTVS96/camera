@@ -109,8 +109,8 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
     add({ url: URL.createObjectURL(file), file, poster: frame.url, frame: frame.file });
   }
 
-  async function sweep() {
-    if (!pan) {
+  async function sweep(current = pan) {
+    if (!current) {
       if (!video.current?.videoWidth) return;
 
       const sideways = settings.orientation === "landscape";
@@ -119,9 +119,9 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
       return update({ panning: true });
     }
 
-    const shot = await pan.stop();
     setPan(undefined);
     update({ panning: false });
+    const shot = await current.stop();
 
     if (shot) add(shot);
   }

@@ -1,7 +1,7 @@
 import type { Shot } from "./capture.ts";
 
-/** Longest side of the stitched strip; a canvas of Apple's 63 MP does not fit in a browser. */
-const reach = 8000;
+/** The strip's length over its width, the box's aspect-ratio in pano.css, so the preview fills it true to scale. */
+const ratio = 4;
 const scan = 64;
 const range = 12;
 const every = 80;
@@ -61,7 +61,12 @@ function shift(before: Uint8Array, now: Uint8Array, width: number, height: numbe
 }
 
 /** Stitches the camera stream into a strip by laying down each new edge as the phone pans. `sign` is 1 toward the screen's right or bottom, -1 the other way. */
-export function startPano(video: HTMLVideoElement, axis: Axis, sign: 1 | -1, onFull: () => void): Panorama {
+export function startPano(
+  video: HTMLVideoElement,
+  axis: Axis,
+  sign: 1 | -1,
+  onFull: (panorama: Panorama) => void,
+): Panorama {
   const wide = axis === "x";
 
   const frame = {
@@ -71,6 +76,7 @@ export function startPano(video: HTMLVideoElement, axis: Axis, sign: 1 | -1, onF
 
   const scale = Math.min(1, 2000 / frame.across);
   const size = { along: Math.round(frame.along * scale), across: Math.round(frame.across * scale) };
+  const reach = size.across * ratio;
   const small = document.createElement("canvas");
   small.width = wide ? scan : Math.round((scan * frame.across) / frame.along);
   small.height = wide ? Math.round((scan * frame.across) / frame.along) : scan;
@@ -115,7 +121,10 @@ export function startPano(video: HTMLVideoElement, axis: Axis, sign: 1 | -1, onF
     );
     length += step;
 
-    if (length >= reach) onFull();
+    if (length < reach) return;
+
+    clearInterval(timer);
+    onFull(panorama);
   }, every);
 
   async function stop() {
@@ -137,11 +146,13 @@ export function startPano(video: HTMLVideoElement, axis: Axis, sign: 1 | -1, onF
     return { url: URL.createObjectURL(file), file };
   }
 
-  return {
+  const panorama: Panorama = {
     strip,
     progress: () => length / reach,
     drift: () => across,
     hint: () => (fast ? "too fast" : across > drifted ? "move up" : across < -drifted ? "move down" : undefined),
     stop,
   };
+
+  return panorama;
 }
