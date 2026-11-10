@@ -40,10 +40,10 @@ export function SubmenuVideoFormat({ settings, update }: Props) {
       {resolutions.map((r, i) => (
         <button
           key={r}
-          className="vf-option"
+          className="vf-option vf-res"
           data-on={r === format.resolution || undefined}
           data-dot={r === "HD" || undefined}
-          style={place(i, 61)}
+          style={place(i, 61.33)}
           onClick={() => choose({ resolution: r })}
         >
           {r}

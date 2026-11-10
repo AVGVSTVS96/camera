@@ -42,3 +42,7 @@
   border-radius: 50%;
   background: currentColor;
 }
+
+.screen[data-orientation="landscape"] .vf-res + .vf-res {
+  translate: -0.67px 0;
+}

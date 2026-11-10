@@ -589,6 +589,17 @@ function rememberedFormats({ mode, formats, submenu }: Settings, c: Controls) {
   return { ...formats, [mode]: changeFormat({ ...format, resolution: "4K" }) };
 }
 
+// Apple's inner-portrait captures of 60 and 120 fps still show HD, 30 frames per second, though every other pose shows the choice.
+function staleInnerFormats(state: ParityState, { mode, formats, submenu }: Settings, c: Controls) {
+  const rate = Number.parseInt(String(c.selected));
+
+  if (submenu !== "Video Format" || state.display !== "inner" || state.orientation !== "portrait") return formats;
+
+  if (Array.isArray(c.selected) || (rate !== 60 && rate !== 120)) return formats;
+
+  return { ...formats, [mode]: changeFormat({ ...formats[mode]!, resolution: "HD" }, { rate: 30 }) };
+}
+
 // A forced state: what tapping reaches, plus what Apple's simulator carried over from earlier captures.
 export function settingsFor(state: ParityState, profile = state.profile ?? duo): Settings {
   const c = state.controls ?? {};
@@ -608,7 +619,7 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
           : settings.night,
     lighting: settings.picked ? settings.lighting : rememberedLighting(state),
     aperture: settings.submenu === "Depth" ? rememberedAperture(state, c) : undefined,
-    formats: rememberedFormats(settings, c),
+    formats: staleInnerFormats(state, { ...settings, formats: rememberedFormats(settings, c) }, c),
     stopped: c.action === "stopped",
   };
 }
