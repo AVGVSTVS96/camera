@@ -167,6 +167,8 @@ export interface Settings extends Pose {
   holding: boolean;
   recording: boolean;
   paused: boolean;
+  panning: boolean;
+  reverse: boolean;
   stopped: boolean;
   viewer: boolean;
   sheet?: Sheet;
@@ -282,6 +284,8 @@ export function initialSettings(profile: Profile, pose: Pose, mode: Mode = "phot
     holding: false,
     recording: false,
     paused: false,
+    panning: false,
+    reverse: false,
     stopped: false,
     viewer: false,
   };

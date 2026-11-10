@@ -5,6 +5,7 @@ import "./shutter.css";
 const movies: Partial<Record<Mode, [string, string]>> = {
   "slo-mo": ["Record Slomo video", "Stop Slomo video"],
   "time-lapse": ["Record time lapse video", "Stop time lapse video"],
+  pano: ["Take Picture", "Stop Recording Panorama"],
   video: ["Record Video", "Stop Recording Video"],
   cinematic: ["Record Video", "Stop Recording Video"],
 };

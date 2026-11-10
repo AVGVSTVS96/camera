@@ -1,0 +1,102 @@
+.pano {
+  --at: 0;
+  --drift: 0;
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  width: min(86%, 560px);
+  aspect-ratio: 4;
+  pointer-events: none;
+  color: #fff;
+}
+
+.screen[data-orientation="landscape"] .pano {
+  width: auto;
+  height: min(80%, 560px);
+  aspect-ratio: 0.25;
+}
+
+.pano-frame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 6px;
+  background: rgb(0 0 0 / 0.25);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.7);
+}
+
+.pano-frame canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.pano-line {
+  position: absolute;
+  inset: 50% 0 auto;
+  height: 1px;
+  background: rgb(255 255 255 / 0.7);
+}
+
+.screen[data-orientation="landscape"] .pano-line {
+  inset: 0 auto 0 50%;
+  width: 1px;
+  height: auto;
+}
+
+.pano-text {
+  position: absolute;
+  inset: auto 0 calc(100% + 16px);
+  margin: 0;
+  text-align: center;
+  font:
+    600 15px/1.25 system-ui,
+    sans-serif;
+  text-shadow: 0 0 6px rgb(0 0 0 / 0.5);
+  rotate: var(--glyph-turn);
+}
+
+.screen[data-orientation="landscape"] .pano-text {
+  inset: 50% auto auto calc(100% + 16px);
+  width: max-content;
+  max-width: 200px;
+  translate: 0 -50%;
+}
+
+.pano[data-warn] .pano-text {
+  color: var(--yellow, #ffd60a);
+}
+
+.pano-arrow {
+  position: absolute;
+  left: calc(var(--at) * 100%);
+  top: calc(50% + var(--drift) * 150%);
+  width: 41px;
+  height: 50px;
+  translate: -50% -50%;
+  pointer-events: auto;
+  filter: drop-shadow(0 0 4px rgb(0 0 0 / 0.4));
+}
+
+.pano[data-reverse] .pano-arrow {
+  left: calc((1 - var(--at)) * 100%);
+  scale: -1 1;
+}
+
+.screen[data-orientation="landscape"] .pano-arrow {
+  left: calc(50% + var(--drift) * 150%);
+  top: calc(var(--at) * 100%);
+  rotate: 90deg;
+}
+
+.screen[data-orientation="landscape"] .pano[data-reverse] .pano-arrow {
+  top: calc((1 - var(--at)) * 100%);
+}
+
+.pano-arrow svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}

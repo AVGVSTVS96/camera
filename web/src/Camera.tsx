@@ -1,6 +1,7 @@
 import { useEffect, useEffectEvent, useRef, useState } from "react";
 import { record, snapshot, useCamera, type Recording as Take } from "./capture.ts";
 import { crossfade } from "./crossfade.ts";
+import { startPano, type Panorama } from "./pano.ts";
 import { useLibrary } from "./library.ts";
 import { AspectFlip } from "./components/aspect-flip/AspectFlip.tsx";
 import { ControlsButton } from "./components/controls-button/ControlsButton.tsx";
@@ -11,6 +12,7 @@ import { Flip } from "./components/flip/Flip.tsx";
 import { Grid, Level } from "./components/grid/Grid.tsx";
 import { InnerPreview } from "./components/inner-layout/InnerPreview.tsx";
 import { Lighting } from "./components/lighting/Lighting.tsx";
+import { Pano } from "./components/pano/Pano.tsx";
 import { Macro } from "./components/macro/Macro.tsx";
 import { SubmenuAspectRatio } from "./components/submenu-aspect-ratio/SubmenuAspectRatio.tsx";
 import { SubmenuFocus } from "./components/submenu-focus/SubmenuFocus.tsx";
@@ -58,11 +60,12 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
 
   const lock = useRef<HTMLButtonElement>(null);
   const take = useRef<Take>(undefined);
+  const [pan, setPan] = useState<Panorama>();
   const { video, stream } = useCamera(settings, !still);
   const update: Update = (change) => setSettings((s) => ({ ...s, ...change }));
   const movie = movieModes.has(settings.mode);
   const counting = settings.countdown > 0;
-  const busy = settings.holding || settings.recording || counting;
+  const busy = settings.holding || settings.recording || settings.panning || counting;
   const props = { settings, update };
   const open = settings.submenu;
   const styling = open === "Styles";
@@ -106,8 +109,27 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
     add({ url: URL.createObjectURL(file), file, poster: frame.url, frame: frame.file });
   }
 
+  async function sweep() {
+    if (!pan) {
+      if (!video.current?.videoWidth) return;
+
+      const sideways = settings.orientation === "landscape";
+      setPan(startPano(video.current, sideways ? "y" : "x", settings.reverse ? -1 : 1, sweep));
+
+      return update({ panning: true });
+    }
+
+    const shot = await pan.stop();
+    setPan(undefined);
+    update({ panning: false });
+
+    if (shot) add(shot);
+  }
+
   async function capture() {
     if (!video.current || !stream) return;
+
+    if (settings.mode === "pano") return sweep();
 
     if (take.current) return finish();
 
@@ -166,7 +188,7 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
 
   const quicktake = {
     mode: settings.mode,
-    recording: settings.recording,
+    recording: settings.recording || settings.panning,
     holding: settings.holding,
     lock,
     onPress: shutter,
@@ -192,6 +214,7 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
       data-holding={settings.holding || undefined}
       data-wide={settings.aspect === "16:9" || undefined}
       data-recording={settings.recording || undefined}
+      data-panning={settings.panning || undefined}
       data-stopped={settings.stopped || undefined}
       style={still ? { backgroundImage: `url(/plates/${still}.png)` } : undefined}
     >
@@ -202,6 +225,7 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
       {still && settings.display === "inner" && <InnerPreview />}
       {settings.sheet && settings.sheet !== "choose" && <div className="sheet-scrim" />}
       {settings.grid && <Grid />}
+      {settings.mode === "pano" && !settings.tray && !settings.submenu && <Pano {...props} pan={pan} />}
       {settings.recording || settings.holding ? (
         <Recording settings={settings} lockRef={lock} still={!!still} onPause={pause} onStill={takePicture} />
       ) : (
@@ -222,7 +246,8 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
             {movie
               ? profile.macro && <Macro {...props} />
               : !busy &&
-                settings.mode !== "portrait" && (
+                settings.mode !== "portrait" &&
+                settings.mode !== "pano" && (
                   <DepthButton on={settings.depth} toggle={() => update({ depth: !settings.depth })} />
                 )}
             <Shutter {...quicktake} />

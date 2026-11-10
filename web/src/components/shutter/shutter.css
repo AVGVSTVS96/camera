@@ -159,12 +159,14 @@
 }
 
 [data-recording] .shutter-button span,
+[data-panning] .shutter-button span,
 [data-countdown] .shutter-button span {
   width: 28px;
   height: 28px;
   border-radius: 7px;
 }
 
+[data-panning] .shutter-button span,
 [data-countdown] .shutter-button span {
   background: #fff;
 }
