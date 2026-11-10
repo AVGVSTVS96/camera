@@ -83,27 +83,28 @@
 
 .tray-label {
   position: absolute;
-  top: 77px;
+  top: 76px;
   left: 50%;
   translate: -50% 0;
   color: #fff;
   font-size: 14px;
-  letter-spacing: 1.3px;
+  letter-spacing: 1.15px;
   white-space: nowrap;
 }
 
 .tray .glyph {
-  stroke-width: 1.6;
+  overflow: visible;
+  stroke-width: 1.25;
 }
 
 .tray-stack b {
-  font-size: 22px;
-  font-weight: 500;
+  font-size: 20px;
+  font-weight: 350;
 }
 
 .tray-stack b + b {
-  font-size: 17px;
-  font-weight: 400;
+  font-size: 15px;
+  font-weight: 300;
   margin-top: 2px;
 }
 

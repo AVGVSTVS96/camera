@@ -39,9 +39,10 @@ function Stack({ top, bottom, turn = 0 }: { top: string; bottom?: string; turn?:
   );
 }
 
-function controlsFor(settings: Settings, photoFormat: string): Control[] {
+function controlsFor(settings: Settings, photoFormat: string, duo: boolean): Control[] {
   const { mode, facing, flash, on, display, orientation, centerStage, formats } = settings;
   const front = facing === "front";
+  const nightOff = front || settings.night === "off" || on.includes("Smart Take");
   const movie = mode !== "photo" && mode !== "portrait";
   const turn = orientation === "landscape" ? 90 : display === "inner" ? 180 : 0;
   const [photoName = "", photoDetail = ""] = photoFormat.split(" ");
@@ -49,13 +50,18 @@ function controlsFor(settings: Settings, photoFormat: string): Control[] {
 
   const control = {
     flash: { name: "Flash", label: "Flash", glyph: <Bolt flash={flash} /> },
-    live: { name: "Live Photo", label: "Live", glyph: <LivePhoto /> },
+    live: { name: "Live Photo", label: "Live", glyph: <LivePhoto off={duo && settings.live !== "on"} /> },
     aspect: { name: "Aspect Ratio", label: "Aspect", glyph: <Aspect /> },
     timer: { name: "Timer", label: "Timer", glyph: <TimerOff /> },
     exposure: { name: "Exposure", label: "Exposure", glyph: <Exposure /> },
-    styles: { name: "Styles", label: "Styles", glyph: <Styles off={on.includes("Smart Take")} /> },
+    styles: { name: "Styles", label: "Styles", glyph: <Styles /> },
     depth: { name: "Depth", label: "Depth", glyph: <Depth off={mode === "photo"} /> },
-    night: { name: "Night Mode", label: "Night Mode", glyph: <NightMode off={front} /> },
+    night: {
+      name: "Night Mode",
+      label: "Night Mode",
+      glyph: duo ? <NightMode off={nightOff} exposure="2" /> : <NightMode off={nightOff} />,
+      on: duo && !nightOff,
+    },
     resolution: { name: "Resolution", label: "Resolution", glyph: <Stack top={photoName} bottom={photoDetail} /> },
     framing: { name: "Center Stage", label: "Center Stage", glyph: <Framing on={centerStage.zoom} /> },
     focus: { name: "Focus", label: "Focus", glyph: <Focus /> },
@@ -132,7 +138,7 @@ interface PanelProps extends Props {
 
 export function ControlsPanel({ settings, update, from, closing, gone }: PanelProps) {
   const profile = useProfile();
-  const controls = controlsFor(settings, profile.photoFormat);
+  const controls = controlsFor(settings, profile.photoFormat, profile.name === "duo");
   const { display, orientation, mode, expanded } = settings;
   const [compact, setCompact] = useState(mode === "photo" && !expanded);
 
