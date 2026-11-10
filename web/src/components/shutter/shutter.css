@@ -20,7 +20,7 @@
     inset calc(-1 * var(--lit-x)) calc(-1 * var(--lit-y)) 0.6px -0.5px var(--arc);
 }
 
-.screen:is([data-profile="simulator"], [data-profile="duo"])[data-orientation^="landscape"] {
+.screen:is([data-profile="simulator"], [data-profile="duo"])[data-display="outer"][data-orientation^="landscape"] {
   --lit-x: 1.2px;
   --lit-y: 0px;
 }
