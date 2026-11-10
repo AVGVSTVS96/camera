@@ -28,8 +28,8 @@ export const Auto = () => (
   <Glyph>
     <circle r="8" strokeWidth="1.6" strokeDasharray="38 12.3" transform="rotate(89)" />
     <circle r="3.2" strokeWidth="2" />
-    <circle cx="9.5" cy="6.5" r="5.5" fill="currentColor" stroke="#1f1f1f" strokeWidth="1" />
-    <text y="10.4" x="9.5" textAnchor="middle" fontSize="10.5" fontWeight="700" fill="#1f1f1f" stroke="none">
+    <circle cx="9.5" cy="5.4" r="5.5" fill="currentColor" stroke="#1f1f1f" strokeWidth="1" />
+    <text y="9.7" x="9.5" textAnchor="middle" fontSize="12" fontWeight="800" fontFamily='".SF Compact Rounded", sans-serif' fill="#1f1f1f" stroke="none">
       A
     </text>
   </Glyph>
