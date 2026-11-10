@@ -55,6 +55,13 @@
   --band: rgb(255 255 255 / 0.12);
 }
 
+.screen[data-profile="simulator"]:has(.zoom[data-dial])[data-mode="video"]:not([data-recording]) {
+  --edge: rgb(0 0 0 / 0.5);
+  --glow: rgb(255 255 255 / 0.08);
+  --arc: rgb(255 255 255 / 0.4);
+  --dark: rgb(0 0 0 / 0.6);
+}
+
 .screen[data-profile="duo"] {
   --ring: 80px;
   --disc: 68px;
