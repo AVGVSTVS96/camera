@@ -5,6 +5,9 @@
 
 .screen[data-profile="simulator"] {
   --record: #ff383c;
+}
+
+.screen:is([data-profile="simulator"], [data-profile="duo"]) {
   --band: rgb(52 52 53 / 0.62);
   --edge: rgb(0 0 0 / 0.7);
   --glow: rgb(255 255 255 / 0.2);
@@ -17,7 +20,7 @@
     inset calc(-1 * var(--lit-x)) calc(-1 * var(--lit-y)) 0.6px -0.5px var(--arc);
 }
 
-.screen[data-profile="simulator"][data-orientation^="landscape"] {
+.screen:is([data-profile="simulator"], [data-profile="duo"])[data-orientation^="landscape"] {
   --lit-x: 1.2px;
   --lit-y: 0px;
 }
@@ -53,10 +56,19 @@
 }
 
 .screen[data-profile="duo"] {
-  --ring: 81px;
+  --ring: 80px;
   --disc: 68px;
-  --band: rgb(255 255 255 / 0.12);
-  --rim: inset 0 0 0 0.33px rgb(255 255 255 / 0.4);
+  --band: rgb(255 255 255 / 0.09);
+  --edge: rgb(0 0 0 / 0.6);
+  --glow: rgb(255 255 255 / 0.1);
+}
+
+.screen[data-profile="duo"][data-mode="video"] {
+  --band: rgb(255 255 255 / 0.25);
+}
+
+.screen[data-profile="duo"] .shutter-button {
+  margin-top: -0.9px;
 }
 
 .shutter-button {
