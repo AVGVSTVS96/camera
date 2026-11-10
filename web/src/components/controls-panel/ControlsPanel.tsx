@@ -42,7 +42,7 @@ function Stack({ top, bottom, turn = 0 }: { top: string; bottom?: string; turn?:
 function controlsFor(settings: Settings, photoFormat: string, duo: boolean): Control[] {
   const { mode, facing, flash, on, display, orientation, centerStage, formats } = settings;
   const front = facing === "front";
-  const nightOff = front || settings.night === "off" || on.includes("Smart Take");
+  const nightOff = front || settings.night === "off";
   const movie = mode !== "photo" && mode !== "portrait";
   const turn = orientation === "landscape" ? 90 : display === "inner" ? 180 : 0;
   const [photoName = "", photoDetail = ""] = photoFormat.split(" ");
@@ -50,7 +50,11 @@ function controlsFor(settings: Settings, photoFormat: string, duo: boolean): Con
 
   const control = {
     flash: { name: "Flash", label: "Flash", glyph: <Bolt flash={flash} /> },
-    live: { name: "Live Photo", label: "Live", glyph: <LivePhoto off={duo && settings.live !== "on"} /> },
+    live: {
+      name: "Live Photo",
+      label: "Live",
+      glyph: <LivePhoto off={duo ? settings.live !== "on" : settings.live === "off"} />,
+    },
     aspect: { name: "Aspect Ratio", label: "Aspect", glyph: <Aspect /> },
     timer: { name: "Timer", label: "Timer", glyph: <TimerOff /> },
     exposure: { name: "Exposure", label: "Exposure", glyph: <Exposure /> },

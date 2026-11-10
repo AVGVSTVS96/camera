@@ -538,6 +538,10 @@ function depthOn(state: ParityState, c: Controls) {
   return c.control !== "Depth" || !hasOptions(c);
 }
 
+// Apple's simulator captured each pose's Night Mode states before its Smart Take toggle, except inner portrait, so Night Mode shows the Off they left.
+const nightLeftOff = (state: ParityState, c: Controls) =>
+  c.control === "Smart Take" && !(state.display === "inner" && state.orientation === "portrait");
+
 // Apple's simulator keeps the f-stop it last had, so these follow its capture history.
 function rememberedAperture(state: ParityState, c: Controls): Aperture {
   const front = c.camera === "front";
@@ -582,7 +586,12 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
     zoomTurn: zoomTurnOf(state, c),
     flipTurn: zoomTurnOf(state, c, true),
     depth: depthOn(state, c),
-    night: settings.submenu === "Night Mode" && hasOptions(c) ? nightOf(c.selected) : settings.night,
+    night:
+      settings.submenu === "Night Mode" && hasOptions(c)
+        ? nightOf(c.selected)
+        : nightLeftOff(state, c)
+          ? "off"
+          : settings.night,
     lighting: settings.picked ? settings.lighting : rememberedLighting(state),
     aperture: settings.submenu === "Depth" ? rememberedAperture(state, c) : undefined,
     formats: rememberedFormats(settings, c),
