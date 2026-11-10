@@ -162,8 +162,10 @@ export function ControlsPanel({ settings, update, from, closing, gone }: PanelPr
   });
 
   const narrow = (orientation === "landscape") !== sheet.turned;
+  const away = orientation === "landscape" ? { x: 1, y: 0 } : { x: 0, y: display === "outer" ? -1 : 1 };
 
   const tray = useRef<HTMLElement>(null);
+  const swipe = useRef<{ x: number; y: number } | null>(null);
   const finish = useEffectEvent(gone);
 
   useLayoutEffect(() => {
@@ -196,8 +198,6 @@ export function ControlsPanel({ settings, update, from, closing, gone }: PanelPr
 
     return () => shrink.cancel();
   }, [closing, orientation]);
-
-  const swipe = useRef<{ x: number; y: number } | null>(null);
 
   const open = (name: Submenu | Toggle) => {
     if (!isToggle(name)) return update({ submenu: name, tray: false, expanded: false });
@@ -255,11 +255,14 @@ export function ControlsPanel({ settings, update, from, closing, gone }: PanelPr
             }}
             onPointerMove={(e) => {
               const from = swipe.current;
+              const pull = from ? (e.clientX - from.x) * away.x + (e.clientY - from.y) * away.y : 0;
 
-              if (from && Math.hypot(e.clientX - from.x, e.clientY - from.y) > 20) {
-                swipe.current = null;
-                dismiss();
-              }
+              if (Math.abs(pull) < 20) return;
+
+              swipe.current = null;
+
+              if (pull < 0) dismiss();
+              else if (compact) update({ expanded: true });
             }}
             onPointerUp={() => (swipe.current = null)}
           />
