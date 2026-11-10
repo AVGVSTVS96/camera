@@ -199,7 +199,3 @@
   padding-inline: 21.2px;
   letter-spacing: 0.7px;
 }
-
-.screen[data-display="inner"][data-orientation="landscape"] .dial {
-  left: 57.67px;
-}
