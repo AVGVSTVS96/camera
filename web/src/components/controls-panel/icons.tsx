@@ -115,9 +115,9 @@ export const Depth = ({ off = false }: { off?: boolean }) => (
 export const Bolt = ({ flash }: { flash: Flash }) =>
   flash === "auto" ? (
     <Icon size={34}>
-      <path d={bolt} fill="currentColor" stroke="none" transform="translate(.55 -1) scale(.92 1)" />
+      <path d={bolt} fill="currentColor" stroke="none" transform="translate(-.9 -1) scale(1.17 1)" />
       <circle cx="18.3" cy="17.6" r="4.9" fill="currentColor" stroke="none" />
-      <path d="m16.2 19.6 2.1-4.8 2.1 4.8m-3.4-1.5h2.7" stroke="#000" strokeWidth={0.9} />
+      <path d="m16.2 19.6 2.1-4.8 2.1 4.8m-3.4-1.5h2.7" stroke="#000" strokeWidth={0.65} />
     </Icon>
   ) : (
     <Icon size={34}>
@@ -192,10 +192,10 @@ export const NightMode = ({ off = false, exposure }: { off?: boolean; exposure?:
     <Icon size={34}>
       <mask id="crescent">
         <circle cx="11.6" cy="12" r="9.8" fill="#fff" />
-        <circle cx="15.2" cy="8.4" r="8.2" fill="#000" />
+        <circle cx="14.4" cy="8.4" r="8.2" fill="#000" />
       </mask>
       <circle cx="11.6" cy="12" r="9.8" fill="currentColor" stroke="none" mask="url(#crescent)" />
-      <text x="16.6" y="10.8" fontSize="13.5" fontWeight="300" fill="currentColor" stroke="none" textAnchor="middle">
+      <text x="16.8" y="10.6" fontSize="11.5" fontWeight="300" fill="currentColor" stroke="none" textAnchor="middle">
         {exposure ?? "A"}
       </text>
     </Icon>
