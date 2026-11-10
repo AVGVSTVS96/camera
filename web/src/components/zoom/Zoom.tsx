@@ -19,8 +19,10 @@ function Ticks({ place, zoom }: { place: ReturnType<typeof layout>; zoom: number
   const [ux, uy] = place.along;
   const [nx, ny] = place.into;
   const { centre, radius } = place;
+
   // Apple's portrait dial rests 1.55 degrees short of its marker
   const bias = place.vertical ? 0 : 1.55;
+
   const at = (angle: number, r: number) => [
     centre.x + nx * r * Math.cos(angle) + ux * r * Math.sin(angle),
     centre.y + ny * r * Math.cos(angle) + uy * r * Math.sin(angle),
