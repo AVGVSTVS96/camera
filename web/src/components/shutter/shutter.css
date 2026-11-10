@@ -7,29 +7,41 @@
   --record: #ff383c;
   --band: rgb(52 52 53 / 0.62);
   --edge: rgb(0 0 0 / 0.7);
+  --glow: rgb(255 255 255 / 0.2);
+  --arc: rgb(255 255 255 / 0.9);
+  --lit-x: 0px;
+  --lit-y: 1.2px;
   --rim:
-    inset 0 0 0 0.5px var(--edge), inset 0 0 1px 0.5px rgb(255 255 255 / 0.25),
-    inset 0 1.5px 1px -1px rgb(255 255 255 / 0.7), inset 0 -1.5px 1px -1px rgb(255 255 255 / 0.7);
+    inset 0 0 0 0.4px var(--edge), inset 0 0 2px 0.5px var(--glow),
+    inset var(--lit-x) var(--lit-y) 0.6px -0.5px var(--arc),
+    inset calc(-1 * var(--lit-x)) calc(-1 * var(--lit-y)) 0.6px -0.5px var(--arc);
 }
 
-.screen[data-profile="simulator"][data-display="outer"][data-orientation^="landscape"] {
-  --rim:
-    inset 0 0 0 0.5px var(--edge), inset 0 0 1px 0.5px rgb(255 255 255 / 0.25),
-    inset 1.5px 0 1px -1px rgb(255 255 255 / 0.7), inset -1.5px 0 1px -1px rgb(255 255 255 / 0.7);
+.screen[data-profile="simulator"][data-orientation^="landscape"] {
+  --lit-x: 1.2px;
+  --lit-y: 0px;
 }
 
 .screen[data-profile="simulator"][data-mode="video"],
 .screen[data-profile="simulator"][data-mode="cinematic"] {
-  --ring: 67px;
+  --ring: 66.67px;
 }
 
 .screen[data-profile="simulator"][data-movie][data-facing="front"],
 .screen[data-profile="simulator"][data-recording],
+.screen[data-profile="simulator"][data-stopped],
 .screen[data-profile="simulator"][data-mode="cinematic"],
 .screen[data-profile="simulator"][data-mode="slo-mo"],
 .screen[data-profile="simulator"][data-mode="time-lapse"] {
   --band: none;
   --edge: rgb(0 0 0 / 0.5);
+  --glow: rgb(255 255 255 / 0.1);
+  --arc: rgb(255 255 255 / 0.5);
+}
+
+.screen[data-profile="simulator"][data-stopped] {
+  --glow: rgb(255 255 255 / 0.05);
+  --arc: transparent;
 }
 
 .screen[data-profile="simulator"]:has(.zoom[data-dial]):is(
@@ -126,4 +138,8 @@
 
 [data-countdown] .shutter-button span {
   background: #fff;
+}
+
+.screen:has(.zoom[data-dial]) :is(.row.shutter, .row.modes) {
+  z-index: 1;
 }

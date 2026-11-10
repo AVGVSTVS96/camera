@@ -167,6 +167,7 @@ export interface Settings extends Pose {
   holding: boolean;
   recording: boolean;
   paused: boolean;
+  stopped: boolean;
   viewer: boolean;
   sheet?: Sheet;
 }
@@ -281,6 +282,7 @@ export function initialSettings(profile: Profile, pose: Pose, mode: Mode = "phot
     holding: false,
     recording: false,
     paused: false,
+    stopped: false,
     viewer: false,
   };
 }
@@ -441,6 +443,7 @@ export function reached(state: ParityState, profile = state.profile ?? duo): Set
     holding: c.action === "shutter held (QuickTake)",
     recording: c.action === "recording",
     paused: false,
+    stopped: false,
     viewer: state.mode === "viewer",
     sheet: sheets.get(String(c.sheet)),
   };
@@ -595,6 +598,7 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
     lighting: settings.picked ? settings.lighting : rememberedLighting(state),
     aperture: settings.submenu === "Depth" ? rememberedAperture(state, c) : undefined,
     formats: rememberedFormats(settings, c),
+    stopped: c.action === "stopped",
   };
 }
 

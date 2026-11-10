@@ -192,6 +192,7 @@ export function Camera({ initial, still, onSettings }: CameraProps) {
       data-holding={settings.holding || undefined}
       data-wide={settings.aspect === "16:9" || undefined}
       data-recording={settings.recording || undefined}
+      data-stopped={settings.stopped || undefined}
       style={still ? { backgroundImage: `url(/plates/${still}.png)` } : undefined}
     >
       <Viewfinder {...props} still={!!still}>
