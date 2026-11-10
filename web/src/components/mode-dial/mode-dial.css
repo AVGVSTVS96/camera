@@ -86,7 +86,7 @@
 .dial .window {
   position: absolute;
   inset: 0;
-  mask: linear-gradient(to right, rgb(0 0 0 / 0.1), #000 23%, #000 76%, rgb(0 0 0 / 0.25));
+  mask: linear-gradient(to right, rgb(0 0 0 / 0.1), #000 23%, #000 76%, rgb(0 0 0 / 0.08));
 }
 
 .dial .labels {
@@ -106,8 +106,8 @@
 
 .dial .labels button {
   height: 41.6px;
-  margin-inline: -5px;
-  padding-inline: 21.1px;
+  margin-inline: -4.5px;
+  padding-inline: 20.6px;
   border-radius: 20.8px;
   font-size: 14px;
   font-weight: 400;
@@ -141,8 +141,8 @@
   background: linear-gradient(rgb(255 255 255 / 0.06), rgb(255 255 255 / 0.03));
   box-shadow:
     0 0 0 0.5px rgb(0 0 0 / 0.5),
-    inset 0 0.5px 0.5px rgb(255 255 255 / 0.45),
-    inset 0 -0.5px 0.5px rgb(255 255 255 / 0.55),
+    inset 0 0.5px 1px rgb(255 255 255 / 0.4),
+    inset 0 -0.5px 1px rgb(255 255 255 / 0.5),
     inset 0 0 0 0.33px rgb(255 255 255 / 0.1),
     inset 0 1.5px 2px rgb(255 255 255 / 0.09),
     inset 0 -1.5px 2px rgb(255 255 255 / 0.15);
@@ -198,4 +198,8 @@
   margin-inline: -5.3px;
   padding-inline: 21.2px;
   letter-spacing: 0.7px;
+}
+
+.screen[data-display="inner"][data-orientation="landscape"] .dial {
+  left: 57.67px;
 }
