@@ -25,3 +25,16 @@
   inset: 0;
   pointer-events: none;
 }
+
+.screen[data-profile="duo"] .flip {
+  background: rgb(0 0 0 / 0.28);
+}
+
+.screen[data-profile="duo"][data-mode="video"] .flip {
+  right: 58px;
+  background: rgb(255 255 255 / 0.22);
+}
+
+.screen[data-display="inner"] .flip .glyph {
+  translate: 0 -0.33px;
+}

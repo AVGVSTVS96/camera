@@ -161,6 +161,7 @@ export interface Settings extends Pose {
   dial: boolean;
   lenses: boolean;
   zoomTurn: number;
+  flipTurn: number;
   picked: boolean;
   countdown: number;
   holding: boolean;
@@ -274,6 +275,7 @@ export function initialSettings(profile: Profile, pose: Pose, mode: Mode = "phot
     dial: false,
     lenses: false,
     zoomTurn: 0,
+    flipTurn: 0,
     picked: false,
     countdown: 0,
     holding: false,
@@ -473,7 +475,7 @@ function rememberedLighting(state: ParityState): Lighting {
 const touches = /^(shutter tapped|long-press|drag|tap viewfinder)/;
 
 // Apple's simulator leaves the zoom stops turned the way the device last was, so the turn follows the capture history rather than any control.
-function zoomTurnOf(state: ParityState, c: Controls) {
+function zoomTurnOf(state: ParityState, c: Controls, dialOpen = false) {
   const portrait = state.orientation === "portrait";
 
   const touched = touches.test(String(c.action));
@@ -485,7 +487,9 @@ function zoomTurnOf(state: ParityState, c: Controls) {
   const resting =
     c.timer === undefined &&
     c.smartTake === undefined &&
-    (c.panel !== undefined || (portrait && c.fold !== undefined) || (c.zoom !== undefined && c.zoomDial === undefined));
+    (c.panel !== undefined ||
+      (portrait && c.fold !== undefined) ||
+      (c.zoom !== undefined && (dialOpen || c.zoomDial === undefined)));
 
   return sideways && (resting || touched) ? 90 : 0;
 }
@@ -576,6 +580,7 @@ export function settingsFor(state: ParityState, profile = state.profile ?? duo):
     ...settings,
     zoom: wideTimeLapse(state, c) ? 0.5 : heldZoom(state, c, settings.zoom),
     zoomTurn: zoomTurnOf(state, c),
+    flipTurn: zoomTurnOf(state, c, true),
     depth: depthOn(state, c),
     night: settings.submenu === "Night Mode" && hasOptions(c) ? nightOf(c.selected) : settings.night,
     lighting: settings.picked ? settings.lighting : rememberedLighting(state),

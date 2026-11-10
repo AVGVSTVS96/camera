@@ -56,7 +56,7 @@ export function Flip({ settings, update }: Props) {
         update(flipCamera(profile, settings));
       }}
     >
-      <FlipGlyph />
+      <FlipGlyph turn={settings.flipTurn} />
     </button>
   );
 }

@@ -247,7 +247,7 @@ export function Zoom({ settings, update }: Props) {
   return (
     <>
       {showDial && (
-        <svg className="zoom-dial" aria-hidden>
+        <svg className="zoom-dial" style={{ clipPath: place.clip }} aria-hidden>
           <path d={place.dial} />
           <polygon
             className="marker"

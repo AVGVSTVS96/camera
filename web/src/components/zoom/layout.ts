@@ -75,6 +75,12 @@ export function layout(s: Settings, duo: boolean) {
     along: p.along,
     vertical: p.vertical,
     into: p.into,
+    clip:
+      dx + dy < 0
+        ? `inset(0 0 calc(100% - ${edge}px) 0)`
+        : dy > 0
+          ? `inset(${edge}px 0 0 0)`
+          : `inset(0 0 0 ${edge}px)`,
     turn: s.display === "inner" && !p.vertical ? 180 : 0,
     apex: { x: ax, y: ay },
     dial: `M${cx - p.radius} ${cy}a${p.radius} ${p.radius} 0 1 0 ${2 * p.radius} 0a${p.radius} ${p.radius} 0 1 0 ${-2 * p.radius} 0Z`,
