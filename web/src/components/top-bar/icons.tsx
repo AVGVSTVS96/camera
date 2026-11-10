@@ -1,7 +1,7 @@
-import type { ReactNode } from "react";
+import { type ReactNode, useId } from "react";
 import { bolt, Icon } from "../../icons.tsx";
 
-const Cut = ({
+function Cut({
   off,
   slash,
   width = 4.4,
@@ -11,22 +11,26 @@ const Cut = ({
   slash: string;
   width?: number;
   children: ReactNode;
-}) => (
-  <Icon>
-    {off ? (
-      <>
-        <mask id="top-bar-cut">
-          <rect width="24" height="24" fill="#fff" stroke="none" />
-          <path d={slash} stroke="#000" strokeWidth={width} />
-        </mask>
-        <g mask="url(#top-bar-cut)">{children}</g>
-        <path d={slash} strokeWidth={1.8} />
-      </>
-    ) : (
-      children
-    )}
-  </Icon>
-);
+}) {
+  const id = `top-bar-cut-${useId().replace(/\W/g, "")}`;
+
+  return (
+    <Icon>
+      {off ? (
+        <>
+          <mask id={id}>
+            <rect width="24" height="24" fill="#fff" stroke="none" />
+            <path d={slash} stroke="#000" strokeWidth={width} />
+          </mask>
+          <g mask={`url(#${id})`}>{children}</g>
+          <path d={slash} strokeWidth={1.8} />
+        </>
+      ) : (
+        children
+      )}
+    </Icon>
+  );
+}
 
 const wide = "M4 3.5 20 20.5";
 
