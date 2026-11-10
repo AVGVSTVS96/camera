@@ -46,6 +46,16 @@
   --dark: rgb(0 0 0 / 0.7);
 }
 
+/* Over the black bar under a 4:3 viewfinder, the glass rim catches far less light. */
+.screen[data-profile="simulator"]:is([data-mode="photo"], [data-mode="portrait"]):not(
+    [data-wide],
+    [data-submenu],
+    [data-styles]
+  ) {
+  --glow: rgb(255 255 255 / 0.05);
+  --arc: rgb(255 255 255 / 0.25);
+}
+
 .screen[data-profile="simulator"][data-sheet="intro"][data-mode="cinematic"],
 .screen[data-profile="simulator"]:has(.zoom[data-dial]):is(
     [data-mode="cinematic"],
