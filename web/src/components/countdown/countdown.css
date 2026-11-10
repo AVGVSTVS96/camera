@@ -55,3 +55,8 @@
   font-feature-settings: normal;
   text-shadow: none;
 }
+
+.screen[data-display="inner"] .countdown[data-running] {
+  color: rgb(255 255 255 / 0.3);
+  font-weight: 400;
+}
