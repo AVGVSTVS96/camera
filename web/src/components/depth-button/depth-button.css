@@ -3,6 +3,10 @@
   color: #fff;
 }
 
+.depth-button[data-slash]:not([data-on]) {
+  color: rgb(255 255 255 / 0.35);
+}
+
 .depth-button[data-on] {
   background: rgb(47 46 45 / 0.33);
   box-shadow: none;

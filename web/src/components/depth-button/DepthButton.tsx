@@ -12,6 +12,7 @@ export function DepthButton({ on, toggle }: { on: boolean; toggle: () => void })
       aria-label="Depth"
       aria-pressed={on}
       data-on={on || undefined}
+      data-slash={slash || undefined}
       onClick={toggle}
     >
       {slash ? <DepthOn /> : <DepthOff />}
