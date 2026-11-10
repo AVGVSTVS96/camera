@@ -141,8 +141,11 @@
   background: linear-gradient(rgb(255 255 255 / 0.06), rgb(255 255 255 / 0.03));
   box-shadow:
     0 0 0 0.5px rgb(0 0 0 / 0.5),
-    inset 0 0 0 0.4px rgb(255 255 255 / 0.45),
-    inset 0 0 1.5px 0.3px rgb(255 255 255 / 0.18);
+    inset 0 0.5px 0.5px rgb(255 255 255 / 0.45),
+    inset 0 -0.5px 0.5px rgb(255 255 255 / 0.55),
+    inset 0 0 0 0.33px rgb(255 255 255 / 0.1),
+    inset 0 1.5px 2px rgb(255 255 255 / 0.09),
+    inset 0 -1.5px 2px rgb(255 255 255 / 0.15);
 }
 
 .dial[data-profile="duo"] {
@@ -185,11 +188,6 @@
 
 .screen[data-sheet] .dial:not([data-profile="duo"]) .pill {
   background: #3c3c3c;
-  box-shadow:
-    0 0 0 1px rgb(0 0 0 / 0.55),
-    inset 0 0 0 1px rgb(255 255 255 / 0.16),
-    inset 0 1.5px 0 rgb(255 255 255 / 0.4),
-    inset 0 -1.5px 0 rgb(255 255 255 / 0.25);
 }
 
 .screen[data-holding] .dial {
