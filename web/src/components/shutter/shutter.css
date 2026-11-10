@@ -12,12 +12,15 @@
   --edge: rgb(0 0 0 / 0.7);
   --glow: rgb(255 255 255 / 0.2);
   --arc: rgb(255 255 255 / 0.9);
+  --dark: transparent;
   --lit-x: 0px;
   --lit-y: 1.2px;
   --rim:
     inset 0 0 0 0.4px var(--edge), inset 0 0 2px 0.5px var(--glow),
     inset var(--lit-x) var(--lit-y) 0.6px -0.5px var(--arc),
-    inset calc(-1 * var(--lit-x)) calc(-1 * var(--lit-y)) 0.6px -0.5px var(--arc);
+    inset calc(-1 * var(--lit-x)) calc(-1 * var(--lit-y)) 0.6px -0.5px var(--arc),
+    inset calc(0.5 * var(--lit-y)) calc(0.5 * var(--lit-x)) 0.3px -0.2px var(--dark),
+    inset calc(-0.5 * var(--lit-y)) calc(-0.5 * var(--lit-x)) 0.3px -0.2px var(--dark);
 }
 
 .screen:is([data-profile="simulator"], [data-profile="duo"])[data-display="outer"][data-orientation^="landscape"] {
@@ -37,16 +40,13 @@
 .screen[data-profile="simulator"][data-mode="slo-mo"],
 .screen[data-profile="simulator"][data-mode="time-lapse"] {
   --band: none;
-  --edge: rgb(0 0 0 / 0.5);
-  --glow: rgb(255 255 255 / 0.1);
-  --arc: rgb(255 255 255 / 0.5);
-}
-
-.screen[data-profile="simulator"][data-stopped] {
+  --edge: rgb(0 0 0 / 0.3);
   --glow: rgb(255 255 255 / 0.05);
-  --arc: transparent;
+  --arc: rgb(255 255 255 / 0.25);
+  --dark: rgb(0 0 0 / 0.7);
 }
 
+.screen[data-profile="simulator"][data-sheet="intro"][data-mode="cinematic"],
 .screen[data-profile="simulator"]:has(.zoom[data-dial]):is(
     [data-mode="cinematic"],
     [data-mode="slo-mo"],
