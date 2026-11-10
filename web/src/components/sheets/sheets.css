@@ -37,6 +37,9 @@
 
 [data-sheet] .zoom,
 [data-sheet] .lighting,
+[data-sheet]:not([data-sheet="choose"]) .row.top,
+[data-sheet]:not([data-sheet="choose"]) .thumb,
+[data-sheet]:not([data-sheet="choose"]) [aria-label="Smart Take"],
 [data-sheet][data-orientation="landscape"] .row.shutter {
   display: none;
 }
