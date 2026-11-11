@@ -26,7 +26,7 @@ scripts/gui /usr/bin/env DEVELOPER_DIR=/Applications/Xcode-27.3-beta.app/Content
   -configuration Release -derivedDataPath build -allowProvisioningUpdates -quiet CURRENT_PROJECT_VERSION="$1"
 mkdir Payload
 cp -R build/Build/Products/Release-iphoneos/Camera.app Payload/
-ditto -c -k --keepParent Payload Camera.ipa
+ditto -c -k --norsrc --noextattr --keepParent Payload Camera.ipa
 MAC
 dir=$HOME/.local/share/camera/hangar
 mkdir -p "$dir"
