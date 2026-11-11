@@ -16,6 +16,7 @@ settings:
     TARGETED_DEVICE_FAMILY: "1"
     MARKETING_VERSION: "0.1.0"
     CURRENT_PROJECT_VERSION: "3"
+    DEVELOPMENT_TEAM: 6SV62PQ76B
 targets:
   Camera:
     type: application
@@ -27,6 +28,7 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.bassim.camera
+        INFOPLIST_FILE: Camera/Info.plist
         PRODUCT_NAME: Camera
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_CFBundleDisplayName: Camera Lab

@@ -53,6 +53,7 @@
 		8E3F53D384D93D27CAC02FF8 /* TopBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBar.swift; sourceTree = "<group>"; };
 		8F9A9954D00BEDA125BE470D /* CameraApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraApp.swift; sourceTree = "<group>"; };
 		9CFDD5C00934D21C94AE4C54 /* CameraStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraStyle.swift; sourceTree = "<group>"; };
+		BC81295A7B214E8C2BF95465 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		CF8CD6787A559B870C873F20 /* Camera.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Camera.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE1BDBD68B2906F54094C031 /* CameraFixture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraFixture.swift; sourceTree = "<group>"; };
 		DEFC813A3D81440E7C3E6789 /* PhotoCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCapture.swift; sourceTree = "<group>"; };
@@ -175,6 +176,7 @@
 			children = (
 				F18EFEDFAA2FD233FBBF8F1A /* Assets.xcassets */,
 				8F9A9954D00BEDA125BE470D /* CameraApp.swift */,
+				BC81295A7B214E8C2BF95465 /* Info.plist */,
 				DC6B89042142968AF44339BB /* Capture */,
 				304BA0FACF951CEB54B91487 /* Debug */,
 				B7D3CEBD12A5484EC476F5C3 /* Duo */,
@@ -219,6 +221,7 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					E9BB5C32BA17C1DB6E4FB51E = {
+						DevelopmentTeam = 6SV62PQ76B;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -325,6 +328,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 6SV62PQ76B;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -393,6 +397,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 6SV62PQ76B;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -426,6 +431,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Camera/Preview Content\"";
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Camera/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Camera Lab";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Camera access is required to take photos and videos.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location access lets you include the capture location in your photos and videos.";
@@ -456,6 +462,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Camera/Preview Content\"";
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Camera/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Camera Lab";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Camera access is required to take photos and videos.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location access lets you include the capture location in your photos and videos.";

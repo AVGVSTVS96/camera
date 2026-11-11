@@ -9,3 +9,7 @@ xcuserdata/
 .swiftpm/
 .build/
 .claude/
+gui.sh
+gui.plist
+gui.log
+gui.status
