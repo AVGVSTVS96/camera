@@ -3,7 +3,7 @@
 # Bassim's iPhone that installs his development apps when he taps, from any network (~/Developer/hangar on this box).
 # The build number is main's commit count, and the build registers the URL scheme com.bassim.camera-<build>
 # (Camera/Info.plist), which hangar opens to know that build is installed and to bring the app back up. Notes default
-# to main's last commit.
+# to main's last commit. It builds with the Xcode for the iOS his Duo runs (27.3 beta), since the app targets 27.1.
 # Usage: ios/scripts/hangar [--notes '<one line on what changed>']
 set -e
 cd "$(dirname "$0")/../.."
@@ -21,7 +21,8 @@ ssh mac sh -s "$build" <<'MAC'
 set -e
 cd ~/Developer/camera-hangar/ios
 /opt/homebrew/bin/xcodegen generate -q
-scripts/gui "$HOME/.local/bin/turn" xcodebuild build -project Camera.xcodeproj -scheme Camera -destination generic/platform=iOS \
+scripts/gui /usr/bin/env DEVELOPER_DIR=/Applications/Xcode-27.3-beta.app/Contents/Developer "$HOME/.local/bin/turn" \
+  xcodebuild build -project Camera.xcodeproj -scheme Camera -destination generic/platform=iOS \
   -configuration Release -derivedDataPath build -allowProvisioningUpdates -quiet CURRENT_PROJECT_VERSION="$1"
 mkdir Payload
 cp -R build/Build/Products/Release-iphoneos/Camera.app Payload/
